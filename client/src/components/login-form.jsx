@@ -18,6 +18,8 @@ import { Input } from "@/components/ui/input";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { Spinner } from "./ui/spinner";
+import githubIcon from "@/assets/github-icon.svg";
+import googleIcon from "@/assets/google-icon.svg";
 
 export function LoginForm({ className, ...props }) {
   const { setUser, setToken } = useAuth();
@@ -28,7 +30,7 @@ export function LoginForm({ className, ...props }) {
     e.preventDefault();
     setLoading(true);
     try {
-      const res = await fetch(`${import.meta.env.VITE_API_URL}/signin`, {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/auth/signin`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -89,6 +91,28 @@ export function LoginForm({ className, ...props }) {
               </Field>
               <Field>
                 <Button type="submit">Login</Button>
+                <div className="flex flex-col w-full items-center gap-2">
+                  <p className="text-gray-600">Or continue with</p>
+                  <span className="w-full border-b border-gray-400"></span>
+                  <div className="flex gap-2 w-full py-2">
+                    <Button variant="outline" className="flex-1">
+                      <img
+                        width={20}
+                        height={20}
+                        src={googleIcon}
+                        alt="Google"
+                      />
+                    </Button>
+                    <Button variant="outline" className="flex-1">
+                      <img
+                        width="20"
+                        height="20"
+                        src={githubIcon}
+                        alt="GitHub"
+                      />
+                    </Button>
+                  </div>
+                </div>
                 <FieldDescription className="text-center">
                   Don&apos;t have an account? <a href="/signup">Sign up</a>
                 </FieldDescription>

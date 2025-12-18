@@ -5,13 +5,13 @@ const cors = require("cors");
 
 const PORT = process.env.PORT || 8000;
 
-const userRouter = require("./routes/userRouter");
+const authRouter = require("./routes/authRouter");
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cors());
 
-app.use("/api/user", userRouter);
+app.use("/api/auth", authRouter);
 
 app.listen(PORT, (err) => {
   if (err) throw err;
