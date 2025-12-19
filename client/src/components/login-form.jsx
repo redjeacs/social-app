@@ -34,16 +34,21 @@ export function LoginForm({ className, ...props }) {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          email: e.target.email.value,
+          username: e.target.username.value,
           password: e.target.password.value,
         }),
       });
+      const data = await res.json();
       if (!res.ok) {
-        alert(data.errors ? data.errors.join("\n") : "Signin failed");
+        alert(
+          data.errors
+            ? data.errors.map((err) => err.msg).join("\n")
+            : "Signin failed"
+        );
         setLoading(false);
         return;
       }
-      const data = await res.json();
+
       setToken(data.token);
       setUser(data.user);
       setLoading(false);
@@ -54,6 +59,45 @@ export function LoginForm({ className, ...props }) {
       setLoading(false);
     }
   };
+
+  const handleDemoSignin = async () => {
+    setLoading(true);
+    try {
+      const res = await fetch(
+        `${import.meta.env.VITE_API_URL}/auth/demo-signin`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+        }
+      );
+
+      console.log("Demo signin response:", res);
+
+      const data = await res.json();
+      console.log(data);
+
+      if (!res.ok) {
+        alert(
+          data.errors
+            ? data.errors.map((err) => err.msg).join("\n")
+            : "Demo signin failed"
+        );
+
+        setLoading(false);
+        return;
+      }
+
+      setToken(data.token);
+      setUser(data.user);
+      setLoading(false);
+      navigate("/");
+    } catch (err) {
+      console.error("Demo signin error:", err);
+      alert("An error occurred during demo login. Please try again.");
+      setLoading(false);
+    }
+  };
+
   return loading ? (
     <Spinner />
   ) : (
@@ -69,11 +113,11 @@ export function LoginForm({ className, ...props }) {
           <form onSubmit={handleSignin}>
             <FieldGroup>
               <Field>
-                <FieldLabel htmlFor="email">Email</FieldLabel>
+                <FieldLabel htmlFor="username">Username</FieldLabel>
                 <Input
-                  id="email"
-                  type="email"
-                  placeholder="m@example.com"
+                  id="username"
+                  type="text"
+                  placeholder="Enter your username"
                   required
                 />
               </Field>
@@ -91,6 +135,7 @@ export function LoginForm({ className, ...props }) {
               </Field>
               <Field>
                 <Button type="submit">Login</Button>
+                <Button onClick={handleDemoSignin}>Demo Login</Button>
                 <div className="flex flex-col w-full items-center gap-2">
                   <p className="text-gray-600">Or continue with</p>
                   <span className="w-full border-b border-gray-400"></span>

@@ -19,14 +19,33 @@ exports.signupValidator = [
       if (user) throw new Error("Email already exists");
       else return true;
     }),
-  body("name")
+  body("username")
     .trim()
     .notEmpty()
-    .withMessage("name " + emptyMsg)
+    .withMessage("username " + emptyMsg)
     .isLength({ min: 1, max: 50 })
-    .withMessage("name " + length)
+    .withMessage("username " + length)
+    .custom(async (value) => {
+      const user = await db.getUser("username", value);
+      if (user) throw new Error("Username already exists");
+      else return true;
+    }),
+  body("firstName")
+    .trim()
+    .notEmpty()
+    .withMessage("first name " + emptyMsg)
+    .isLength({ min: 1, max: 50 })
+    .withMessage("first name " + length)
     .isAlpha()
-    .withMessage("name must be alphabetic characters only"),
+    .withMessage("first name must be alphabetic characters only"),
+  body("lastName")
+    .trim()
+    .notEmpty()
+    .withMessage("last name " + emptyMsg)
+    .isLength({ min: 1, max: 50 })
+    .withMessage("last name " + length)
+    .isAlpha()
+    .withMessage("last name must be alphabetic characters only"),
   body("password")
     .trim()
     .notEmpty()
@@ -45,14 +64,12 @@ exports.signupValidator = [
 ];
 
 exports.signinValidator = [
-  body("email")
+  body("username")
     .trim()
     .notEmpty()
-    .withMessage("email " + emptyMsg)
+    .withMessage("username " + emptyMsg)
     .isLength({ min: 1, max: 50 })
-    .withMessage("email " + length)
-    .isEmail()
-    .withMessage("email is not valid"),
+    .withMessage("username " + length),
   body("password")
     .trim()
     .notEmpty()

@@ -2,16 +2,20 @@ require("dotenv").config();
 const { PrismaPg } = require("@prisma/adapter-pg");
 const { PrismaClient } = require("@prisma/client");
 
+const db_URL = process.env.DATABASE_URL || process.env.LOCAL_DATABASE_URL;
+
 const adapter = new PrismaPg({
-  connectionString: process.env.LOCAL_DATABASE_URL,
+  connectionString: db_URL,
 });
 const prisma = new PrismaClient({ adapter });
 
-exports.createUser = async (email, name, password) => {
+exports.createUser = async (email, firstName, lastName, username, password) => {
   await prisma.user.create({
     data: {
       email: email,
-      name: name,
+      firstName: firstName,
+      lastName: lastName,
+      username: username,
       password: password,
     },
   });

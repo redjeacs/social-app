@@ -31,18 +31,26 @@ export function SignupForm({ ...props }) {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          name: e.target.name.value,
+          firstName: e.target.firstName.value,
+          lastName: e.target.lastName.value,
           email: e.target.email.value,
+          username: e.target.username.value,
           password: e.target.password.value,
           confirmPassword: e.target.confirmPassword.value,
         }),
       });
+      const data = await res.json();
+
       if (!res.ok) {
-        alert(data.errors ? data.errors.join("\n") : "Signup failed");
+        alert(
+          data.errors
+            ? data.errors.map((err) => err.msg).join("\n")
+            : "Signup failed"
+        );
         setLoading(false);
         return;
       }
-      const data = await res.json();
+
       setToken(data.token);
       setUser(data.user);
       setLoading(false);
@@ -68,8 +76,16 @@ export function SignupForm({ ...props }) {
         <form onSubmit={handleSignup}>
           <FieldGroup>
             <Field>
-              <FieldLabel htmlFor="name">Full Name</FieldLabel>
-              <Input id="name" type="text" placeholder="John Doe" required />
+              <FieldLabel htmlFor="firstName">First Name</FieldLabel>
+              <Input id="firstName" type="text" placeholder="John" required />
+            </Field>
+            <Field>
+              <FieldLabel htmlFor="lastName">Last Name</FieldLabel>
+              <Input id="lastName" type="text" placeholder="Doe" required />
+            </Field>
+            <Field>
+              <FieldLabel htmlFor="username">Username</FieldLabel>
+              <Input id="username" type="text" placeholder="johndoe" required />
             </Field>
             <Field>
               <FieldLabel htmlFor="email">Email</FieldLabel>

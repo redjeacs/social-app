@@ -7,11 +7,13 @@ datasource db {
 }
 
 model User {
-  id        String      @id @default(uuid())
-  email     String      @unique
-  name      String
-  password  String
-  createdAt DateTime    @default(now())
+  id              String      @id @default(uuid())
+  email           String      @unique
+  username        String      @unique
+  firstName       String
+  lastName        String
+  password        String
+  createdAt       DateTime    @default(now())
 
   @@map("app_users")
 }

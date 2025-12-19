@@ -7,4 +7,5 @@ const authRouter = Router();
 authRouter.get("/", verifyToken, authController.checkSignin);
 authRouter.post("/signup", authController.createUser);
 authRouter.post("/signin", authController.signin);
+authRouter.post("/demo-signin", authController.demoSignin);
 module.exports = authRouter;
