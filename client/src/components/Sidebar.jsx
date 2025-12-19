@@ -30,7 +30,7 @@ function Sidebar() {
             </li>
           </Link>
           <Link
-            to="/profile"
+            to="/"
             className="md:p-4 cursor-pointer hover:bg-gray-800 rounded w-6 h-6 md:w-full md:h-full"
           >
             <li>

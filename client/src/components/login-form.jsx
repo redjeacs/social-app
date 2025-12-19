@@ -98,6 +98,14 @@ export function LoginForm({ className, ...props }) {
     }
   };
 
+  const handleGoogleSignin = () => {
+    window.location.href = `${import.meta.env.VITE_API_URL}/auth/google`;
+  };
+
+  const handleGithubSignin = () => {
+    window.location.href = `${import.meta.env.VITE_API_URL}/auth/github`;
+  };
+
   return loading ? (
     <Spinner />
   ) : (
@@ -135,12 +143,18 @@ export function LoginForm({ className, ...props }) {
               </Field>
               <Field>
                 <Button type="submit">Login</Button>
-                <Button onClick={handleDemoSignin}>Demo Login</Button>
+                <Button variant="secondary" onClick={handleDemoSignin}>
+                  Demo Login
+                </Button>
                 <div className="flex flex-col w-full items-center gap-2">
                   <p className="text-gray-600">Or continue with</p>
                   <span className="w-full border-b border-gray-400"></span>
                   <div className="flex gap-2 w-full py-2">
-                    <Button variant="outline" className="flex-1">
+                    <Button
+                      variant="outline"
+                      onClick={handleGoogleSignin}
+                      className="flex-1"
+                    >
                       <img
                         width={20}
                         height={20}
@@ -148,7 +162,11 @@ export function LoginForm({ className, ...props }) {
                         alt="Google"
                       />
                     </Button>
-                    <Button variant="outline" className="flex-1">
+                    <Button
+                      variant="outline"
+                      onClick={handleGithubSignin}
+                      className="flex-1"
+                    >
                       <img
                         width="20"
                         height="20"

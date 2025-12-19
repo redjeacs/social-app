@@ -9,7 +9,6 @@ function HomePage() {
     <div>
       {(!user || !token) && <Navigate to="/signin" />}
       HomePage
-      <Button>Click me</Button>
     </div>
   );
 }

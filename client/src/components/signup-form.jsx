@@ -17,6 +17,8 @@ import { Input } from "@/components/ui/input";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { Spinner } from "./ui/spinner";
+import githubIcon from "@/assets/github-icon.svg";
+import googleIcon from "@/assets/google-icon.svg";
 
 export function SignupForm({ ...props }) {
   const { setUser, setToken } = useAuth();
@@ -95,17 +97,10 @@ export function SignupForm({ ...props }) {
                 placeholder="m@example.com"
                 required
               />
-              <FieldDescription>
-                We&apos;ll use this to contact you. We will not share your email
-                with anyone else.
-              </FieldDescription>
             </Field>
             <Field>
               <FieldLabel htmlFor="password">Password</FieldLabel>
               <Input id="password" type="password" required />
-              <FieldDescription>
-                Must be at least 8 characters long.
-              </FieldDescription>
             </Field>
             <Field>
               <FieldLabel htmlFor="confirmPassword">
@@ -117,6 +112,28 @@ export function SignupForm({ ...props }) {
             <FieldGroup>
               <Field>
                 <Button type="submit">Create Account</Button>
+                <div className="flex flex-col w-full items-center gap-2">
+                  <p className="text-gray-600">Or continue with</p>
+                  <span className="w-full border-b border-gray-400"></span>
+                  <div className="flex gap-2 w-full py-2">
+                    <Button variant="outline" className="flex-1">
+                      <img
+                        width={20}
+                        height={20}
+                        src={googleIcon}
+                        alt="Google"
+                      />
+                    </Button>
+                    <Button variant="outline" className="flex-1">
+                      <img
+                        width="20"
+                        height="20"
+                        src={githubIcon}
+                        alt="GitHub"
+                      />
+                    </Button>
+                  </div>
+                </div>
                 <FieldDescription className="px-6 text-center">
                   Already have an account? <a href="/signin">Sign in</a>
                 </FieldDescription>
