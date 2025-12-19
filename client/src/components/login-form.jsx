@@ -64,11 +64,7 @@ export function LoginForm({ className, ...props }) {
     setLoading(true);
     try {
       const res = await fetch(
-        `${import.meta.env.VITE_API_URL}/auth/demo-signin`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-        }
+        `${import.meta.env.VITE_API_URL}/auth/demo-signin`
       );
 
       console.log("Demo signin response:", res);
