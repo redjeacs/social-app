@@ -1,7 +1,47 @@
 const passport = require("passport");
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
 const GitHubStrategy = require("passport-github2").Strategy;
-const db = require("../db/queries");
+const { PrismaClient } = require("@prisma/client");
+const prisma = new PrismaClient();
+
+// Helper to find or create user with identity
+async function findOrCreateOAuthUser({
+  provider,
+  providerId,
+  email,
+  username,
+  firstName,
+  lastName,
+}) {
+  // Try to find identity
+  let identity = await prisma.identity.findUnique({
+    where: { provider_providerId: { provider, providerId } },
+    include: { user: true },
+  });
+
+  if (identity && identity.user) {
+    return identity.user;
+  }
+
+  // If not found, create user and identity
+  const user = await prisma.user.create({
+    data: {
+      email,
+      username,
+      firstName,
+      lastName,
+      password: "", // No password for OAuth
+      identities: {
+        create: {
+          provider,
+          providerId,
+        },
+      },
+    },
+  });
+
+  return user;
+}
 
 // Google OAuth Strategy
 passport.use(
@@ -13,18 +53,14 @@ passport.use(
     },
     async (accessToken, refreshToken, profile, done) => {
       try {
-        // Try to find user by googleId
-        let user = await db.getUser("googleId", profile.id);
-        if (!user) {
-          // If not found, create new user
-          user = await db.createOAuthUser({
-            email: profile.emails[0].value,
-            username: profile.displayName || profile.emails[0].value,
-            googleId: profile.id,
-            firstName: profile.name?.givenName || "",
-            lastName: profile.name?.familyName || "",
-          });
-        }
+        const user = await findOrCreateOAuthUser({
+          provider: "google",
+          providerId: profile.id,
+          email: profile.emails[0].value,
+          username: profile.displayName || profile.emails[0].value,
+          firstName: profile.name?.givenName || "",
+          lastName: profile.name?.familyName || "",
+        });
         return done(null, user);
       } catch (err) {
         return done(err, null);
@@ -44,25 +80,19 @@ passport.use(
     },
     async (accessToken, refreshToken, profile, done) => {
       try {
-        // Try to find user by githubId
-        let user = await db.getUser("githubId", profile.id);
-        if (!user) {
-          // If not found, create new user
-          user = await db.createOAuthUser({
-            email:
-              profile.emails && profile.emails[0]
-                ? profile.emails[0].value
-                : "",
-            username:
-              profile.username ||
-              (profile.emails && profile.emails[0]
-                ? profile.emails[0].value
-                : ""),
-            githubId: profile.id,
-            firstName: profile.displayName || "",
-            lastName: "",
-          });
-        }
+        const user = await findOrCreateOAuthUser({
+          provider: "github",
+          providerId: profile.id,
+          email:
+            profile.emails && profile.emails[0] ? profile.emails[0].value : "",
+          username:
+            profile.username ||
+            (profile.emails && profile.emails[0]
+              ? profile.emails[0].value
+              : ""),
+          firstName: profile.displayName || "",
+          lastName: "",
+        });
         return done(null, user);
       } catch (err) {
         return done(err, null);
