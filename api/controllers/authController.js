@@ -2,6 +2,7 @@ const db = require("../db/queries");
 const { validationResult, matchedData } = require("express-validator");
 const CustomNotFoundError = require("../middlewares/CustomNotFoundError");
 const validators = require("../middlewares/Validators");
+const passport = require("passport");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
@@ -40,6 +41,31 @@ exports.createUser = [
     }
   },
 ];
+
+exports.getUser = async (req, res, next) => {
+  const authHeader = req.headers.authorization;
+  if (!authHeader || !authHeader.startsWith("Bearer ")) {
+    return res.status(401).json({ message: "Authorization header missing" });
+  }
+  const token = authHeader.split(" ")[1];
+  try {
+    const payload = jwt.verify(token, process.env.JWT_SECRET);
+    const user = await db.getUser("id", payload.id);
+    if (!user) return res.status(404).json({ message: "User not found" });
+
+    const userData = {
+      id: user.id,
+      email: user.email,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      username: user.username,
+    };
+
+    return res.status(200).json({ message: "User fetched", user: userData });
+  } catch (err) {
+    return res.status(401).json({ message: "Invalid token" });
+  }
+};
 
 exports.signin = [
   validators.signinValidator,
@@ -125,4 +151,50 @@ exports.checkSignin = async (req, res, next) => {
   } catch (err) {
     next(err);
   }
+};
+
+exports.googleCallback = (req, res, next) => {
+  passport.authenticate("google", { session: false }, (err, user) => {
+    if (err || !user) {
+      return res.redirect(
+        `${process.env.CLIENT_URL}/signin?error=OAuth%20Failed`
+      );
+    }
+
+    const payload = {
+      id: user.id,
+      email: user.email,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      username: user.username,
+    };
+    const token = jwt.sign(payload, process.env.JWT_SECRET, {
+      expiresIn: "1d",
+    });
+
+    res.redirect(`${process.env.CLIENT_URL}/oauth-callback?token=${token}`);
+  })(req, res, next);
+};
+
+exports.githubCallback = (req, res, next) => {
+  passport.authenticate("github", { session: false }, (err, user) => {
+    if (err || !user) {
+      return res.redirect(
+        `${process.env.CLIENT_URL}/signin?error=OAuth%20Failed`
+      );
+    }
+
+    const payload = {
+      id: user.id,
+      email: user.email,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      username: user.username,
+    };
+    const token = jwt.sign(payload, process.env.JWT_SECRET, {
+      expiresIn: "1d",
+    });
+
+    res.redirect(`${process.env.CLIENT_URL}/oauth-callback?token=${token}`);
+  })(req, res, next);
 };

@@ -2,7 +2,7 @@ import "dotenv/config";
 import { defineConfig, env } from "prisma/config";
 
 const db_URL =
-  process.env.NODE_ENV === "production"
+  env("NODE_ENV") === "production"
     ? env("DATABASE_URL")
     : env("LOCAL_DATABASE_URL");
 

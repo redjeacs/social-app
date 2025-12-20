@@ -16,7 +16,7 @@ import {
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Spinner } from "./ui/spinner";
 import githubIcon from "@/assets/github-icon.svg";
 import googleIcon from "@/assets/google-icon.svg";
@@ -25,6 +25,14 @@ export function LoginForm({ className, ...props }) {
   const { setUser, setToken } = useAuth();
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const error = params.get("error");
+    if (error) {
+      alert(decodeURIComponent(error));
+    }
+  }, []);
 
   const handleSignin = async (e) => {
     e.preventDefault();
@@ -147,6 +155,7 @@ export function LoginForm({ className, ...props }) {
                   <span className="w-full border-b border-gray-400"></span>
                   <div className="flex gap-2 w-full py-2">
                     <Button
+                      type="button"
                       variant="outline"
                       onClick={handleGoogleSignin}
                       className="flex-1"
@@ -159,6 +168,7 @@ export function LoginForm({ className, ...props }) {
                       />
                     </Button>
                     <Button
+                      type="button"
                       variant="outline"
                       onClick={handleGithubSignin}
                       className="flex-1"
