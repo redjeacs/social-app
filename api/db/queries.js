@@ -28,3 +28,18 @@ exports.getUser = async (colName, query) => {
   });
   return user;
 };
+
+exports.getAllPosts = async () => {
+  const posts = await prisma.post.findMany();
+  return posts;
+};
+
+exports.createPost = async (userId, content) => {
+  const newPost = await prisma.post.create({
+    data: {
+      content: content,
+      user: { connect: { id: userId } },
+    },
+  });
+  return newPost;
+};

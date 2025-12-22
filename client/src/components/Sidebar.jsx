@@ -66,7 +66,7 @@ function Sidebar() {
             alt="Logo"
             className="w-10 h-10 rounded-full bg-gray-500"
           />
-          <div className="hidden xl:flex xl:flex-col">
+          <div className="hidden xl:flex xl:flex-col" onClick={handleSignout}>
             <span>{user?.name || "Guest"}</span>
             <span>@{user?.username || "username"}</span>
           </div>

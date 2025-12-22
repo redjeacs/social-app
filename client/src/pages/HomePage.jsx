@@ -58,6 +58,7 @@ function HomePage() {
         }
       );
       const data = await res.json();
+      console.log(data, token);
       if (!res.ok) {
         setAlert({
           type: "error",

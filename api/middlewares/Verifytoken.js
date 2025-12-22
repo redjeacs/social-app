@@ -12,7 +12,9 @@ function verifyToken(req, res, next) {
       req.user = decoded; // Set req.user to the decoded JWT payload
       next();
     } catch (err) {
-      return res.status(401).json({ message: "Invalid or expired token" });
+      return res
+        .status(401)
+        .json({ message: "Invalid or expired token", error: err });
     }
   } else {
     res.sendStatus(403);
