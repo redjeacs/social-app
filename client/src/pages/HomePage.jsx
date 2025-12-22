@@ -1,17 +1,38 @@
 import PostList from "@/components/PostList";
 import { Navigate } from "react-router-dom";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useAuth } from "../contexts/AuthContext";
+import { useAlert } from "../contexts/AlertContext";
 import userProfilePlaceholder from "../assets/user.svg";
 import globeIcon from "../assets/globe.png";
 import { Button } from "@/components/ui/button";
 import TrendsBar from "@/components/TrendsBar";
+import { Progress } from "@/components/ui/progress";
 
 function HomePage() {
   const { user, token } = useAuth();
   const [selectedTab, setSelectedTab] = useState("For you");
   const [post, setPost] = useState("");
+  const [isSubmittingPost, setIsSubmittingPost] = useState(false);
+  const [progress, setProgress] = useState(0);
+  const { setAlert } = useAlert();
   const textareaRef = useRef(null);
+
+  useEffect(() => {
+    if (isSubmittingPost) {
+      let progressValue = 0;
+      const interval = setInterval(() => {
+        progressValue += 10;
+        setProgress(progressValue);
+        if (progressValue >= 100) {
+          clearInterval(interval);
+          setIsSubmittingPost(false);
+          setProgress(0);
+        }
+      }, 100);
+      return () => clearInterval(interval);
+    }
+  }, [isSubmittingPost]);
 
   const handleTextareaInput = (e) => {
     const textarea = textareaRef.current;
@@ -21,9 +42,37 @@ function HomePage() {
     }
   };
 
-  const handlePostSubmit = (e) => {
+  const handlePostSubmit = async (e) => {
     e.preventDefault();
-    console.log("Post submitted:", post);
+    setIsSubmittingPost(true);
+    try {
+      const res = await fetch(
+        `${import.meta.env.VITE_API_URL}/posts/${user.id}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({ content: post }),
+        }
+      );
+      const data = await res.json();
+      if (!res.ok) {
+        setAlert({
+          type: "error",
+          message: `An error occured - ${data.message || res.statusText}`,
+        });
+        return;
+      }
+      setPost("");
+      setAlert({ type: "success", message: "Post submitted successfully!" });
+    } catch (err) {
+      setAlert({
+        type: "error",
+        message: `An error occured - ${err.message}`,
+      });
+    }
     // Handle post submission logic here
   };
 
@@ -63,7 +112,7 @@ function HomePage() {
             ></div>
           </div>
         </div>
-        <div className="flex p-2 border-b border-(--twitter-gray)">
+        <div className="relative flex p-2 border-b border-(--twitter-gray)">
           <div className="p-2">
             <img
               src={user?.profilePicture || userProfilePlaceholder}
@@ -74,6 +123,12 @@ function HomePage() {
 
           <div className="flex flex-col flex-1">
             <div className="border-b border-(--twitter-gray)">
+              {isSubmittingPost && (
+                <Progress
+                  className="absolute top-0 left-0 w-full"
+                  value={progress}
+                />
+              )}
               <textarea
                 ref={textareaRef}
                 autoComplete="off"
