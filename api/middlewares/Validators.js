@@ -77,3 +77,12 @@ exports.signinValidator = [
     .isLength({ min: 1, max: 50 })
     .withMessage("username " + length),
 ];
+
+exports.postValidator = [
+  body("content")
+    .trim()
+    .notEmpty()
+    .withMessage("Post content cannot be empty")
+    .isLength({ min: 1, max: 280 })
+    .withMessage("Post content should be between 1 and 280 characters"),
+];
