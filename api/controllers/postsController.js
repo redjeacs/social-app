@@ -29,12 +29,11 @@ exports.createPost = [
     const data = matchedData(req);
     if (!data) throw new CustomNotFoundError("No data found after validation");
 
-    await db.createPost(userId, content);
-
-    res.status(201).json({ message: "Post created successfully" });
     try {
       const newPost = await db.createPost(userId, content);
-      res.status(201).json(newPost);
+      res
+        .status(201)
+        .json({ message: "Post created successfully", post: newPost });
     } catch (error) {
       res.status(500).json({ message: "Error creating post", error });
     }

@@ -30,7 +30,14 @@ exports.getUser = async (colName, query) => {
 };
 
 exports.getAllPosts = async () => {
-  const posts = await prisma.post.findMany();
+  const posts = await prisma.post.findMany({
+    include: {
+      user: true,
+    },
+    orderBy: {
+      createdAt: "desc",
+    },
+  });
   return posts;
 };
 

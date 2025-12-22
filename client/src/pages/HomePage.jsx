@@ -13,6 +13,7 @@ function HomePage() {
   const { user, token } = useAuth();
   const [selectedTab, setSelectedTab] = useState("For you");
   const [post, setPost] = useState("");
+  const [yourRecentPosts, setYourRecentPosts] = useState([]);
   const [isSubmittingPost, setIsSubmittingPost] = useState(false);
   const [progress, setProgress] = useState(0);
   const { setAlert } = useAlert();
@@ -58,7 +59,6 @@ function HomePage() {
         }
       );
       const data = await res.json();
-      console.log(data, token);
       if (!res.ok) {
         setAlert({
           type: "error",
@@ -67,6 +67,7 @@ function HomePage() {
         return;
       }
       setPost("");
+      setYourRecentPosts([data.post, ...yourRecentPosts]);
       setAlert({ type: "success", message: "Post submitted successfully!" });
     } catch (err) {
       setAlert({
@@ -74,7 +75,6 @@ function HomePage() {
         message: `An error occured - ${err.message}`,
       });
     }
-    // Handle post submission logic here
   };
 
   return (
@@ -171,7 +171,7 @@ function HomePage() {
           </div>
         </div>
         <div className="max-w-[600px] flex flex-col">
-          <PostList />
+          <PostList yourRecentPosts={yourRecentPosts} />
         </div>
       </div>
 
