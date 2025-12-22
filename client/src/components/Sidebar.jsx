@@ -11,7 +11,7 @@ function Sidebar() {
   };
 
   return (
-    <aside className="flex flex-col xl:items-start items-center p-2 overflow-auto fixed w-full bottom-0 h-16 md:top-0 md:h-screen md:w-22 xl:w-68 text-white md:flex-col shadow-lg z-40">
+    <aside className="custom-scrollbar flex flex-col xl:items-start items-center p-2 overflow-auto fixed w-full bottom-0 h-16 md:top-0 md:h-screen md:w-22 xl:w-68 text-white md:flex-col shadow-lg z-40">
       <div className="flex flex-col flex-1 w-full">
         <div className="flex flex-col items-center xl:items-start xl:gap-1">
           <div className="flex-1">

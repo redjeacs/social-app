@@ -5,6 +5,7 @@ import { useAuth } from "../contexts/AuthContext";
 import userProfilePlaceholder from "../assets/user.svg";
 import globeIcon from "../assets/globe.png";
 import { Button } from "@/components/ui/button";
+import TrendsBar from "@/components/TrendsBar";
 
 function HomePage() {
   const { user, token } = useAuth();
@@ -29,8 +30,8 @@ function HomePage() {
   return (
     <div className="flex gap-6 min-h-screen">
       {(!user || !token) && <Navigate to="/signin" />}
-      <div className="max-w-[600px] w-screen border-x  border-gray-700 text-white">
-        <div className="sticky top-0 bg-black flex grow border-b border-gray-700">
+      <div className="max-w-[600px] w-screen border-x border-(--twitter-gray) text-white">
+        <div className="sticky w-full top-0 bg-black flex grow border-b border-(--twitter-gray)">
           <div
             className={`relative flex flex-col text-gray-400 justify-center items-center flex-1 h-13 cursor-pointer ${
               selectedTab === "For you" ? "text-white" : ""
@@ -62,7 +63,7 @@ function HomePage() {
             ></div>
           </div>
         </div>
-        <div className="flex p-2 border-b border-gray-700">
+        <div className="flex p-2 border-b border-(--twitter-gray)">
           <div className="p-2">
             <img
               src={user?.profilePicture || userProfilePlaceholder}
@@ -72,7 +73,7 @@ function HomePage() {
           </div>
 
           <div className="flex flex-col flex-1">
-            <div className="border-b border-gray-700">
+            <div className="border-b border-(--twitter-gray)">
               <textarea
                 ref={textareaRef}
                 autoComplete="off"
@@ -118,11 +119,7 @@ function HomePage() {
         </div>
       </div>
 
-      <div className=" min-w-[290px] hidden lg:block p-2">
-        <div className="border border-gray-500 text-gray-500 p-2 rounded-full">
-          search
-        </div>
-      </div>
+      <TrendsBar />
     </div>
   );
 }
