@@ -26,7 +26,6 @@ function PostList({ yourRecentPosts }) {
             message: `An error occured - ${res.statusText}`,
           });
 
-        console.log("Fetched posts:", data);
         setPosts(data);
         setAlert({ type: "success", message: "Posts loaded successfully!" });
       } catch (error) {
