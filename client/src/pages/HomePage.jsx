@@ -81,7 +81,7 @@ function HomePage() {
     <div className="flex gap-6 min-h-screen">
       {(!user || !token) && <Navigate to="/signin" />}
       <div className="max-w-[600px] w-screen border-x border-(--twitter-gray) text-white">
-        <div className="sticky w-full top-0 bg-black flex grow border-b border-(--twitter-gray)">
+        <div className="sticky w-full top-0 z-10 bg-black flex grow border-b border-(--twitter-gray)">
           <div
             className={`relative flex flex-col text-gray-400 justify-center items-center flex-1 h-13 cursor-pointer ${
               selectedTab === "For you" ? "text-white" : ""
