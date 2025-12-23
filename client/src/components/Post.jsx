@@ -17,17 +17,19 @@ function Post({ post }) {
       <div className="flex flex-col flex-1">
         <div className="flex gap-2">
           <span className="font-bold">{`${user?.firstName} ${user?.lastName}`}</span>
-          <span className="text-[#71767b]">@{user?.username}</span>
-          <div className="text-[#71767b]">·</div>
-          <span className="text-[#71767b]">{formatDate(post.createdAt)}</span>
+          <span className="text-(--twitter-text)">@{user?.username}</span>
+          <div className="text-(--twitter-text)">·</div>
+          <span className="text-(--twitter-text)">
+            {formatDate(post.createdAt)}
+          </span>
         </div>
         <p>{post.content}</p>
-        <div className="flex justify-around w-full text-[#71767b] mt-2">
+        <div className="flex justify-around w-full text-(--twitter-text) mt-2">
           <div className="flex gap-2 items-center">
             <div className="hover:text-(--twitter-blue) hover:bg-[rgba(29,155,240,0.2)] p-2 rounded-full ease-in-out duration-300">
               <svg
                 viewBox="0 0 24 24"
-                fill="#71767b"
+                fill="var(--twitter-text)"
                 stroke="currentColor"
                 strokeWidth="1"
                 strokeLinecap="round"

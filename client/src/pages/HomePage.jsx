@@ -8,6 +8,7 @@ import globeIcon from "../assets/globe.png";
 import { Button } from "@/components/ui/button";
 import TrendsBar from "@/components/TrendsBar";
 import { Progress } from "@/components/ui/progress";
+import FollowingList from "@/components/FollowingList";
 
 function HomePage() {
   const { user, token } = useAuth();
@@ -171,7 +172,10 @@ function HomePage() {
           </div>
         </div>
         <div className="max-w-[600px] flex flex-col">
-          <PostList yourRecentPosts={yourRecentPosts} />
+          {selectedTab === "Following" && <FollowingList />}
+          {selectedTab === "For you" && (
+            <PostList yourRecentPosts={yourRecentPosts} />
+          )}
         </div>
       </div>
 

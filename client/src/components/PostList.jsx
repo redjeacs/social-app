@@ -27,7 +27,6 @@ function PostList({ yourRecentPosts }) {
           });
 
         setPosts(data);
-        setAlert({ type: "success", message: "Posts loaded successfully!" });
       } catch (error) {
         console.error("Error fetching posts:", error);
       }

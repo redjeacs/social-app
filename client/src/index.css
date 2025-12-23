@@ -75,7 +75,9 @@
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
   --twitter-blue: rgb(29, 155, 240);
+  --twitter-blue-hover: rgba(29, 155, 240, 0.8);
   --twitter-gray: rgba(231, 233, 234, 0.4);
+  --twitter-text: #71767b;
 }
 
 .dark {
