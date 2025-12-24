@@ -60,13 +60,16 @@ function Sidebar() {
           </button>
           <img src={logo} alt="Post" className="xl:hidden w-16 h-16 p-1" />
         </div>
-        <div className="flex gap-2 m-2 p-2 items-center rounded-full hover:bg-gray-800 cursor-pointer">
+        <div
+          onClick={handleSignout}
+          className="flex gap-2 m-2 p-2 items-center rounded-full hover:bg-gray-800 cursor-pointer"
+        >
           <img
             src={user?.profilePicture || userIcon}
             alt="Logo"
             className="w-10 h-10 rounded-full bg-gray-500"
           />
-          <div className="hidden xl:flex xl:flex-col" onClick={handleSignout}>
+          <div className="hidden xl:flex xl:flex-col">
             <span>{user?.name || "Guest"}</span>
             <span>@{user?.username || "username"}</span>
           </div>

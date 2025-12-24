@@ -93,7 +93,7 @@ function HomePage() {
             <div
               className={`absolute bottom-0 min-w-14 h-1 rounded-full ${
                 selectedTab === "For you"
-                  ? "border-2 border-blue-500 font-bold"
+                  ? "border-2 border-(--twitter-blue) font-bold"
                   : "font-normal"
               }`}
             ></div>
@@ -108,7 +108,7 @@ function HomePage() {
             <div
               className={`absolute bottom-0 min-w-14 h-1 rounded-full ${
                 selectedTab === "Following"
-                  ? "border-2 border-blue-500 font-bold"
+                  ? "border-2 border-(--twitter-blue) font-bold"
                   : "font-normal"
               }`}
             ></div>

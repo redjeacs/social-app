@@ -10,9 +10,11 @@ function FollowingList() {
           This is the best place to see what’s happening in your world. Find
           some people and topics to follow now.
         </span>
-        <Button className="bg-(--twitter-blue) text-lg text-white font-bold rounded-full w-35 h-14 cursor-pointer hover:bg-(--twitter-blue-hover)">
-          <Link to="/follow">Let's go!</Link>
-        </Button>
+        <Link to="/follow">
+          <Button className="bg-(--twitter-blue) text-lg text-white font-bold rounded-full w-35 h-14 cursor-pointer hover:bg-(--twitter-blue-hover)">
+            Let's go!
+          </Button>
+        </Link>
       </div>
     </div>
   );
