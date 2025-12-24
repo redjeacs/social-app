@@ -96,8 +96,15 @@ function FollowCard({ userToFollow }) {
                     ? () => handleUserUnfollow(userToFollow.id)
                     : () => handleUserFollow(userToFollow.id)
                 }
+                onMouseEnter={(e) => {
+                  if (isFollowing) e.target.textContent = "Unfollow";
+                }}
+                onMouseLeave={(e) => {
+                  if (isFollowing) e.target.textContent = "Following";
+                }}
                 className={`bg-white text-black font-bold rounded-full px-4 py-1 hover:bg-white/90 ${
-                  isFollowing && "bg-(--twitter-blue)"
+                  isFollowing &&
+                  "w-22 bg-black text-white border border-white hover:text-[rgb(244,33,46)] hover:bg-[rgba(244,33,46,0.1)] hover:border-[rgb(244,33,46)]"
                 }`}
               >
                 {isFollowing ? "Following" : "Follow"}
