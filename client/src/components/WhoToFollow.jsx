@@ -46,7 +46,9 @@ function WhoToFollow() {
     <div className="flex flex-col w-full">
       {suggestedUsers &&
         suggestedUsers.length > 0 &&
-        suggestedUsers.map((user) => <FollowCard key={user.id} user={user} />)}
+        suggestedUsers.map((user) => (
+          <FollowCard key={user.id} userToFollow={user} />
+        ))}
     </div>
   );
 }

@@ -15,5 +15,11 @@ usersRouter.get(
   verifyToken,
   usersController.getUsersToFollow
 );
+usersRouter.post("/follow/:userId", verifyToken, usersController.followUser);
+usersRouter.post(
+  "/unfollow/:userId",
+  verifyToken,
+  usersController.unfollowUser
+);
 
 module.exports = usersRouter;
