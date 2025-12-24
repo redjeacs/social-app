@@ -75,8 +75,6 @@ export function LoginForm({ className, ...props }) {
         `${import.meta.env.VITE_API_URL}/auth/demo-signin`
       );
 
-      console.log("Demo signin response:", res);
-
       const data = await res.json();
       console.log(data);
 

@@ -3,7 +3,6 @@ import { formatDate } from "@/utils/formatDate";
 import { useAuth } from "../contexts/AuthContext";
 
 function Post({ post }) {
-  const { user } = useAuth();
   return (
     <div className="flex w-full items-stretch border-b border-gray-700 gap-2 p-4 pb-0 justify-center cursor-pointer hover:bg-[rgb(10,10,10)] ease-in-out duration-500">
       <div className="h-full w-10 bg-gray-400 rounded-full">

@@ -85,8 +85,6 @@ function FollowingList() {
     fetchFollowsPosts();
   }, [userData]);
 
-  console.log("followsPosts:", followsPosts);
-
   return (
     <div className="flex flex-col w-full">
       {followsPosts && followsPosts.length > 0 ? (
