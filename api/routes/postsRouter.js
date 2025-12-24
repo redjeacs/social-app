@@ -5,5 +5,10 @@ const postsRouter = Router();
 
 postsRouter.get("/", verifyToken, postsController.getAllPosts);
 postsRouter.post("/:userId", verifyToken, postsController.createPost);
+postsRouter.get(
+  "/follows/:userId",
+  verifyToken,
+  postsController.getFollowsPosts
+);
 
 module.exports = postsRouter;

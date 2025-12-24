@@ -12,6 +12,20 @@ exports.getAllPosts = async (req, res) => {
   }
 };
 
+exports.getFollowsPosts = async (req, res) => {
+  const { userId } = req.params;
+  try {
+    const posts = await db.getFollowsPOsts(userId);
+
+    if (!posts)
+      res.status(404).json({ message: "No posts found for followers" });
+
+    res.status(200).json(posts);
+  } catch (error) {
+    res.status(500).json({ message: "Error retrieving follower posts", error });
+  }
+};
+
 exports.createPost = [
   validators.postValidator,
   async (req, res) => {

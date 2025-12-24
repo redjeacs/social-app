@@ -96,6 +96,27 @@ exports.getAllPosts = async () => {
   return posts;
 };
 
+exports.getFollowsPosts = async (userId) => {
+  const posts = await prisma.post.findMany({
+    where: {
+      user: {
+        followers: {
+          some: {
+            id: userId,
+          },
+        },
+      },
+    },
+    include: {
+      user: true,
+    },
+    orderBy: {
+      createdAt: "desc",
+    },
+  });
+  return posts;
+};
+
 exports.createPost = async (userId, content) => {
   const newPost = await prisma.post.create({
     data: {
