@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "../contexts/AuthContext";
 import { useAlert } from "../contexts/AlertContext";
+import FollowCard from "./FollowCard";
 
 function WhoToFollow() {
-  const { user } = useAuth();
+  const { user, token } = useAuth();
   const { setAlert } = useAlert();
   const [suggestedUsers, setSuggestedUsers] = useState([]);
 
@@ -16,7 +17,7 @@ function WhoToFollow() {
             method: "GET",
             headers: {
               "Content-Type": "application/json",
-              Authorization: `Bearer ${user.token}`,
+              Authorization: `Bearer ${token}`,
             },
           }
         );
@@ -43,11 +44,9 @@ function WhoToFollow() {
 
   return (
     <div className="flex flex-col w-full">
-      {suggestedUsers.map((user) => (
-        <div key={user.id} className="p-4 border-b border-(--twitter-gray)">
-          {user.username}
-        </div>
-      ))}
+      {suggestedUsers &&
+        suggestedUsers.length > 0 &&
+        suggestedUsers.map((user) => <FollowCard key={user.id} user={user} />)}
     </div>
   );
 }

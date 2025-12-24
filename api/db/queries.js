@@ -29,6 +29,29 @@ exports.getUser = async (colName, query) => {
   return user;
 };
 
+exports.getUsersToFollow = async (userId) => {
+  const users = await prisma.user.findMany({
+    where: {
+      id: {
+        not: userId,
+      },
+    },
+    take: 20,
+  });
+  return users;
+};
+
+exports.getPopularUsers = async (userId) => {
+  const users = await prisma.user.findMany({
+    where: { id: { not: userId } },
+    orderBy: {
+      followersCount: "desc",
+    },
+    take: 20,
+  });
+  return users;
+};
+
 exports.getAllPosts = async () => {
   const posts = await prisma.post.findMany({
     include: {

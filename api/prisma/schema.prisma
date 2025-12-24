@@ -17,6 +17,9 @@ model User {
   identities      Identity[]
   posts           Post[]
   comments        Comment[]
+  followers       User[]      @relation("UserFollowers")
+  following       User[]      @relation("UserFollowers")
+  followersCount  Int         @default(0)
 
   @@map("app_users")
 }
