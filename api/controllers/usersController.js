@@ -1,5 +1,4 @@
 const db = require("../db/queries");
-const CustomNotFoundError = require("../middlewares/CustomNotFoundError");
 
 exports.getUserById = async (req, res, next) => {
   const userId = req.params.userId;

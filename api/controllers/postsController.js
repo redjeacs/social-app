@@ -15,7 +15,7 @@ exports.getAllPosts = async (req, res) => {
 exports.getFollowsPosts = async (req, res) => {
   const { userId } = req.params;
   try {
-    const posts = await db.getFollowsPOsts(userId);
+    const posts = await db.getFollowsPosts(userId);
 
     if (!posts)
       res.status(404).json({ message: "No posts found for followers" });

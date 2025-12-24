@@ -25,6 +25,7 @@ exports.getUser = async (colName, query) => {
   const key = { [colName]: query };
   const user = await prisma.user.findUnique({
     where: key,
+    include: { followers: true, following: true },
   });
   return user;
 };

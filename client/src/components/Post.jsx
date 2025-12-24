@@ -1,7 +1,6 @@
 import userIcon from "../assets/user.svg";
 import { formatDate } from "@/utils/formatDate";
 import { useAuth } from "../contexts/AuthContext";
-import heartIcon from "../assets/heart.png";
 
 function Post({ post }) {
   const { user } = useAuth();
@@ -16,8 +15,12 @@ function Post({ post }) {
       </div>
       <div className="flex flex-col flex-1">
         <div className="flex gap-2">
-          <span className="font-bold">{`${user?.firstName} ${user?.lastName}`}</span>
-          <span className="text-(--twitter-text)">@{user?.username}</span>
+          <span className="font-bold">
+            {post.user && `${post.user.firstName} ${post.user.lastName}`}
+          </span>
+          <span className="text-(--twitter-text)">
+            @{post.user && post.user.username}
+          </span>
           <div className="text-(--twitter-text)">·</div>
           <span className="text-(--twitter-text)">
             {formatDate(post.createdAt)}

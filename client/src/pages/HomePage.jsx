@@ -68,7 +68,7 @@ function HomePage() {
         return;
       }
       setPost("");
-      setYourRecentPosts([data.post, ...yourRecentPosts]);
+      setYourRecentPosts([{ ...data.post, user }, ...yourRecentPosts]);
       setAlert({ type: "success", message: "Post submitted successfully!" });
     } catch (err) {
       setAlert({
