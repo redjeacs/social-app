@@ -1,7 +1,60 @@
 import userIcon from "../assets/user.svg";
 import { formatDate } from "@/utils/formatDate";
+import { useAuth } from "../contexts/AuthContext";
+import { useAlert } from "../contexts/AlertContext";
 
-function Post({ post }) {
+function PostCard({ post }) {
+  const { user, token } = useAuth();
+  const { setAlert } = useAlert();
+
+  const handlePostLike = async () => {
+    const userId = user.id;
+    const postId = post.id;
+
+    try {
+      const res = await fetch(
+        `${import.meta.env.VITE_API_URL}/posts/${postId}/like`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({ userId }),
+        }
+      );
+
+      let data;
+      const contentType = res.headers.get("content-type");
+      if (contentType && contentType.includes("application/json")) {
+        data = await res.json();
+      } else {
+        data = { message: await res.text() };
+      }
+
+      if (!res.ok) {
+        setAlert({
+          type: "error",
+          message: `An error occured - ${data.message || res.statusText}`,
+        });
+        return;
+      }
+
+      setAlert({
+        type: "success",
+        message: data.message || "Post liked successfully",
+      });
+
+      post.likes = data.likes;
+    } catch (err) {
+      console.error("Error liking post:", err);
+      setAlert({
+        type: "error",
+        message: `An error occured - ${err.message}`,
+      });
+    }
+  };
+
   return (
     <div className="flex w-full items-stretch border-b border-gray-700 gap-2 p-4 pb-0 justify-center cursor-pointer hover:bg-[rgb(10,10,10)] ease-in-out duration-500">
       <div className="h-full w-10 bg-gray-400 rounded-full">
@@ -26,8 +79,8 @@ function Post({ post }) {
         </div>
         <p>{post.content}</p>
         <div className="flex justify-around w-full text-(--twitter-text) mt-2">
-          <div className="flex gap-2 items-center">
-            <div className="hover:text-(--twitter-blue) hover:bg-[rgba(29,155,240,0.2)] p-2 rounded-full ease-in-out duration-300">
+          <div className="flex items-center hover:text-(--twitter-blue)">
+            <div className=" hover:bg-[rgba(29,155,240,0.2)] p-2 rounded-full ease-in-out duration-300">
               <svg
                 viewBox="0 0 24 24"
                 fill="var(--twitter-text)"
@@ -42,8 +95,8 @@ function Post({ post }) {
             </div>
             <span>{post.comments || ""}</span>
           </div>
-          <div className="flex gap-2 items-center">
-            <div className="hover:text-[rgb(0,186,124)] hover:bg-[rgba(0,186,124,0.2)] p-2 rounded-full ease-in-out duration-300">
+          <div className="flex items-center hover:text-[rgb(0,186,124)]">
+            <div className=" hover:bg-[rgba(0,186,124,0.2)] p-2 rounded-full ease-in-out duration-300">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 24 24"
@@ -62,8 +115,11 @@ function Post({ post }) {
             </div>
             <span>{post.retweet || ""}</span>
           </div>
-          <div className="flex gap-2 items-center">
-            <div className="hover:text-[rgb(249,24,128)] hover:bg-[rgba(249,24,128,0.2)] p-2 rounded-full ease-in-out duration-300">
+          <div
+            onClick={handlePostLike}
+            className="flex items-center hover:text-[rgb(249,24,128)]"
+          >
+            <div className="hover:bg-[rgba(249,24,128,0.2)] p-2 rounded-full ease-in-out duration-300">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 24 24"
@@ -77,7 +133,7 @@ function Post({ post }) {
                 <path d="M2 9.5a5.5 5.5 0 0 1 9.591-3.676.56.56 0 0 0 .818 0A5.49 5.49 0 0 1 22 9.5c0 2.29-1.5 4-3 5.5l-5.492 5.313a2 2 0 0 1-3 .019L5 15c-1.5-1.5-3-3.2-3-5.5" />
               </svg>
             </div>
-            <span>{post.likes || ""}</span>
+            <span className="text-xs">{post.likes || ""}</span>
           </div>
         </div>
       </div>
@@ -85,4 +141,4 @@ function Post({ post }) {
   );
 }
 
-export default Post;
+export default PostCard;

@@ -53,3 +53,28 @@ exports.createPost = [
     }
   },
 ];
+
+exports.likePost = async (req, res) => {
+  const { postId } = req.params;
+  const { userId } = req.body;
+
+  try {
+    const data = await db.likePost(postId, userId);
+
+    if (!data) {
+      return res.status(404).json({ message: "Post not found" });
+    }
+
+    if (data.removed) {
+      return res
+        .status(200)
+        .json({ message: "Post unliked successfully", likes: data.likes });
+    }
+
+    res
+      .status(200)
+      .json({ message: "Post liked successfully", likes: data.likes });
+  } catch (error) {
+    res.status(500).json({ message: "Error liking post", error });
+  }
+};

@@ -127,3 +127,41 @@ exports.createPost = async (userId, content) => {
   });
   return newPost;
 };
+
+exports.likePost = async (postId, userId) => {
+  const userWithLikes = await prisma.user.findUnique({
+    where: { id: userId },
+    include: { likedPosts: { select: { id: true } } },
+  });
+
+  if (!userWithLikes) throw new Error("User not found");
+  const alreadyLiked = userWithLikes.likedPosts.some((p) => p.id === postId);
+
+  if (alreadyLiked) {
+    await prisma.user.update({
+      where: { id: userId },
+      data: {
+        likedPosts: { disconnect: { id: postId } },
+      },
+    });
+    const updatedPost = await prisma.post.update({
+      where: { id: postId },
+      data: { likes: { decrement: 1 } },
+    });
+
+    return { likes: updatedPost.likes, removed: true };
+  } else {
+    await prisma.user.update({
+      where: { id: userId },
+      data: {
+        likedPosts: { connect: { id: postId } },
+      },
+    });
+    const updatedPost = await prisma.post.update({
+      where: { id: postId },
+      data: { likes: { increment: 1 } },
+    });
+
+    return { likes: updatedPost.likes, removed: false };
+  }
+};

@@ -10,5 +10,6 @@ postsRouter.get(
   verifyToken,
   postsController.getFollowsPosts
 );
+postsRouter.post("/:postId/like", verifyToken, postsController.likePost);
 
 module.exports = postsRouter;

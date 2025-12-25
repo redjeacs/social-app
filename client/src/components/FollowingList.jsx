@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { useState } from "react";
 import { useAuth } from "../contexts/AuthContext";
 import { useAlert } from "../contexts/AlertContext";
-import Post from "./Post";
+import Post from "./PostCard";
 
 function FollowingList() {
   const { user, token } = useAuth();

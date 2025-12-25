@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useAlert } from "../contexts/AlertContext";
 import { useAuth } from "../contexts/AuthContext";
-import Post from "./Post";
+import PostCard from "./PostCard";
 
 function PostList({ yourRecentPosts }) {
   const { token } = useAuth();
@@ -44,7 +44,7 @@ function PostList({ yourRecentPosts }) {
         </>
       )}
       {posts && posts.length > 0 ? (
-        posts?.map((post) => <Post key={post.id} post={post} />)
+        posts?.map((post) => <PostCard key={post.id} post={post} />)
       ) : (
         <>
           <div className="flex w-full items-stretch p-4 max-h-100 justify-center cursor-pointer hover:bg-gray-900 ease-in-out duration-500">
