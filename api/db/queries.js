@@ -27,6 +27,7 @@ exports.getUser = async (colName, query) => {
     where: key,
     include: { followers: true, following: true },
   });
+
   return user;
 };
 
@@ -89,6 +90,7 @@ exports.getAllPosts = async () => {
   const posts = await prisma.post.findMany({
     include: {
       user: true,
+      likedBy: true,
     },
     orderBy: {
       createdAt: "desc",
@@ -110,6 +112,7 @@ exports.getFollowsPosts = async (userId) => {
     },
     include: {
       user: true,
+      likedBy: true,
     },
     orderBy: {
       createdAt: "desc",
@@ -146,10 +149,13 @@ exports.likePost = async (postId, userId) => {
     });
     const updatedPost = await prisma.post.update({
       where: { id: postId },
-      data: { likes: { decrement: 1 } },
+      data: {
+        likes: { decrement: 1 },
+      },
+      include: { likedBy: true },
     });
 
-    return { likes: updatedPost.likes, removed: true };
+    return { post: updatedPost, removed: true };
   } else {
     await prisma.user.update({
       where: { id: userId },
@@ -159,9 +165,12 @@ exports.likePost = async (postId, userId) => {
     });
     const updatedPost = await prisma.post.update({
       where: { id: postId },
-      data: { likes: { increment: 1 } },
+      data: {
+        likes: { increment: 1 },
+      },
+      include: { likedBy: true },
     });
 
-    return { likes: updatedPost.likes, removed: false };
+    return { post: updatedPost, removed: false };
   }
 };

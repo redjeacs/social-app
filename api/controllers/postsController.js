@@ -68,12 +68,12 @@ exports.likePost = async (req, res) => {
     if (data.removed) {
       return res
         .status(200)
-        .json({ message: "Post unliked successfully", likes: data.likes });
+        .json({ message: "Post unliked successfully", post: data.post });
     }
 
     res
       .status(200)
-      .json({ message: "Post liked successfully", likes: data.likes });
+      .json({ message: "Post liked successfully", post: data.post });
   } catch (error) {
     res.status(500).json({ message: "Error liking post", error });
   }

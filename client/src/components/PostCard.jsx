@@ -44,8 +44,8 @@ function PostCard({ post }) {
         type: "success",
         message: data.message || "Post liked successfully",
       });
-
-      post.likes = data.likes;
+      post.likes = data.post.likes;
+      post.likedBy = data.post.likedBy;
     } catch (err) {
       console.error("Error liking post:", err);
       setAlert({
@@ -117,7 +117,12 @@ function PostCard({ post }) {
           </div>
           <div
             onClick={handlePostLike}
-            className="flex items-center hover:text-[rgb(249,24,128)]"
+            className={`flex items-center hover:text-[rgb(249,24,128)] ${
+              post.likedBy &&
+              post.likedBy.some((likedUser) => likedUser.id === user.id)
+                ? "text-[rgb(249,24,128)]"
+                : ""
+            }`}
           >
             <div className="hover:bg-[rgba(249,24,128,0.2)] p-2 rounded-full ease-in-out duration-300">
               <svg
