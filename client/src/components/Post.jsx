@@ -1,6 +1,5 @@
 import userIcon from "../assets/user.svg";
 import { formatDate } from "@/utils/formatDate";
-import { useAuth } from "../contexts/AuthContext";
 
 function Post({ post }) {
   return (
