@@ -55,6 +55,51 @@ function PostCard({ post }) {
     }
   };
 
+  const handleRepost = async () => {
+    const postId = post.id;
+
+    try {
+      const res = await fetch(
+        `${import.meta.env.VITE_API_URL}/posts/${postId}/repost`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({ userId: user.id }),
+        }
+      );
+
+      let data;
+      const contentType = res.headers.get("content-type");
+      if (contentType && contentType.includes("application/json")) {
+        data = await res.json();
+      } else {
+        data = { message: await res.text() };
+      }
+
+      if (!res.ok) {
+        setAlert({
+          type: "error",
+          message: `An error occured - ${data.message || res.statusText}`,
+        });
+        return;
+      }
+
+      setAlert({
+        type: "success",
+        message: data.message || "Post reposted successfully",
+      });
+    } catch (err) {
+      console.error("Error reposting post:", err);
+      setAlert({
+        type: "error",
+        message: `An error occured - ${err.message}`,
+      });
+    }
+  };
+
   return (
     <div className="flex w-full items-stretch border-b border-gray-700 gap-2 p-4 pb-0 justify-center cursor-pointer hover:bg-[rgb(10,10,10)] ease-in-out duration-500">
       <div className="h-full w-10 bg-gray-400 rounded-full">
@@ -95,7 +140,10 @@ function PostCard({ post }) {
             </div>
             <span>{post.comments || ""}</span>
           </div>
-          <div className="flex items-center hover:text-[rgb(0,186,124)]">
+          <div
+            onClick={handleRepost}
+            className="flex items-center hover:text-[rgb(0,186,124)]"
+          >
             <div className=" hover:bg-[rgba(0,186,124,0.2)] p-2 rounded-full ease-in-out duration-300">
               <svg
                 xmlns="http://www.w3.org/2000/svg"

@@ -174,3 +174,27 @@ exports.likePost = async (postId, userId) => {
     return { post: updatedPost, removed: false };
   }
 };
+
+exports.repost = async (postId, userId) => {
+  const originalPost = await prisma.post.findUnique({
+    where: { id: postId },
+  });
+
+  if (!originalPost) {
+    return null;
+  }
+
+  console.log("Original post found:", originalPost);
+
+  const repost = await prisma.post.create({
+    data: {
+      content: originalPost.content,
+      user: { connect: { id: userId } },
+      originalPost: { connect: { id: originalPost.id } },
+    },
+  });
+
+  console.log("Repost created:", repost);
+
+  return repost;
+};

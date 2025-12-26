@@ -78,3 +78,22 @@ exports.likePost = async (req, res) => {
     res.status(500).json({ message: "Error liking post", error });
   }
 };
+
+exports.repost = async (req, res) => {
+  const { postId } = req.params;
+  const { userId } = req.body;
+
+  try {
+    const repost = await db.repost(postId, userId);
+
+    if (!repost) {
+      return res.status(404).json({ message: "Original post not found" });
+    }
+
+    res
+      .status(201)
+      .json({ message: "Post reposted successfully", repost: repost });
+  } catch (error) {
+    res.status(500).json({ message: "Error reposting post", error });
+  }
+};

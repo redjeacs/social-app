@@ -11,5 +11,6 @@ postsRouter.get(
   postsController.getFollowsPosts
 );
 postsRouter.post("/:postId/like", verifyToken, postsController.likePost);
+postsRouter.post("/:postId/repost", verifyToken, postsController.repost);
 
 module.exports = postsRouter;
