@@ -207,3 +207,22 @@ exports.repost = async (postId, userId) => {
 
   return repost;
 };
+
+exports.undoRepost = async (postId, userId) => {
+  const repost = await prisma.post.findFirst({
+    where: {
+      originalPostId: postId,
+      userId: userId,
+    },
+  });
+
+  if (!repost) {
+    return null;
+  }
+
+  await prisma.post.delete({
+    where: { id: repost.id },
+  });
+
+  return repost;
+};

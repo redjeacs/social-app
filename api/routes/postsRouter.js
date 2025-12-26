@@ -12,5 +12,10 @@ postsRouter.get(
 );
 postsRouter.post("/:postId/like", verifyToken, postsController.likePost);
 postsRouter.post("/:postId/repost", verifyToken, postsController.repost);
+postsRouter.delete(
+  "/:postId/undo-repost",
+  verifyToken,
+  postsController.undoRepost
+);
 
 module.exports = postsRouter;

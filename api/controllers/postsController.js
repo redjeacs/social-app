@@ -97,3 +97,20 @@ exports.repost = async (req, res) => {
     res.status(500).json({ message: "Error reposting post", error });
   }
 };
+
+exports.undoRepost = async (req, res) => {
+  const { postId } = req.params;
+  const { userId } = req.body;
+
+  try {
+    const result = await db.undoRepost(postId, userId);
+
+    if (!result) {
+      return res.status(404).json({ message: "Repost not found" });
+    }
+
+    res.status(200).json({ message: "Repost undone successfully" });
+  } catch (error) {
+    res.status(500).json({ message: "Error undoing repost", error });
+  }
+};
