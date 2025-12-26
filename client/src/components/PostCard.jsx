@@ -105,11 +105,53 @@ function PostCard({ post }) {
   };
 
   const handleUndoRepost = async () => {
-    console.log("Undo repost clicked");
+    const postId = post.id;
+
+    try {
+      const res = await fetch(
+        `${import.meta.env.VITE_API_URL}/posts/${postId}/undo-repost`,
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({ userId: user.id }),
+        }
+      );
+
+      let data;
+      const contentType = res.headers.get("content-type");
+      if (contentType && contentType.includes("application/json")) {
+        data = await res.json();
+      } else {
+        data = { message: await res.text() };
+      }
+
+      if (!res.ok) {
+        setAlert({
+          type: "error",
+          message: `An error occured - ${data.message || res.statusText}`,
+        });
+        return;
+      }
+
+      setAlert({
+        type: "success",
+        message: data.message || "You have undone the repost",
+      });
+      navigate(0);
+    } catch (err) {
+      console.error("Error undoing repost:", err);
+      setAlert({
+        type: "error",
+        message: `An error occured - ${err.message}`,
+      });
+    }
   };
 
   return (
-    <div className="p-4 pb-0 gap-2 flex flex-col border-b border-gray-700 hover:bg-[rgb(10,10,10)] ease-in-out duration-500 cursor-pointer ">
+    <div className="p-4 pb-0 flex flex-col border-b border-gray-700 hover:bg-[rgb(10,10,10)] ease-in-out duration-500 cursor-pointer ">
       {post.originalPost && (
         <div className="w-full text-(--twitter-text) flex items-center gap-2">
           <div className="w-10 flex justify-end">

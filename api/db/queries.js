@@ -211,7 +211,7 @@ exports.repost = async (postId, userId) => {
 exports.undoRepost = async (postId, userId) => {
   const repost = await prisma.post.findFirst({
     where: {
-      originalPostId: postId,
+      id: postId,
       userId: userId,
     },
   });
