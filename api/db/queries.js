@@ -91,6 +91,14 @@ exports.getAllPosts = async () => {
     include: {
       user: true,
       likedBy: true,
+      originalPost: {
+        include: {
+          user: true,
+          likedBy: true,
+          reposts: true,
+        },
+      },
+      reposts: true,
     },
     orderBy: {
       createdAt: "desc",
@@ -192,6 +200,7 @@ exports.repost = async (postId, userId) => {
       user: { connect: { id: userId } },
       originalPost: { connect: { id: originalPost.id } },
     },
+    include: { user: true, originalPost: true, likedBy: true },
   });
 
   console.log("Repost created:", repost);
