@@ -5,6 +5,7 @@ import { useAuth } from "../contexts/AuthContext";
 import { Spinner } from "@/components/ui/spinner";
 import userIcon from "@/assets/user.svg";
 import { formatDateFull } from "../utils/formatDate";
+import ReplyForm from "@/components/ReplyForm";
 
 function PostPage() {
   const { user, token } = useAuth();
@@ -234,6 +235,8 @@ function PostPage() {
           </div>
         </article>
       )}
+      <ReplyForm />
+      <div>Comments</div>
     </>
   );
 }
