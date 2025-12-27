@@ -41,3 +41,29 @@ export const formatDate = (dateString) => {
     return `${seconds}s`;
   }
 };
+
+export const formatDateFull = (dateString) => {
+  const date = new Date(dateString);
+  const month = date.getMonth().toString();
+  const day = date.getDate().toString();
+  const year = date.getFullYear().toString();
+  const hours = date.getHours().toString().padStart(2, "0");
+  const minutes = date.getMinutes().toString().padStart(2, "0");
+
+  const monthNames = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ];
+
+  return `${monthNames[month]} ${day}, ${year} · ${hours}:${minutes} `;
+};
