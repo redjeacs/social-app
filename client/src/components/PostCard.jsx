@@ -2,7 +2,7 @@ import userIcon from "../assets/user.svg";
 import { formatDate } from "@/utils/formatDate";
 import { useAuth } from "../contexts/AuthContext";
 import { useAlert } from "../contexts/AlertContext";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
 function PostCard({ post }) {
   const navigate = useNavigate();
@@ -151,7 +151,10 @@ function PostCard({ post }) {
   };
 
   return (
-    <div className="p-4 pb-0 flex flex-col border-b border-gray-700 hover:bg-[rgb(10,10,10)] ease-in-out duration-500 cursor-pointer ">
+    <Link
+      to={`/posts/${post.id}`}
+      className="p-4 pb-0 flex flex-col border-b border-gray-700 hover:bg-[rgb(10,10,10)] ease-in-out duration-500 cursor-pointer "
+    >
       {post.originalPost && (
         <div className="w-full text-(--twitter-text) flex items-center gap-2">
           <div className="w-10 flex justify-end">
@@ -309,7 +312,7 @@ function PostCard({ post }) {
           </div>
         </div>
       </div>
-    </div>
+    </Link>
   );
 }
 

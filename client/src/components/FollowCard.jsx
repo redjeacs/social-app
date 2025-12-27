@@ -104,7 +104,7 @@ function FollowCard({ userToFollow }) {
                 }}
                 className={`bg-white text-black font-bold rounded-full px-4 py-1 hover:bg-white/90 ${
                   isFollowing &&
-                  "w-22 bg-black text-white border border-white hover:text-[rgb(244,33,46)] hover:bg-[rgba(244,33,46,0.1)] hover:border-[rgb(244,33,46)]"
+                  "w-22 bg-black text-(--twitter-text) border border-(--twitter-text) hover:text-[rgb(244,33,46)] hover:bg-[rgba(244,33,46,0.1)] hover:border-[rgb(244,33,46)]"
                 }`}
               >
                 {isFollowing ? "Following" : "Follow"}
