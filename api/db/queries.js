@@ -1,6 +1,7 @@
 require("dotenv").config();
 const { PrismaPg } = require("@prisma/adapter-pg");
 const { PrismaClient } = require("@prisma/client");
+const { getPostById } = require("../controllers/postsController");
 
 const db_URL = process.env.DATABASE_URL || process.env.LOCAL_DATABASE_URL;
 
@@ -105,6 +106,26 @@ exports.getAllPosts = async () => {
     },
   });
   return posts;
+};
+
+exports.getPostById = async (postId) => {
+  const post = await prisma.post.findUnique({
+    where: { id: postId },
+    include: {
+      user: true,
+      likedBy: true,
+      originalPost: {
+        include: {
+          user: true,
+          likedBy: true,
+          reposts: true,
+        },
+      },
+      reposts: true,
+      comments: true,
+    },
+  });
+  return post;
 };
 
 exports.getFollowsPosts = async (userId) => {

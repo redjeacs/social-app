@@ -152,7 +152,7 @@ function PostCard({ post }) {
 
   return (
     <Link
-      to={`/posts/${post.id}`}
+      to={`/post/${post.id}`}
       className="p-4 pb-0 flex flex-col border-b border-gray-700 hover:bg-[rgb(10,10,10)] ease-in-out duration-500 cursor-pointer "
     >
       {post.originalPost && (

@@ -12,6 +12,19 @@ exports.getAllPosts = async (req, res) => {
   }
 };
 
+exports.getPostById = async (req, res) => {
+  const { postId } = req.params;
+  try {
+    const post = await db.getPostById(postId);
+
+    if (!post) return res.status(404).json({ message: "Post not found" });
+
+    res.status(200).json(post);
+  } catch (error) {
+    res.status(500).json({ message: "Error retrieving post", error });
+  }
+};
+
 exports.getFollowsPosts = async (req, res) => {
   const { userId } = req.params;
   try {
