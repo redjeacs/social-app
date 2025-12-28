@@ -39,7 +39,7 @@ function PostList({ yourRecentPosts }) {
       {yourRecentPosts && yourRecentPosts.length > 0 && (
         <>
           {yourRecentPosts.map((post) => (
-            <Post key={post.id} post={post} />
+            <PostCard key={post.id} post={post} />
           ))}
         </>
       )}

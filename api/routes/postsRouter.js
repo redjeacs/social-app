@@ -19,4 +19,10 @@ postsRouter.delete(
   postsController.undoRepost
 );
 
+postsRouter.post(
+  "/:postId/comment",
+  verifyToken,
+  postsController.addCommentToPost
+);
+
 module.exports = postsRouter;

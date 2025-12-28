@@ -3,10 +3,15 @@ import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import globeIcon from "@/assets/globe.png";
 import { useAuth } from "../contexts/AuthContext";
+import { useAlert } from "../contexts/AlertContext";
 import userProfilePlaceholder from "../assets/user.svg";
+import { useNavigate, useParams } from "react-router-dom";
 
 function ReplyForm() {
-  const { user } = useAuth();
+  const { user, token } = useAuth();
+  const { setAlert } = useAlert();
+  const { postId } = useParams();
+  const navigate = useNavigate();
   const [isSubmittingReply, setIsSubmittingReply] = useState(false);
   const [progress, setProgress] = useState(0);
   const [reply, setReply] = useState("");
@@ -37,10 +42,40 @@ function ReplyForm() {
     }
   }, [isSubmittingReply]);
 
-  const handleReplySubmit = (e) => {
+  const handleReplySubmit = async (e) => {
     e.preventDefault();
     setIsSubmittingReply(true);
-    // Add logic to submit the reply here
+    try {
+      const res = await fetch(
+        `${import.meta.env.VITE_API_URL}/posts/${postId}/comment`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({ content: reply, userId: user.id }),
+        }
+      );
+      const data = await res.json();
+
+      if (!res.ok) {
+        setAlert({
+          type: "error",
+          message: `An error occured - ${data.message || res.statusText}`,
+        });
+        return;
+      }
+
+      setReply("");
+      setIsReplying(false);
+      navigate(0);
+    } catch (err) {
+      setAlert({
+        type: "error",
+        message: `An error occured - ${err.message || res.statusText}`,
+      });
+    }
   };
 
   return (
@@ -64,8 +99,8 @@ function ReplyForm() {
             ref={textareaRef}
             autoComplete="off"
             placeholder="Post your reply"
-            name="reply"
-            id="reply"
+            name="comment"
+            id="comment"
             rows="1"
             value={reply}
             onFocus={() => setIsReplying(true)}

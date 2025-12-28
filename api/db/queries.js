@@ -247,3 +247,24 @@ exports.undoRepost = async (postId, userId) => {
 
   return repost;
 };
+
+exports.addCommentToPost = async (postId, userId, content) => {
+  const post = await prisma.post.findUnique({
+    where: { id: postId },
+  });
+
+  if (!post) {
+    return null;
+  }
+
+  const comment = await prisma.comment.create({
+    data: {
+      content: content,
+      post: { connect: { id: postId } },
+      user: { connect: { id: userId } },
+    },
+    include: { user: true },
+  });
+
+  return comment;
+};

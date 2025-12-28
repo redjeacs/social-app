@@ -48,8 +48,6 @@ function PostPage() {
     fetchPost();
   }, [postId]);
 
-  console.log("post:", post);
-
   return (
     <>
       <div className="sticky top-0 flex w-full bg-black z-10 p-2 justify-between">
