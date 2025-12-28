@@ -122,7 +122,11 @@ exports.getPostById = async (postId) => {
         },
       },
       reposts: true,
-      comments: true,
+      comments: {
+        include: {
+          user: true,
+        },
+      },
     },
   });
   return post;
