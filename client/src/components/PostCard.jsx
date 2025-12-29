@@ -3,168 +3,22 @@ import { formatDate } from "@/utils/formatDate";
 import { useAuth } from "../contexts/AuthContext";
 import { useAlert } from "../contexts/AlertContext";
 import { useNavigate, Link } from "react-router-dom";
-import { use } from "react";
+import {
+  handlePostLike,
+  handleUndoRepost,
+  handleRepost,
+} from "@/utils/PostHandler";
 
 function PostCard({ post }) {
   const navigate = useNavigate();
   const { user, token } = useAuth();
   const { setAlert } = useAlert();
+  const likedPost = post.originalPost || post;
+  const isLiked = likedPost?.likedBy?.some(
+    (likedUser) => likedUser.id === user.id
+  );
 
-  const handlePostLike = async (e) => {
-    e.preventDefault();
-    const userId = user.id;
-    const postId = post.id;
-
-    try {
-      const res = await fetch(
-        `${import.meta.env.VITE_API_URL}/posts/${postId}/like`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify({ userId }),
-        }
-      );
-
-      let data;
-      const contentType = res.headers.get("content-type");
-      if (contentType && contentType.includes("application/json")) {
-        data = await res.json();
-      } else {
-        data = { message: await res.text() };
-      }
-
-      if (!res.ok) {
-        setAlert({
-          type: "error",
-          message: `An error occured - ${data.message || res.statusText}`,
-        });
-        return;
-      }
-
-      setAlert({
-        type: "success",
-        message: data.message || "Post liked successfully",
-      });
-      post.likes = data.post.likes;
-      post.likedBy = data.post.likedBy;
-    } catch (err) {
-      console.error("Error liking post:", err);
-      setAlert({
-        type: "error",
-        message: `An error occured - ${err.message}`,
-      });
-    }
-  };
-
-  const handleRepost = async (e) => {
-    e.preventDefault();
-    const postId = post.id;
-
-    try {
-      const res = await fetch(
-        `${import.meta.env.VITE_API_URL}/posts/${postId}/repost`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify({ userId: user.id }),
-        }
-      );
-
-      let data;
-      const contentType = res.headers.get("content-type");
-      if (contentType && contentType.includes("application/json")) {
-        data = await res.json();
-      } else {
-        data = { message: await res.text() };
-      }
-
-      if (!res.ok) {
-        setAlert({
-          type: "error",
-          message: `An error occured - ${data.message || res.statusText}`,
-        });
-        return;
-      }
-
-      setAlert({
-        type: "success",
-        message: data.message || "Post reposted successfully",
-      });
-      navigate(0);
-      console.log("Repost data:", data);
-    } catch (err) {
-      console.error("Error reposting post:", err);
-      setAlert({
-        type: "error",
-        message: `An error occured - ${err.message}`,
-      });
-    }
-  };
-
-  const handleUndoRepost = async (e) => {
-    e.preventDefault();
-
-    let targetPostId;
-    if (post.originalPostId && post.user.id === user.id) {
-      targetPostId = post.id;
-    } else {
-      targetPostId = post.reposts.find(
-        (repost) => repost.userId === user.id
-      ).id;
-    }
-
-    console.log(targetPostId);
-
-    const postId = targetPostId;
-
-    try {
-      const res = await fetch(
-        `${import.meta.env.VITE_API_URL}/posts/${postId}/undo-repost`,
-        {
-          method: "DELETE",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify({ userId: user.id }),
-        }
-      );
-
-      let data;
-      const contentType = res.headers.get("content-type");
-      if (contentType && contentType.includes("application/json")) {
-        data = await res.json();
-      } else {
-        data = { message: await res.text() };
-      }
-
-      if (!res.ok) {
-        setAlert({
-          type: "error",
-          message: `An error occured - ${data.message || res.statusText}`,
-        });
-        return;
-      }
-
-      setAlert({
-        type: "success",
-        message: data.message || "You have undone the repost",
-      });
-      navigate(0);
-    } catch (err) {
-      console.error("Error undoing repost:", err);
-      setAlert({
-        type: "error",
-        message: `An error occured - ${err.message}`,
-      });
-    }
-  };
+  console.log(post);
 
   return (
     <Link
@@ -258,8 +112,17 @@ function PostCard({ post }) {
                 (post.originalPost && post.userId === user.id) ||
                 (post.reposts &&
                   post.reposts.some((repost) => repost.userId === user.id))
-                  ? handleUndoRepost
-                  : handleRepost
+                  ? (e) =>
+                      handleUndoRepost({
+                        e,
+                        user,
+                        post,
+                        token,
+                        setAlert,
+                        navigate,
+                      })
+                  : (e) =>
+                      handleRepost({ e, user, post, token, setAlert, navigate })
               }
               className={`flex items-center hover:text-[rgb(0,186,124)] ${
                 (post.originalPost && post.userId === user.id) ||
@@ -297,12 +160,11 @@ function PostCard({ post }) {
               </span>
             </div>
             <div
-              onClick={handlePostLike}
+              onClick={(e) =>
+                handlePostLike({ e, user, post, token, setAlert, navigate })
+              }
               className={`flex items-center hover:text-[rgb(249,24,128)] ${
-                post.likedBy &&
-                post.likedBy.some((likedUser) => likedUser.id === user.id)
-                  ? "text-[rgb(249,24,128)]"
-                  : ""
+                isLiked && "text-[rgb(249,24,128)]"
               }`}
             >
               <div className="hover:bg-[rgba(249,24,128,0.2)] p-2 rounded-full ease-in-out duration-300">

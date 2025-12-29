@@ -7,6 +7,11 @@ import userIcon from "@/assets/user.svg";
 import { formatDateFull } from "../utils/formatDate";
 import ReplyForm from "@/components/ReplyForm";
 import CommentCard from "@/components/CommentCard";
+import {
+  handlePostLike,
+  handleRepost,
+  handleUndoRepost,
+} from "@/utils/PostHandler";
 
 function PostPage() {
   const { user, token } = useAuth();
@@ -14,6 +19,10 @@ function PostPage() {
   const navigate = useNavigate();
   const { postId } = useParams();
   const [post, setPost] = useState(null);
+  const likedPost = post?.originalPost || post;
+  const isLiked = likedPost?.likedBy?.some(
+    (likedUser) => likedUser.id === user.id
+  );
 
   useEffect(() => {
     const fetchPost = async () => {
@@ -154,7 +163,32 @@ function PostPage() {
                   : ""
               }`}
             >
-              <div className="relative h-fit flex gap-1 cursor-pointer">
+              <div
+                onClick={
+                  (post.originalPost && post.userId === user.id) ||
+                  (post.reposts &&
+                    post.reposts.some((repost) => repost.userId === user.id))
+                    ? (e) =>
+                        handleUndoRepost({
+                          e,
+                          user,
+                          post,
+                          token,
+                          setAlert,
+                          navigate,
+                        })
+                    : (e) =>
+                        handleRepost({
+                          e,
+                          user,
+                          post,
+                          token,
+                          setAlert,
+                          navigate,
+                        })
+                }
+                className="relative h-fit flex gap-1 cursor-pointer"
+              >
                 <div className=" hover:bg-[rgba(0,186,124,0.2)] p-2 rounded-full ease-in-out duration-300">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -184,11 +218,11 @@ function PostPage() {
               </div>
             </div>
             <div
+              onClick={(e) =>
+                handlePostLike({ e, user, post, token, setAlert, navigate })
+              }
               className={`flex flex-1 items-center hover:text-[rgb(249,24,128)] ${
-                post.likedBy &&
-                post.likedBy.some((likedUser) => likedUser.id === user.id)
-                  ? "text-[rgb(249,24,128)]"
-                  : ""
+                isLiked && "text-[rgb(249,24,128)]"
               }`}
             >
               <div className="relative h-fit flex gap-1 cursor-pointer">
