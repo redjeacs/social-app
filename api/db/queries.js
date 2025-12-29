@@ -1,7 +1,6 @@
 require("dotenv").config();
 const { PrismaPg } = require("@prisma/adapter-pg");
 const { PrismaClient } = require("@prisma/client");
-const { getPostById } = require("../controllers/postsController");
 
 const db_URL = process.env.DATABASE_URL || process.env.LOCAL_DATABASE_URL;
 
@@ -122,10 +121,8 @@ exports.getPostById = async (postId) => {
         },
       },
       reposts: true,
-      comments: {
-        include: {
-          user: true,
-        },
+      replies: {
+        include: true,
       },
     },
   });
@@ -238,6 +235,7 @@ exports.undoRepost = async (postId, userId) => {
     where: {
       id: postId,
       userId: userId,
+      originalPostId: { not: null },
     },
   });
 

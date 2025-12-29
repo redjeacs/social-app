@@ -53,12 +53,18 @@ function CommentCard({ comment }) {
                 </svg>
               </div>
               <span>
-                {Array.isArray(comment.comments) ? comment.comments.length : ""}
+                {comment.comments &&
+                Array.isArray(comment.comments) &&
+                comment.comments.length > 0
+                  ? comment.comments.length
+                  : ""}
               </span>
             </div>
             <div
-              onClick={() => {}}
-              className={`flex items-center hover:text-[rgb(0,186,124)] ${
+              onClick={() => {
+                console.log("Repost clicked"); //repost
+              }}
+              className={`flex items-center hover:text-[rgb(0,186,124)] z-10 ${
                 (comment.originalPost && comment.userId === user.id) ||
                 (comment.reposts &&
                   comment.reposts.some((repost) => repost.userId === user.id))
@@ -86,7 +92,9 @@ function CommentCard({ comment }) {
               <span>{() => {}}</span>
             </div>
             <div
-              onClick={() => {}}
+              onClick={() => {
+                console.log("likes clicked");
+              }} //likes count
               className={`flex items-center hover:text-[rgb(249,24,128)] ${
                 comment.likedBy &&
                 comment.likedBy.some((likedUser) => likedUser.id === user.id)

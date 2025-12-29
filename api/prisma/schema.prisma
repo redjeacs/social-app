@@ -16,7 +16,6 @@ model User {
   createdAt       DateTime    @default(now())
   identities      Identity[]
   posts           Post[]
-  comments        Comment[]
   followers       User[]      @relation("UserFollowers")
   following       User[]      @relation("UserFollowers")
   followersCount  Int         @default(0)
@@ -42,23 +41,14 @@ model Post {
   createdAt       DateTime    @default(now())
   user            User        @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId          String
-  likes           Int         @default(0)
-  comments        Comment[]     
+  likes           Int         @default(0)    
   likedBy         User[]      @relation("PostLikes")
   originalPost    Post?       @relation("OriginalPost", fields: [originalPostId], references: [id], onDelete: Cascade)
   originalPostId  String?
   reposts         Post[]      @relation("OriginalPost")
+
+  parentPost     Post?       @relation("ParentPost", fields: [parentPostId], references: [id], onDelete: Cascade)
+  parentPostId   String?
+  replies        Post[]      @relation("ParentPost")
   @@map("posts")
-}
-
-model Comment {
-  id        String    @id @default(uuid())
-  content   String
-  createdAt DateTime  @default(now())
-  post      Post      @relation(fields: [postId], references: [id], onDelete: Cascade)
-  postId    String
-  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId    String
-
-  @@map("comments")
 }

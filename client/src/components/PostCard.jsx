@@ -3,13 +3,15 @@ import { formatDate } from "@/utils/formatDate";
 import { useAuth } from "../contexts/AuthContext";
 import { useAlert } from "../contexts/AlertContext";
 import { useNavigate, Link } from "react-router-dom";
+import { use } from "react";
 
 function PostCard({ post }) {
   const navigate = useNavigate();
   const { user, token } = useAuth();
   const { setAlert } = useAlert();
 
-  const handlePostLike = async () => {
+  const handlePostLike = async (e) => {
+    e.preventDefault();
     const userId = user.id;
     const postId = post.id;
 
@@ -57,7 +59,8 @@ function PostCard({ post }) {
     }
   };
 
-  const handleRepost = async () => {
+  const handleRepost = async (e) => {
+    e.preventDefault();
     const postId = post.id;
 
     try {
@@ -104,8 +107,21 @@ function PostCard({ post }) {
     }
   };
 
-  const handleUndoRepost = async () => {
-    const postId = post.id;
+  const handleUndoRepost = async (e) => {
+    e.preventDefault();
+
+    let targetPostId;
+    if (post.originalPostId && post.user.id === user.id) {
+      targetPostId = post.id;
+    } else {
+      targetPostId = post.reposts.find(
+        (repost) => repost.userId === user.id
+      ).id;
+    }
+
+    console.log(targetPostId);
+
+    const postId = targetPostId;
 
     try {
       const res = await fetch(
