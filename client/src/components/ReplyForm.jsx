@@ -47,7 +47,7 @@ function ReplyForm() {
     setIsSubmittingReply(true);
     try {
       const res = await fetch(
-        `${import.meta.env.VITE_API_URL}/posts/${postId}/comment`,
+        `${import.meta.env.VITE_API_URL}/posts/${postId}/reply`,
         {
           method: "POST",
           headers: {

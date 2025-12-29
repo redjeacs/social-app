@@ -122,7 +122,7 @@ exports.getPostById = async (postId) => {
       },
       reposts: true,
       replies: {
-        include: true,
+        include: { user: true, likedBy: true, reposts: true },
       },
     },
   });
@@ -250,23 +250,29 @@ exports.undoRepost = async (postId, userId) => {
   return repost;
 };
 
-exports.addCommentToPost = async (postId, userId, content) => {
-  const post = await prisma.post.findUnique({
+exports.replyToPost = async (postId, userId, content) => {
+  let post = await prisma.post.findUnique({
     where: { id: postId },
+    include: { replies: true, user: true },
   });
 
-  if (!post) {
+  if (post.originalPostId) {
+    post = await prisma.post.findUnique({
+      where: { id: post.originalPostId },
+      include: { replies: true, user: true },
+    });
+  } else if (!post) {
     return null;
   }
 
-  const comment = await prisma.comment.create({
+  const reply = await prisma.post.create({
     data: {
       content: content,
-      post: { connect: { id: postId } },
       user: { connect: { id: userId } },
+      parentPost: { connect: { id: post.id } },
     },
     include: { user: true },
   });
 
-  return comment;
+  return reply;
 };

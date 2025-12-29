@@ -128,21 +128,19 @@ exports.undoRepost = async (req, res) => {
   }
 };
 
-exports.addCommentToPost = async (req, res) => {
+exports.replyToPost = async (req, res) => {
   const { postId } = req.params;
   const { content, userId } = req.body;
 
   try {
-    const comment = await db.addCommentToPost(postId, userId, content);
+    const reply = await db.replyToPost(postId, userId, content);
 
-    if (!comment) {
+    if (!reply) {
       return res.status(404).json({ message: "Post not found" });
     }
 
-    res
-      .status(201)
-      .json({ message: "Comment added successfully", comment: comment });
+    res.status(201).json({ message: "Reply added successfully", reply: reply });
   } catch (error) {
-    res.status(500).json({ message: "Error adding comment", error });
+    res.status(500).json({ message: "Error adding reply", error });
   }
 };

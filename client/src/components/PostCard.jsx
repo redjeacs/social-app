@@ -13,12 +13,11 @@ function PostCard({ post }) {
   const navigate = useNavigate();
   const { user, token } = useAuth();
   const { setAlert } = useAlert();
-  const likedPost = post.originalPost || post;
+  const likedPost = post?.originalPost || post;
   const isLiked = likedPost?.likedBy?.some(
     (likedUser) => likedUser.id === user.id
   );
-
-  console.log(post);
+  const isRepost = Boolean(post?.originalPost);
 
   return (
     <Link
@@ -55,7 +54,9 @@ function PostCard({ post }) {
         <div className="h-full w-10 bg-gray-400 rounded-full">
           <img
             src={
-              post.originalPost?.user?.profile || post.user?.profile || userIcon
+              (isRepost && post.originalPost.user.profile) ||
+              post.user.profile ||
+              userIcon
             }
             alt="profile icon"
             className="w-10 h-10"
@@ -64,9 +65,9 @@ function PostCard({ post }) {
         <div className="flex flex-col flex-1">
           <div className="flex gap-2">
             <span className="font-bold">
-              {post.originalPost
-                ? `${post.originalPost.user.firstName} ${post.originalPost.user.lastName}`
-                : post.user && `${post.user.firstName} ${post.user.lastName}`}
+              {(isRepost &&
+                `${post.originalPost.user.firstName} ${post.originalPost.user.lastName}`) ||
+                (post.user && `${post.user.firstName} ${post.user.lastName}`)}
             </span>
             <span className="text-(--twitter-text)">
               @
@@ -76,9 +77,8 @@ function PostCard({ post }) {
             </span>
             <div className="text-(--twitter-text)">·</div>
             <span className="text-(--twitter-text)">
-              {post.originalPost
-                ? formatDate(post.originalPost.createdAt)
-                : formatDate(post.createdAt)}
+              {(isRepost && formatDate(post.originalPost.createdAt)) ||
+                formatDate(post.createdAt)}
             </span>
           </div>
           <p>{post.content}</p>
@@ -98,13 +98,10 @@ function PostCard({ post }) {
                 </svg>
               </div>
               <span>
-                {post.originalPost
-                  ? Array.isArray(post.originalPost?.comments)
-                    ? post.originalPost.comments.length
-                    : ""
-                  : Array.isArray(post.comments)
-                  ? post.comments.length
-                  : ""}
+                {(isRepost && Array.isArray(post.originalPost?.comments)
+                  ? post.originalPost.comments.length
+                  : "") ||
+                  (Array.isArray(post.comments) ? post.comments.length : "")}
               </span>
             </div>
             <div
@@ -150,11 +147,10 @@ function PostCard({ post }) {
                 </svg>
               </div>
               <span>
-                {post.originalPost
-                  ? Array.isArray(post.originalPost?.reposts)
-                    ? post.originalPost.reposts.length
-                    : ""
-                  : Array.isArray(post.reposts) && post.reposts.length > 0
+                {isRepost && Array.isArray(post.originalPost?.reposts)
+                  ? post.originalPost.reposts.length
+                  : "" ||
+                    (Array.isArray(post.reposts) && post.reposts.length > 0)
                   ? post.reposts.length
                   : ""}
               </span>
@@ -182,9 +178,7 @@ function PostCard({ post }) {
                 </svg>
               </div>
               <span className="text-xs">
-                {post.originalPost
-                  ? post.originalPost.likes || ""
-                  : post.likes || ""}
+                {(isRepost && post.originalPost.likes) || post.likes || ""}
               </span>
             </div>
           </div>

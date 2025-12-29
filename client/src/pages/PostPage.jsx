@@ -6,12 +6,13 @@ import { Spinner } from "@/components/ui/spinner";
 import userIcon from "@/assets/user.svg";
 import { formatDateFull } from "../utils/formatDate";
 import ReplyForm from "@/components/ReplyForm";
-import CommentCard from "@/components/CommentCard";
+
 import {
   handlePostLike,
   handleRepost,
   handleUndoRepost,
 } from "@/utils/PostHandler";
+import PostCard from "@/components/PostCard";
 
 function PostPage() {
   const { user, token } = useAuth();
@@ -272,12 +273,10 @@ function PostPage() {
       )}
       <ReplyForm />
       <div>
-        {post.comments &&
-          Array.isArray(post.comments) &&
-          post.comments.length > 0 &&
-          post.comments.map((comment) => (
-            <CommentCard key={comment.id} comment={comment} />
-          ))}
+        {post.replies &&
+          Array.isArray(post.replies) &&
+          post.replies.length > 0 &&
+          post.replies.map((reply) => <PostCard key={reply.id} post={reply} />)}
       </div>
     </>
   );
