@@ -44,7 +44,6 @@ exports.createPost = [
   async (req, res) => {
     const { userId } = req.params;
     const { content } = req.body;
-    console.log("Creating post for userId:", userId, "with content:", content);
 
     const errors = validationResult(req);
 

@@ -4,9 +4,9 @@ import { Link } from "react-router-dom";
 import { useState } from "react";
 import { useAuth } from "../contexts/AuthContext";
 import { useAlert } from "../contexts/AlertContext";
-import Post from "./PostCard";
+import PostList from "./PostList";
 
-function FollowingList() {
+function FollowingList({ yourRecentPosts }) {
   const { user, token } = useAuth();
   const { setAlert } = useAlert();
   const [userData, setUserData] = useState(null);
@@ -87,8 +87,11 @@ function FollowingList() {
 
   return (
     <div className="flex flex-col w-full">
-      {followsPosts && followsPosts.length > 0 ? (
-        followsPosts.map((post) => <Post key={post.id} post={post} />)
+      {Array.isArray(followsPosts) && followsPosts.length > 0 ? (
+        <PostList
+          yourRecentPost={yourRecentPosts}
+          followsPosts={followsPosts}
+        />
       ) : (
         <div className="flex flex-col w-90 self-center m-10 gap-4">
           <h1 className="text-4xl font-bold">Welcome to X!</h1>

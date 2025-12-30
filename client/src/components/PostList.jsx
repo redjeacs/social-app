@@ -4,13 +4,17 @@ import { useAuth } from "../contexts/AuthContext";
 import PostCard from "./PostCard";
 import { buildReplyTree } from "../utils/buildReplyTree";
 
-function PostList({ yourRecentPosts }) {
+function PostList({ yourRecentPosts, followsPosts = null }) {
   const { token } = useAuth();
   const [posts, setPosts] = useState([]);
   const { setAlert } = useAlert();
 
   useEffect(() => {
     const fetchPosts = async () => {
+      if (followsPosts) {
+        setPosts(followsPosts);
+        return;
+      }
       try {
         const res = await fetch(`${import.meta.env.VITE_API_URL}/posts`, {
           method: "GET",

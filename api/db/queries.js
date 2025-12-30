@@ -145,6 +145,18 @@ exports.getFollowsPosts = async (userId) => {
     include: {
       user: true,
       likedBy: true,
+      originalPost: {
+        include: {
+          user: true,
+          likedBy: true,
+          reposts: true,
+          replies: true,
+        },
+      },
+      reposts: true,
+      replies: {
+        include: { user: true, likedBy: true, reposts: true },
+      },
     },
     orderBy: {
       createdAt: "desc",
@@ -216,8 +228,6 @@ exports.repost = async (postId, userId) => {
     return null;
   }
 
-  console.log("Original post found:", originalPost);
-
   const repost = await prisma.post.create({
     data: {
       content: originalPost.content,
@@ -226,8 +236,6 @@ exports.repost = async (postId, userId) => {
     },
     include: { user: true, originalPost: true, likedBy: true },
   });
-
-  console.log("Repost created:", repost);
 
   return repost;
 };

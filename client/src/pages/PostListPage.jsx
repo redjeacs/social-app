@@ -167,7 +167,9 @@ function PostsPage() {
         </div>
       </div>
       <div className="max-w-[600px] flex flex-col">
-        {selectedTab === "Following" && <FollowingList />}
+        {selectedTab === "Following" && (
+          <FollowingList yourRecentPosts={yourRecentPosts} />
+        )}
         {selectedTab === "For you" && (
           <PostList yourRecentPosts={yourRecentPosts} />
         )}
