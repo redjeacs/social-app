@@ -103,10 +103,10 @@ function PostCard({ post }) {
                 </svg>
               </div>
               <span>
-                {(isRepost && Array.isArray(post.originalPost?.comments)
-                  ? post.originalPost.comments.length
+                {(isRepost && Array.isArray(post.originalPost?.replies)
+                  ? post.originalPost.replies.length
                   : "") ||
-                  (Array.isArray(post.comments) ? post.comments.length : "")}
+                  (Array.isArray(post.replies) ? post.replies.length : "")}
               </span>
             </div>
             <div

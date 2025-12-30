@@ -24,6 +24,7 @@ function PostPage() {
   const isLiked = likedPost?.likedBy?.some(
     (likedUser) => likedUser.id === user.id
   );
+  const isRepost = Boolean(post?.originalPost);
 
   useEffect(() => {
     const fetchPost = async () => {
@@ -101,6 +102,8 @@ function PostPage() {
 
   if (!post) return;
 
+  console.log(post);
+
   return (
     <>
       <div className="sticky top-0 flex w-full bg-black z-10 p-2 justify-between">
@@ -134,7 +137,7 @@ function PostPage() {
           <div className="h-full w-10 bg-gray-400 rounded-full">
             <img
               src={
-                post.originalPost?.user?.profile ||
+                (isRepost && post.originalPost.user?.profile) ||
                 post.user?.profile ||
                 userIcon
               }
@@ -144,15 +147,14 @@ function PostPage() {
           </div>
           <div className="flex flex-col text-[15px] max-h-fit">
             <span className="font-bold h-auto">
-              {post.originalPost
+              {isRepost
                 ? `${post.originalPost.user.firstName} ${post.originalPost.user.lastName}`
                 : post.user && `${post.user.firstName} ${post.user.lastName}`}
             </span>
             <span className="text-(--twitter-text) h-auto">
               @
-              {post.originalPost
-                ? post.originalPost.user.username
-                : post.user && post.user.username}
+              {(isRepost && post.originalPost.user.username) ||
+                (post.user && post.user.username)}
             </span>
           </div>
         </div>
@@ -161,9 +163,8 @@ function PostPage() {
         </div>
         <div className="my-4">
           <span className="text-(--twitter-text)">
-            {post.originalPost
-              ? formatDateFull(post.originalPost.createdAt)
-              : formatDateFull(post.createdAt)}
+            {(isRepost && formatDateFull(post.originalPost.createdAt)) ||
+              formatDateFull(post.createdAt)}
           </span>
         </div>
         <div className="flex grow border-t border-(--twitter-gray) h-12 text-(--twitter-text)">
@@ -183,20 +184,20 @@ function PostPage() {
                 </svg>
               </div>
               <span className="absolute text-xs right-0 bottom-1.5">
-                {post.originalPost
-                  ? Array.isArray(post.originalPost.comments) &&
-                    post.originalPost.comments.length > 0
-                    ? post.originalPost.comments.length
-                    : ""
-                  : Array.isArray(post.comments) && post.comments?.length > 0
-                  ? post.comments.length
+                {isRepost &&
+                Array.isArray(post.originalPost.replies) &&
+                post.originalPost.replies.length > 0
+                  ? post.originalPost.replies.length
+                  : "" ||
+                    (Array.isArray(post.replies) && post.replies?.length > 0)
+                  ? post.replies.length
                   : ""}
               </span>
             </div>
           </div>
           <div
             className={`flex flex-1 items-center hover:text-[rgb(0,186,124)] ${
-              (post.originalPost && post.userId === user.id) ||
+              (isRepost && post.userId === user.id) ||
               (post.reposts &&
                 post.reposts.some((repost) => repost.userId === user.id))
                 ? "text-[rgb(0,186,124)]"
@@ -205,7 +206,7 @@ function PostPage() {
           >
             <div
               onClick={
-                (post.originalPost && post.userId === user.id) ||
+                (isRepost && post.userId === user.id) ||
                 (post.reposts &&
                   post.reposts.some((repost) => repost.userId === user.id))
                   ? (e) =>
@@ -247,11 +248,10 @@ function PostPage() {
                 </svg>
               </div>
               <span className="absolute text-xs right-0 bottom-1.5">
-                {post.originalPost
-                  ? Array.isArray(post.originalPost.reposts)
-                    ? post.originalPost.reposts.length
-                    : ""
-                  : Array.isArray(post.reposts) && post.reposts.length > 0
+                {isRepost && Array.isArray(post.originalPost.reposts)
+                  ? post.originalPost.reposts.length
+                  : "" ||
+                    (Array.isArray(post.reposts) && post.reposts.length > 0)
                   ? post.reposts.length
                   : ""}
               </span>
@@ -281,9 +281,12 @@ function PostPage() {
                 </svg>
               </div>
               <span className="absolute text-xs right-0 bottom-1.5">
-                {post.originalPost
-                  ? post.originalPost.likes || ""
-                  : post.likes || ""}
+                {(isRepost &&
+                  Array.isArray(post.originalPost.likes) &&
+                  post.originalPost.likes) ||
+                  (Array.isArray(post.likes) && post.likes.length > 0
+                    ? post.likes
+                    : "")}
               </span>
             </div>
           </div>
