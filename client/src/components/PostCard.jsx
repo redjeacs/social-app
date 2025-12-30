@@ -22,7 +22,9 @@ function PostCard({ post }) {
   return (
     <Link
       to={`/post/${post.id}`}
-      className="p-4 pb-0 flex flex-col border-b border-gray-700 hover:bg-[rgb(10,10,10)] ease-in-out duration-500 cursor-pointer "
+      className={`p-4 pb-0 flex flex-col ${
+        Array.isArray(post.replies) && post.replies.length > 0 ? "" : "border-b"
+      } border-gray-700 hover:bg-[rgb(10,10,10)] ease-in-out duration-500 cursor-pointer `}
     >
       {post.originalPost && (
         <div className="w-full text-(--twitter-text) flex items-center gap-2">
@@ -50,8 +52,11 @@ function PostCard({ post }) {
           </span>
         </div>
       )}
-      <div className="flex w-full items-stretch gap-2 justify-center">
+      <div className="relative flex w-full items-stretch gap-2 justify-center">
         <div className="h-full w-10 bg-gray-400 rounded-full">
+          {Array.isArray(post.replies) && post.replies.length > 0 && (
+            <div className="absolute left-5 -translate-x-1/2 -bottom-3.5 border border-(--twitter-text)/60 h-[calc(100%-30px)]"></div>
+          )}
           <img
             src={
               (isRepost && post.originalPost.user.profile) ||

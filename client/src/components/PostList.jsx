@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useAlert } from "../contexts/AlertContext";
 import { useAuth } from "../contexts/AuthContext";
 import PostCard from "./PostCard";
+import { buildReplyTree } from "../utils/buildReplyTree";
 
 function PostList({ yourRecentPosts }) {
   const { token } = useAuth();
@@ -34,23 +35,38 @@ function PostList({ yourRecentPosts }) {
     fetchPosts();
   }, []);
 
+  const allPosts = [
+    ...(yourRecentPosts || []),
+    ...posts.filter(
+      (post) => !yourRecentPosts?.some((recent) => recent.id === post.id)
+    ),
+  ];
+
+  const replyTree = buildReplyTree(allPosts);
+
+  function renderPosts(posts, isRoot = true) {
+    const filteredPosts = isRoot
+      ? posts.filter((post) => !post.parentPostId)
+      : posts;
+
+    return filteredPosts.map((post) => (
+      <div key={post.id} className="mb-2">
+        <PostCard post={post} />
+        {post.replies && post.replies.length > 0 && (
+          <div className="relative">{renderPosts(post.replies, false)}</div>
+        )}
+      </div>
+    ));
+  }
+
   return (
     <div className="flex flex-col w-full">
-      {yourRecentPosts && yourRecentPosts.length > 0 && (
-        <>
-          {yourRecentPosts.map((post) => (
-            <PostCard key={post.id} post={post} />
-          ))}
-        </>
-      )}
-      {posts && posts.length > 0 ? (
-        posts?.map((post) => <PostCard key={post.id} post={post} />)
+      {replyTree && replyTree.length > 0 ? (
+        renderPosts(replyTree)
       ) : (
-        <>
-          <div className="flex w-full items-stretch p-4 max-h-100 justify-center cursor-pointer hover:bg-gray-900 ease-in-out duration-500">
-            <p>no posts yet be the first to post</p>
-          </div>
-        </>
+        <div className="flex w-full items-stretch p-4 max-h-100 justify-center cursor-pointer hover:bg-gray-900 ease-in-out duration-500">
+          <p>no posts yet be the first to post</p>
+        </div>
       )}
     </div>
   );
