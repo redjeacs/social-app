@@ -6,6 +6,8 @@ import OAuthCallback from "../pages/OAuthCallback";
 import FollowPage from "../pages/FollowPage";
 import PostListPage from "../pages/PostListPage";
 import PostPage from "../pages/PostPage";
+import ProfilePage from "../pages/ProfilePage";
+import ProfileEditPage from "@/pages/ProfileEditPage";
 
 const routes = [
   {
@@ -19,6 +21,11 @@ const routes = [
           { index: true, element: <PostListPage /> },
           { path: "/follow", element: <FollowPage /> },
           { path: "/post/:postId", element: <PostPage /> },
+          {
+            path: "/profile",
+            element: <ProfilePage />,
+            children: [{ path: "/profile/edit", element: <ProfileEditPage /> }],
+          },
         ],
       },
     ],

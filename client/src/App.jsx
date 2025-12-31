@@ -3,7 +3,7 @@ import Sidebar from "./components/Sidebar";
 
 function App() {
   return (
-    <div className="relative flex max-w-[1420px] justify-self-center">
+    <div className="flex max-w-[1420px] justify-self-center">
       <Sidebar />
       <main className="flex-1 md:h-screen md:ml-22 xl:ml-68">
         <Outlet />
