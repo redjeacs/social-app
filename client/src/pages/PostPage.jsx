@@ -102,8 +102,6 @@ function PostPage() {
 
   if (!post) return;
 
-  console.log(post);
-
   return (
     <>
       <div className="sticky top-0 flex w-full bg-black z-10 p-2 justify-between">

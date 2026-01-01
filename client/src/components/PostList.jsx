@@ -3,16 +3,18 @@ import { useAlert } from "../contexts/AlertContext";
 import { useAuth } from "../contexts/AuthContext";
 import PostCard from "./PostCard";
 import { buildReplyTree } from "../utils/buildReplyTree";
+import { useNavigate } from "react-router-dom";
 
 function PostList({ yourRecentPosts, followsPosts = null }) {
   const { token } = useAuth();
   const [posts, setPosts] = useState([]);
   const { setAlert } = useAlert();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchPosts = async () => {
       if (followsPosts) {
-        setPosts(followsPosts);
+        setPosts(Array.isArray(followsPosts) ? followsPosts : []);
         return;
       }
       try {
@@ -30,8 +32,9 @@ function PostList({ yourRecentPosts, followsPosts = null }) {
             type: "error",
             message: `An error occured - ${res.statusText}`,
           });
+        if (res.status === 401 || res.status === 403) navigate("/signin");
 
-        setPosts(data);
+        setPosts(Array.isArray(data) ? data : []);
       } catch (error) {
         console.error("Error fetching posts:", error);
       }

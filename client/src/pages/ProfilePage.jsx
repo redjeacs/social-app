@@ -5,7 +5,6 @@ import { Button } from "@/components/ui/button";
 function ProfilePage() {
   const { user } = useAuth();
   const navigate = useNavigate();
-  console.log(user);
 
   return (
     <>
