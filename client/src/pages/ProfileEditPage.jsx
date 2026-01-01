@@ -1,12 +1,16 @@
 import { useAuth } from "@/contexts/AuthContext";
 import userIcon from "../assets/user.svg";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 function ProfileEditPage() {
   const { user } = useAuth();
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
+    bio: user.bio,
     firstName: user.firstName,
     lastName: user.lastName,
+    location: user.locaiton,
     profile: user.profile,
   });
   const [inputFocus, setInputFocus] = useState("");
@@ -21,7 +25,10 @@ function ProfileEditPage() {
       <div className="relative flex flex-col basis-auto md:rounded-2xl bg-blac max-w-full md:max-w-[600px] w-screen bg-black mx-auto min-w-[60px] h-[650px] min-h-[400px] max-h-screen md:max-h-[90vh] overflow-auto custom-scrollbar">
         <div className="sticky top-0 bg-black z-20 rounded-t-2xl flex items-center px-4 h-[53px] p-4">
           <div className="flex items-center justify-start min-w-14 bg-black">
-            <button className="w-9 h-9 cursor-pointer">
+            <button
+              onClick={() => navigate(-1)}
+              className="w-9 h-9 cursor-pointer"
+            >
               <div className="flex justify-center items-center w-8.5 h-8.5 hover:rounded-full hover:bg-(--twitter-text)/30">
                 <svg
                   viewBox="0 0 24 24"
@@ -188,6 +195,75 @@ function ProfileEditPage() {
                 }
                 className="outline-none"
                 onFocus={() => setInputFocus("lastName")}
+                onBlur={() => setInputFocus("")}
+              />
+            </div>
+          </label>
+        </div>
+        <div className="flex flex-col items-stretch px-4 py-3">
+          <label
+            htmlFor="bio"
+            className={`border  rounded-sm ${
+              inputFocus === "bio"
+                ? "border-[rgb(29,155,240)] shadow-[0_0_0_1px_rgb(29,155,240)]"
+                : "border-[rgb(51,54,57)]"
+            }`}
+          >
+            <div className="flex flex-col p-2">
+              <span
+                className={` text-sm ${
+                  inputFocus === "bio"
+                    ? "text-[rgb(29,155,240)]"
+                    : "text-[rgb(113,118,123)]"
+                }`}
+              >
+                Bio
+              </span>
+              <textarea
+                id="bio"
+                name="bio"
+                value={formData.bio || user.bio}
+                onChange={(e) =>
+                  setFormData({ ...formData, bio: e.target.value })
+                }
+                maxLength={160}
+                style={{ height: "72px" }}
+                className="outline-none resize-none text-left"
+                onFocus={() => setInputFocus("bio")}
+                onBlur={() => setInputFocus("")}
+              />
+            </div>
+          </label>
+        </div>
+        <div className="flex flex-col items-stretch px-4 py-3">
+          <label
+            htmlFor="location"
+            className={`border rounded-sm ${
+              inputFocus === "location"
+                ? "border-[rgb(29,155,240)] shadow-[0_0_0_1px_rgb(29,155,240)]"
+                : "border-[rgb(51,54,57)]"
+            }`}
+          >
+            <div className="flex flex-col p-2">
+              <span
+                className={` text-sm ${
+                  inputFocus === "location"
+                    ? "text-[rgb(29,155,240)]"
+                    : "text-[rgb(113,118,123)]"
+                }`}
+              >
+                Location
+              </span>
+              <input
+                type="text"
+                id="location"
+                name="location"
+                value={formData.location || user.location}
+                onChange={(e) =>
+                  setFormData({ ...formData, location: e.target.value })
+                }
+                className="outline-none"
+                onFocus={() => setInputFocus("location")}
                 onBlur={() => setInputFocus("")}
               />
             </div>
