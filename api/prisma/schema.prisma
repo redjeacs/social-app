@@ -10,10 +10,16 @@ model User {
   id              String      @id @default(uuid())
   email           String      @unique
   username        String      @unique
+  password        String
   firstName       String
   lastName        String
-  password        String
+  coverImage      String?
+  bio             String?
+  profile         String?
+  location        String?
+  
   createdAt       DateTime    @default(now())
+
   identities      Identity[]
   posts           Post[]
   followers       User[]      @relation("UserFollowers")

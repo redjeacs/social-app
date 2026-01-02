@@ -5,6 +5,7 @@ const verifyToken = require("../middlewares/Verifytoken");
 const usersRouter = Router();
 
 usersRouter.get("/:userId", verifyToken, usersController.getUserById);
+usersRouter.patch("/:userId", verifyToken, usersController.updateUserProfile);
 usersRouter.get(
   "/popular/:userId",
   verifyToken,

@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 function ProfileEditPage() {
-  const { user } = useAuth();
+  const { user, token } = useAuth();
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     bio: user.bio,
@@ -20,9 +20,37 @@ function ProfileEditPage() {
     return () => (document.body.style.overflow = "");
   }, []);
 
+  const handleProfileUpdate = async (e) => {
+    e.preventDefault();
+    try {
+      const res = await fetch(`/api/users/${user.id}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(formData),
+      });
+
+      if (!res.ok) {
+        throw new Error("Failed to update profile");
+      }
+
+      const updatedUser = await res.json();
+      console.log("Profile updated:", updatedUser);
+      navigate(-1);
+    } catch (error) {
+      console.error("Error updating profile:", error);
+    }
+  };
+
   return (
     <div className="absolute flex items-center justify-center top-0 left-0 w-full h-full bg-[rgba(91,112,131,0.4)] z-50">
-      <div className="relative flex flex-col basis-auto md:rounded-2xl bg-blac max-w-full md:max-w-[600px] w-screen bg-black mx-auto min-w-[60px] h-[650px] min-h-[400px] max-h-screen md:max-h-[90vh] overflow-auto custom-scrollbar">
+      <form
+        onSubmit={(e) => handleProfileUpdate(e)}
+        className="relative flex flex-col basis-auto md:rounded-2xl bg-blac max-w-full md:max-w-[600px] w-screen bg-black mx-auto min-w-[60px] h-[650px] min-h-[400px] max-h-screen md:max-h-[90vh] overflow-auto custom-scrollbar"
+      >
+        {/* Nav */}
         <div className="sticky top-0 bg-black z-20 rounded-t-2xl flex items-center px-4 h-[53px] p-4">
           <div className="flex items-center justify-start min-w-14 bg-black">
             <button
@@ -58,6 +86,7 @@ function ProfileEditPage() {
             Save
           </button>
         </div>
+        {/* Image Display */}
         <div className="flex justify-center items-center aspect-3/1 w-full max-h-[200px] opacity-75">
           <button className="flex z-2 justify-center items-center w-10.5 h-10.5 backdrop:blur-xs rounded-full cursor-pointer hover:bg-[rgba(39,44,48,0.75)] ease-in-out duration-100">
             <svg viewBox="0 0 24 24" aria-hidden="true" className="w-5 h-5">
@@ -68,6 +97,7 @@ function ProfileEditPage() {
             </svg>
           </button>
         </div>
+        {/* Photo Edit Bar */}
         <div className="relative flex gap-4 items-end mr-4 min-h-11.5">
           <div className="relative flex justify-center items-stretch  ml-4 -mt-11 w-[25%] bg-black">
             <div className="flex justify-center items-center absolute bottom-0 min-w-16 min-h-16 w-full aspect-square max-w-29 max-h-29 opacity-75">
@@ -132,6 +162,7 @@ function ProfileEditPage() {
             </button>
           </div>
         </div>
+        {/* Nav */}
         <div className="flex flex-col items-stretch px-4 py-3">
           <label
             htmlFor="firstName"
@@ -269,7 +300,7 @@ function ProfileEditPage() {
             </div>
           </label>
         </div>
-      </div>
+      </form>
     </div>
   );
 }

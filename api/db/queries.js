@@ -31,6 +31,15 @@ exports.getUser = async (colName, query) => {
   return user;
 };
 
+exports.updateUserProfile = async (userId, updateData) => {
+  const updatedUser = await prisma.user.update({
+    where: { id: userId },
+    data: updateData,
+    include: { followers: true, following: true },
+  });
+  return updatedUser;
+};
+
 exports.getUsersToFollow = async (userId) => {
   const users = await prisma.user.findMany({
     where: {

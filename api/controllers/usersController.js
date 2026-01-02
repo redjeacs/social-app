@@ -13,6 +13,23 @@ exports.getUserById = async (req, res, next) => {
   }
 };
 
+exports.updateUserProfile = async (req, res, next) => {
+  const userId = req.params.userId;
+  const updates = req.body;
+
+  try {
+    const updatedUser = await db.updateUserProfile(userId, updates);
+
+    if (!updatedUser) {
+      return res.status(400).json({ message: "Unable to update user profile" });
+    }
+
+    res.status(200).json(updatedUser);
+  } catch (err) {
+    next(err);
+  }
+};
+
 exports.getUsersToFollow = async (req, res, next) => {
   const userId = req.params.userId;
   try {
