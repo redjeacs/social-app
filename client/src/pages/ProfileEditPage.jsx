@@ -2,9 +2,11 @@ import { useAuth } from "@/contexts/AuthContext";
 import userIcon from "../assets/user.svg";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useAlert } from "@/contexts/AlertContext";
 
 function ProfileEditPage() {
-  const { user, token } = useAuth();
+  const { user, setUser, token } = useAuth();
+  const { setAlert } = useAlert();
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     bio: user.bio,
@@ -23,33 +25,36 @@ function ProfileEditPage() {
   const handleProfileUpdate = async (e) => {
     e.preventDefault();
     try {
-      const res = await fetch(`/api/users/${user.id}`, {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify(formData),
-      });
+      const res = await fetch(
+        `${import.meta.env.VITE_API_URL}/users/${user.id}`,
+        {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(formData),
+        }
+      );
 
       if (!res.ok) {
-        throw new Error("Failed to update profile");
+        setAlert({ type: "error", message: "Failed to update profile" });
       }
 
       const updatedUser = await res.json();
-      console.log("Profile updated:", updatedUser);
+      setUser(updatedUser);
       navigate(-1);
-    } catch (error) {
-      console.error("Error updating profile:", error);
+    } catch (err) {
+      setAlert({
+        type: "error",
+        message: `An error occurred while updating profile: ${err.message}`,
+      });
     }
   };
 
   return (
     <div className="absolute flex items-center justify-center top-0 left-0 w-full h-full bg-[rgba(91,112,131,0.4)] z-50">
-      <form
-        onSubmit={(e) => handleProfileUpdate(e)}
-        className="relative flex flex-col basis-auto md:rounded-2xl bg-blac max-w-full md:max-w-[600px] w-screen bg-black mx-auto min-w-[60px] h-[650px] min-h-[400px] max-h-screen md:max-h-[90vh] overflow-auto custom-scrollbar"
-      >
+      <div className="relative flex flex-col basis-auto md:rounded-2xl bg-blac max-w-full md:max-w-[600px] w-screen bg-black mx-auto min-w-[60px] h-[650px] min-h-[400px] max-h-screen md:max-h-[90vh] overflow-auto custom-scrollbar">
         {/* Nav */}
         <div className="sticky top-0 bg-black z-20 rounded-t-2xl flex items-center px-4 h-[53px] p-4">
           <div className="flex items-center justify-start min-w-14 bg-black">
@@ -82,7 +87,10 @@ function ProfileEditPage() {
             </button>
           </div>
           <h1 className="text-xl font-bold flex-1">Edit profile</h1>
-          <button className="w-16.5 h-8 text-sm font-bold bg-[#EFF3F4] text-[#0F1419] rounded-full cursor-pointer hover:bg-[rgb(215,219,220)]">
+          <button
+            onClick={(e) => handleProfileUpdate(e)}
+            className="w-16.5 h-8 text-sm font-bold bg-[#EFF3F4] text-[#0F1419] rounded-full cursor-pointer hover:bg-[rgb(215,219,220)]"
+          >
             Save
           </button>
         </div>
@@ -162,7 +170,7 @@ function ProfileEditPage() {
             </button>
           </div>
         </div>
-        {/* Nav */}
+        {/* First Name Input */}
         <div className="flex flex-col items-stretch px-4 py-3">
           <label
             htmlFor="firstName"
@@ -186,7 +194,7 @@ function ProfileEditPage() {
                 type="text"
                 id="firstName"
                 name="firstName"
-                value={formData.firstName || user.firstName}
+                value={formData.firstName}
                 onChange={(e) =>
                   setFormData({ ...formData, firstName: e.target.value })
                 }
@@ -197,6 +205,7 @@ function ProfileEditPage() {
             </div>
           </label>
         </div>
+        {/* Last Name Input */}
         <div className="flex flex-col items-stretch px-4 py-3">
           <label
             htmlFor="lastName"
@@ -220,7 +229,7 @@ function ProfileEditPage() {
                 type="text"
                 id="lastName"
                 name="lastName"
-                value={formData.lastName || user.lastName}
+                value={formData.lastName}
                 onChange={(e) =>
                   setFormData({ ...formData, lastName: e.target.value })
                 }
@@ -231,6 +240,7 @@ function ProfileEditPage() {
             </div>
           </label>
         </div>
+        {/* Bio Input */}
         <div className="flex flex-col items-stretch px-4 py-3">
           <label
             htmlFor="bio"
@@ -253,7 +263,7 @@ function ProfileEditPage() {
               <textarea
                 id="bio"
                 name="bio"
-                value={formData.bio || user.bio}
+                value={formData.bio}
                 onChange={(e) =>
                   setFormData({ ...formData, bio: e.target.value })
                 }
@@ -266,6 +276,7 @@ function ProfileEditPage() {
             </div>
           </label>
         </div>
+        {/* Location Input */}
         <div className="flex flex-col items-stretch px-4 py-3">
           <label
             htmlFor="location"
@@ -289,7 +300,7 @@ function ProfileEditPage() {
                 type="text"
                 id="location"
                 name="location"
-                value={formData.location || user.location}
+                value={formData.location}
                 onChange={(e) =>
                   setFormData({ ...formData, location: e.target.value })
                 }
@@ -300,7 +311,7 @@ function ProfileEditPage() {
             </div>
           </label>
         </div>
-      </form>
+      </div>
     </div>
   );
 }

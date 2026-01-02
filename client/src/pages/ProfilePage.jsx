@@ -1,10 +1,48 @@
 import { Outlet, useNavigate, Link } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 import { Button } from "@/components/ui/button";
+import { useEffect, useState } from "react";
+import { useAlert } from "@/contexts/AlertContext";
 
 function ProfilePage() {
-  const { user } = useAuth();
+  const { user, token } = useAuth();
+  const { setAlert } = useAlert();
+  const [userData, setUserData] = useState(user);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      const userId = user.id;
+      try {
+        const res = await fetch(
+          `${import.meta.env.VITE_API_URL}/users/${userId}`,
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        const data = await res.json();
+        if (!res.ok) {
+          setAlert({ type: "error", message: "Failed to fetch user data" });
+          return;
+        }
+
+        setUserData(data);
+      } catch (err) {
+        setAlert({
+          type: "error",
+          message: `An error occurred while fetching user data: ${err.message}`,
+        });
+      }
+    };
+
+    fetchUserData();
+  }, [user.id]);
+
+  console.log(userData);
 
   return (
     <>
