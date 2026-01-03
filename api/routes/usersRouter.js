@@ -2,8 +2,9 @@ const { Router } = require("express");
 const usersController = require("../controllers/usersController");
 const verifyToken = require("../middlewares/Verifytoken");
 const multer = require("multer");
+const storage = multer.memoryStorage();
 const upload = multer({
-  dest: "uploads/",
+  storage,
   limits: { fileSize: 10 * 1024 * 1024 },
 });
 
@@ -15,7 +16,7 @@ usersRouter.patch(
   verifyToken,
   upload.fields([
     { name: "profile", maxCount: 1 },
-    { name: "cover", maxCount: 1 },
+    { name: "coverImage", maxCount: 1 },
   ]),
   usersController.updateUserProfile
 );

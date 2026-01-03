@@ -21,23 +21,35 @@ exports.updateUserProfile = async (req, res, next) => {
   const updates = { ...req.body };
 
   try {
+    const uploadBufferToCloudinary = (buffer, folder) => {
+      return new Promise((resolve, reject) => {
+        const uploadResult = cloudinary.uploader.upload_stream(
+          { folder },
+          (error, result) => {
+            if (error) return reject(error);
+            resolve(result);
+          }
+        );
+        uploadResult.end(buffer);
+      });
+    };
+
     if (req.files) {
       if (req.files.profile) {
-        const profileImage = req.files.profile[0];
-        const profileUpload = await cloudinary.uploader.upload(
-          profileImage.path,
-          {
-            folder: "user_profiles",
-          }
+        const profileImage = req.files.profile[0].buffer;
+        const profileUpload = await uploadBufferToCloudinary(
+          profileImage,
+          "user_profiles"
         );
         updates.profile = profileUpload.secure_url;
       }
 
-      if (req.files.cover) {
-        const coverImage = req.files.cover[0];
-        const coverUpload = await cloudinary.uploader.upload(coverImage.path, {
-          folder: "user_covers",
-        });
+      if (req.files.coverImage) {
+        const coverImage = req.files.coverImage[0].buffer;
+        const coverUpload = await uploadBufferToCloudinary(
+          coverImage,
+          "user_covers"
+        );
         updates.coverImage = coverUpload.secure_url;
       }
     }

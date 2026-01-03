@@ -17,7 +17,7 @@ function ProfileEditPage() {
     profile: user.profile,
     coverImage: user.coverImage,
   });
-  const [coverPreview, setCoverPreview] = useState("");
+  const [coverImagePreview, setCoverImagePreview] = useState("");
   const [profilePreview, setProfilePreview] = useState("");
   const [inputFocus, setInputFocus] = useState("");
   const [isUploading, setIsUploading] = useState(false);
@@ -66,18 +66,18 @@ function ProfileEditPage() {
     setIsUploading(false);
   };
 
-  const openCoverFile = () => {
+  const openCoverImageFile = () => {
     return () => {
-      document.getElementById("cover").click();
+      document.getElementById("coverImage").click();
     };
   };
 
-  const handleCoverChange = (e) => {
+  const handleCoverImageChange = (e) => {
     const file = e.target.files[0];
-    setFormData({ ...formData, cover: file });
+    setFormData({ ...formData, coverImage: file });
     const reader = new FileReader();
     reader.onloadend = () => {
-      setCoverPreview(reader.result);
+      setCoverImagePreview(reader.result);
     };
     if (file) {
       reader.readAsDataURL(file);
@@ -106,7 +106,7 @@ function ProfileEditPage() {
     <div className="absolute flex items-center justify-center top-0 left-0 w-full h-full bg-[rgba(91,112,131,0.4)] z-40">
       {isUploading && (
         <div className="absolute flex flex-col items-center gap-4 justify-center top-0 left-0 w-full h-full bg-[rgba(0,0,0,0.6)] z-50">
-          <Spinner size="lg" />
+          <Spinner />
           <span className="text-white text-lg">Updating profile...</span>
         </div>
       )}
@@ -153,21 +153,21 @@ function ProfileEditPage() {
         {/* Image Display */}
         <div className="relative flex justify-center items-center aspect-3/1 w-full max-h-[200px] opacity-75">
           <img
-            src={coverPreview || user.coverImage}
-            alt="cover preview"
+            src={coverImagePreview || user.coverImage}
+            alt="cover image preview"
             className={`absolute w-full h-full object-cover ${
               formData.coverImage ? "" : "hidden"
             }`}
           />
           <input
             type="file"
-            id="cover"
-            name="cover"
+            id="coverImage"
+            name="coverImage"
             className="hidden"
-            onChange={handleCoverChange}
+            onChange={handleCoverImageChange}
           />
           <button
-            onClick={openCoverFile()}
+            onClick={openCoverImageFile()}
             className="flex z-2 justify-center items-center w-10.5 h-10.5 backdrop:blur-xs rounded-full cursor-pointer hover:bg-[rgba(39,44,48,0.75)] ease-in-out duration-100"
           >
             <svg viewBox="0 0 24 24" aria-hidden="true" className="w-5 h-5">
