@@ -70,21 +70,35 @@ function ProfilePage() {
       <div className="w-full aspect-3/1 bg-[rgb(51,54,57)]">
         {user.profile && (
           <img
-            src={user.background}
+            src={user.coverImage}
             aria-placeholder="profile background image"
+            className=" w-full h-full object-cover"
           ></img>
         )}
       </div>
-      <div className="w-full aspect-3/1 p-3 pb-0 mb-4 flex flex-col basis-auto items-stretch">
-        <div>
-          <Link to="/profile/edit">
-            <Button
-              variant="outline"
-              className=" border-(--twitter-text) bg-transparent rounded-full"
-            >
-              Edit profile
-            </Button>
-          </Link>
+      {/* Profile Info */}
+      <div className=" pt-3 pb-0 px-4">
+        {/* Profile Picture and Edit Button */}
+        <div className="w-full aspect-3/1 mb-4 flex flex-col basis-auto items-stretch">
+          <div className="relative flex gap-4 items-end mr-4 min-h-11.5 justify-between">
+            <div className="relative flex justify-center items-stretch -mt-11 w-[25%] bg-black">
+              <div className=" flex justify-center items-center absolute bottom-5 md:bottom-0 min-w-18 min-h-18 w-full aspect-square max-w-40 max-h-40 border-2 md:border-4 border-black rounded-full bg-gray-400">
+                <img
+                  className=" w-full h-full rounded-full opacity-75 object-cover"
+                  src={user.profile}
+                  alt="profile image"
+                ></img>
+              </div>
+            </div>
+            <Link to="/profile/edit" className="mb-4">
+              <Button
+                variant="outline"
+                className=" border-(--twitter-text) bg-transparent rounded-full"
+              >
+                Edit profile
+              </Button>
+            </Link>
+          </div>
         </div>
       </div>
     </>
