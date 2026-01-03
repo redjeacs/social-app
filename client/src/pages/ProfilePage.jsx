@@ -42,8 +42,6 @@ function ProfilePage() {
     fetchUserData();
   }, [user.id]);
 
-  console.log(userData);
-
   return (
     <>
       <Outlet />

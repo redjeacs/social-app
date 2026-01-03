@@ -2,6 +2,7 @@ require("dotenv").config();
 const express = require("express");
 const passport = require("passport");
 require("./configs/passportConfig");
+require("./configs/cloudinaryConfig");
 const app = express();
 const cors = require("cors");
 

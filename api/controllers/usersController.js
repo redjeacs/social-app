@@ -1,4 +1,5 @@
 const db = require("../db/queries");
+const cloudinary = require("../configs/cloudinaryConfig");
 
 exports.getUserById = async (req, res, next) => {
   const userId = req.params.userId;
@@ -6,6 +7,8 @@ exports.getUserById = async (req, res, next) => {
     const user = await db.getUser("id", userId);
 
     if (!user) return res.status(404).json({ message: "User not found" });
+
+    user.password = undefined;
 
     res.status(200).json(user);
   } catch (err) {
@@ -15,14 +18,34 @@ exports.getUserById = async (req, res, next) => {
 
 exports.updateUserProfile = async (req, res, next) => {
   const userId = req.params.userId;
-  const updates = req.body;
+  const updates = { ...req.body };
 
   try {
+    if (req.files) {
+      if (req.files.profile) {
+        const profileImage = req.files.profile[0];
+        const profileUpload = await cloudinary.uploader.upload(
+          profileImage.path,
+          {
+            folder: "user_profiles",
+          }
+        );
+        updates.profile = profileUpload.secure_url;
+      }
+
+      if (req.files.cover) {
+        const coverImage = req.files.cover[0];
+        const coverUpload = await cloudinary.uploader.upload(coverImage.path, {
+          folder: "user_covers",
+        });
+        updates.coverImage = coverUpload.secure_url;
+      }
+    }
+
     const updatedUser = await db.updateUserProfile(userId, updates);
 
-    if (!updatedUser) {
-      return res.status(400).json({ message: "Unable to update user profile" });
-    }
+    if (!updatedUser)
+      return res.status(404).json({ message: "User not found for update" });
 
     res.status(200).json(updatedUser);
   } catch (err) {

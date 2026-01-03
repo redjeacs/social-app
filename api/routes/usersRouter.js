@@ -1,11 +1,24 @@
 const { Router } = require("express");
 const usersController = require("../controllers/usersController");
 const verifyToken = require("../middlewares/Verifytoken");
+const multer = require("multer");
+const upload = multer({
+  dest: "uploads/",
+  limits: { fileSize: 10 * 1024 * 1024 },
+});
 
 const usersRouter = Router();
 
 usersRouter.get("/:userId", verifyToken, usersController.getUserById);
-usersRouter.patch("/:userId", verifyToken, usersController.updateUserProfile);
+usersRouter.patch(
+  "/:userId",
+  verifyToken,
+  upload.fields([
+    { name: "profile", maxCount: 1 },
+    { name: "cover", maxCount: 1 },
+  ]),
+  usersController.updateUserProfile
+);
 usersRouter.get(
   "/popular/:userId",
   verifyToken,

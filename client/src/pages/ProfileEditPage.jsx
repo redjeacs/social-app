@@ -3,6 +3,7 @@ import userIcon from "../assets/user.svg";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAlert } from "@/contexts/AlertContext";
+import { Spinner } from "@/components/ui/spinner";
 
 function ProfileEditPage() {
   const { user, setUser, token } = useAuth();
@@ -12,10 +13,14 @@ function ProfileEditPage() {
     bio: user.bio,
     firstName: user.firstName,
     lastName: user.lastName,
-    location: user.locaiton,
+    location: user.location,
     profile: user.profile,
+    coverImage: user.coverImage,
   });
+  const [coverPreview, setCoverPreview] = useState("");
+  const [profilePreview, setProfilePreview] = useState("");
   const [inputFocus, setInputFocus] = useState("");
+  const [isUploading, setIsUploading] = useState(false);
 
   useEffect(() => {
     document.body.style.overflow = "hidden";
@@ -24,36 +29,87 @@ function ProfileEditPage() {
 
   const handleProfileUpdate = async (e) => {
     e.preventDefault();
+    setIsUploading(true);
     try {
+      const multipartFormData = new FormData();
+      Object.entries(formData).forEach(([key, value]) => {
+        if (value) multipartFormData.append(key, value);
+      });
+
       const res = await fetch(
         `${import.meta.env.VITE_API_URL}/users/${user.id}`,
         {
           method: "PATCH",
           headers: {
-            "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
           },
-          body: JSON.stringify(formData),
+          body: multipartFormData,
         }
       );
 
       if (!res.ok) {
         setAlert({ type: "error", message: "Failed to update profile" });
+        setIsUploading(false);
+        return;
       }
 
       const updatedUser = await res.json();
       setUser(updatedUser);
       navigate(-1);
     } catch (err) {
+      console.error(err);
       setAlert({
         type: "error",
         message: `An error occurred while updating profile: ${err.message}`,
       });
     }
+    setIsUploading(false);
+  };
+
+  const openCoverFile = () => {
+    return () => {
+      document.getElementById("cover").click();
+    };
+  };
+
+  const handleCoverChange = (e) => {
+    const file = e.target.files[0];
+    setFormData({ ...formData, cover: file });
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      setCoverPreview(reader.result);
+    };
+    if (file) {
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const openProfileFile = () => {
+    return () => {
+      document.getElementById("profile").click();
+    };
+  };
+
+  const handleProfileChange = (e) => {
+    const file = e.target.files[0];
+    setFormData({ ...formData, profile: file });
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      setProfilePreview(reader.result);
+    };
+    if (file) {
+      reader.readAsDataURL(file);
+    }
   };
 
   return (
-    <div className="absolute flex items-center justify-center top-0 left-0 w-full h-full bg-[rgba(91,112,131,0.4)] z-50">
+    <div className="absolute flex items-center justify-center top-0 left-0 w-full h-full bg-[rgba(91,112,131,0.4)] z-40">
+      {isUploading && (
+        <div className="absolute flex flex-col items-center gap-4 justify-center top-0 left-0 w-full h-full bg-[rgba(0,0,0,0.6)] z-50">
+          <Spinner size="lg" />
+          <span className="text-white text-lg">Updating profile...</span>
+        </div>
+      )}
       <div className="relative flex flex-col basis-auto md:rounded-2xl bg-blac max-w-full md:max-w-[600px] w-screen bg-black mx-auto min-w-[60px] h-[650px] min-h-[400px] max-h-screen md:max-h-[90vh] overflow-auto custom-scrollbar">
         {/* Nav */}
         <div className="sticky top-0 bg-black z-20 rounded-t-2xl flex items-center px-4 h-[53px] p-4">
@@ -95,8 +151,25 @@ function ProfileEditPage() {
           </button>
         </div>
         {/* Image Display */}
-        <div className="flex justify-center items-center aspect-3/1 w-full max-h-[200px] opacity-75">
-          <button className="flex z-2 justify-center items-center w-10.5 h-10.5 backdrop:blur-xs rounded-full cursor-pointer hover:bg-[rgba(39,44,48,0.75)] ease-in-out duration-100">
+        <div className="relative flex justify-center items-center aspect-3/1 w-full max-h-[200px] opacity-75">
+          <img
+            src={coverPreview || user.coverImage}
+            alt="cover preview"
+            className={`absolute w-full h-full object-cover ${
+              formData.coverImage ? "" : "hidden"
+            }`}
+          />
+          <input
+            type="file"
+            id="cover"
+            name="cover"
+            className="hidden"
+            onChange={handleCoverChange}
+          />
+          <button
+            onClick={openCoverFile()}
+            className="flex z-2 justify-center items-center w-10.5 h-10.5 backdrop:blur-xs rounded-full cursor-pointer hover:bg-[rgba(39,44,48,0.75)] ease-in-out duration-100"
+          >
             <svg viewBox="0 0 24 24" aria-hidden="true" className="w-5 h-5">
               <path
                 fill="rgb(255,255,255)"
@@ -108,13 +181,23 @@ function ProfileEditPage() {
         {/* Photo Edit Bar */}
         <div className="relative flex gap-4 items-end mr-4 min-h-11.5">
           <div className="relative flex justify-center items-stretch  ml-4 -mt-11 w-[25%] bg-black">
-            <div className="flex justify-center items-center absolute bottom-0 min-w-16 min-h-16 w-full aspect-square max-w-29 max-h-29 opacity-75">
+            <div className="flex justify-center items-center absolute bottom-0 min-w-16 min-h-16 w-full aspect-square max-w-29 max-h-29 border-2 border-black rounded-full bg-gray-400">
               <img
-                className="absolute bottom-0 w-full h-auto rounded-full bg-white"
-                src={user.profile || userIcon}
+                className=" w-full h-full rounded-full opacity-75 object-cover"
+                src={profilePreview || user.profile || userIcon}
                 alt="profile image"
               />
-              <button className="absolute flex justify-center items-center bottom-1/2 right-1/2 bg-[rgba(15,20,25,0.75)] translate-x-1/2 translate-y-1/2 w-10.5 h-10.5 backdrop:blur-xs rounded-full cursor-pointer hover:bg-[rgba(39,44,48,0.75)] ease-in-out duration-100">
+              <input
+                type="file"
+                id="profile"
+                name="profile"
+                className="hidden"
+                onChange={handleProfileChange}
+              />
+              <button
+                onClick={openProfileFile()}
+                className="absolute flex justify-center items-center bottom-1/2 right-1/2 bg-[rgba(15,20,25,0.75)] translate-x-1/2 translate-y-1/2 w-10.5 h-10.5 backdrop:blur-xs rounded-full cursor-pointer hover:bg-[rgba(39,44,48,0.75)] ease-in-out duration-100"
+              >
                 <svg viewBox="0 0 24 24" aria-hidden="true" className="w-5 h-5">
                   <path
                     fill="rgb(255,255,255)"
