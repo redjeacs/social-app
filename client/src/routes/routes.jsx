@@ -8,6 +8,9 @@ import PostListPage from "../pages/PostListPage";
 import PostPage from "../pages/PostPage";
 import ProfilePage from "../pages/ProfilePage";
 import ProfileEditPage from "@/pages/ProfileEditPage";
+import UserPostListPage from "@/pages/UserPostListPage";
+import UserRepliesListPage from "@/pages/UserRepliesListPage";
+import UserLikesListPage from "@/pages/UserLikesListPage";
 
 const routes = [
   {
@@ -22,9 +25,20 @@ const routes = [
           { path: "/follow", element: <FollowPage /> },
           { path: "/post/:postId", element: <PostPage /> },
           {
-            path: "/profile",
+            path: "/profile/:userId",
             element: <ProfilePage />,
-            children: [{ path: "/profile/edit", element: <ProfileEditPage /> }],
+            children: [
+              { index: true, element: <UserPostListPage /> },
+              { path: "/profile/:userId/edit", element: <ProfileEditPage /> },
+              {
+                path: "/profile/:userId/replies",
+                element: <UserRepliesListPage />,
+              },
+              {
+                path: "/profile/:userId/likes",
+                element: <UserLikesListPage />,
+              },
+            ],
           },
         ],
       },

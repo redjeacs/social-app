@@ -149,7 +149,7 @@ function Sidebar() {
             </div>
           </Link>
           <Link
-            to="/profile"
+            to={`/profile/${user?.id || ""}`}
             className="flex p-3 items-center hover:bg-[rgba(239,243,244,0.1)] ease-in-out duration-500 rounded-full cursor-pointer"
           >
             <div className="w-6.5 h-6.5">

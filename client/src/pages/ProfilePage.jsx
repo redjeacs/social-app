@@ -1,4 +1,10 @@
-import { Outlet, useNavigate, Link } from "react-router-dom";
+import {
+  Outlet,
+  useNavigate,
+  Link,
+  useParams,
+  useLocation,
+} from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
@@ -10,10 +16,12 @@ function ProfilePage() {
   const { setAlert } = useAlert();
   const [userData, setUserData] = useState(user);
   const navigate = useNavigate();
+  const { userId } = useParams();
+  const [selectedTab, setSelectedTab] = useState("posts");
+  const location = useLocation();
 
   useEffect(() => {
     const fetchUserData = async () => {
-      const userId = user.id;
       try {
         const res = await fetch(
           `${import.meta.env.VITE_API_URL}/users/${userId}`,
@@ -43,9 +51,21 @@ function ProfilePage() {
     fetchUserData();
   }, [user]);
 
+  useEffect(() => {
+    const checkProfilePath = () => {
+      if (location.pathname.endsWith(`/replies`)) {
+        setSelectedTab("replies");
+      } else if (location.pathname.endsWith(`/likes`)) {
+        setSelectedTab("likes");
+      } else {
+        setSelectedTab("posts");
+      }
+    };
+    checkProfilePath();
+  }, [location]);
+
   return (
     <>
-      <Outlet />
       <div className="sticky top-0 flex w-full bg-black z-10 p-2 justify-between">
         <div className="flex gap-4 items-center">
           <button
@@ -92,14 +112,16 @@ function ProfilePage() {
                 ></img>
               </div>
             </div>
-            <Link to="/profile/edit" className="mb-4">
-              <Button
-                variant="outline"
-                className=" border-(--twitter-text) bg-transparent rounded-full"
-              >
-                Edit profile
-              </Button>
-            </Link>
+            {user && user.id === userData.id && (
+              <Link to={`/profile/${userId}/edit`} className="mb-4">
+                <Button
+                  variant="outline"
+                  className=" border-(--twitter-text) bg-transparent rounded-full"
+                >
+                  Edit profile
+                </Button>
+              </Link>
+            )}
           </div>
         </div>
         <div className="flex mb-3 mt-1 flex-wrap items-stretch">
@@ -141,7 +163,7 @@ function ProfilePage() {
           <div className="flex gap-4 text-sm">
             <span className="text-(--twitter-text)">
               <strong className="text-white mr-1">
-                {userData.followingCount || 0}
+                {userData.following.length || 0}
               </strong>
               Following
             </span>
@@ -153,6 +175,57 @@ function ProfilePage() {
             </span>
           </div>
         </div>
+        {/* Navigation Tabs */}
+        <div>
+          <nav className="flex border-b border-[rgb(47,51,54)] items-center">
+            <div className="flex flex-col items-stretch justify-center flex-1 grow">
+              <Link
+                className="relative flex flex-col min-w-14 h-13 cursor-pointer items-center justify-center hover:bg-[rgba(239,243,244,0.1)] ease-in-out duration-200 px-4"
+                to={`/profile/${userId}`}
+              >
+                Posts
+                <div
+                  className={`absolute bottom-0 min-w-14 h-1 rounded-full ${
+                    selectedTab === "posts"
+                      ? "border-2 border-(--twitter-blue) font-bold"
+                      : "font-normal"
+                  }`}
+                ></div>
+              </Link>
+            </div>
+            <div className="flex flex-col items-stretch justify-center flex-1 grow">
+              <Link
+                className="relative flex flex-col min-w-14 h-13 cursor-pointer items-center justify-center hover:bg-[rgba(239,243,244,0.1)] ease-in-out duration-200 px-4"
+                to={`/profile/${userId}/replies`}
+              >
+                Replies
+                <div
+                  className={`absolute bottom-0 min-w-14 h-1 rounded-full ${
+                    selectedTab === "replies"
+                      ? "border-2 border-(--twitter-blue) font-bold"
+                      : "font-normal"
+                  }`}
+                ></div>
+              </Link>
+            </div>
+            <div className="flex flex-col items-stretch justify-center flex-1 grow">
+              <Link
+                className="relative flex flex-col min-w-14 h-13 cursor-pointer items-center justify-center hover:bg-[rgba(239,243,244,0.1)] ease-in-out duration-200 px-4"
+                to={`/profile/${userId}/likes`}
+              >
+                Likes
+                <div
+                  className={`absolute bottom-0 min-w-14 h-1 rounded-full ${
+                    selectedTab === "likes"
+                      ? "border-2 border-(--twitter-blue) font-bold"
+                      : "font-normal"
+                  }`}
+                ></div>
+              </Link>
+            </div>
+          </nav>
+        </div>
+        <Outlet />
       </div>
     </>
   );
