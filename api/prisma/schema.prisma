@@ -47,8 +47,10 @@ model Post {
   createdAt       DateTime    @default(now())
   user            User        @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId          String
+  
   likes           Int         @default(0)    
   likedBy         User[]      @relation("PostLikes")
+
   originalPost    Post?       @relation("OriginalPost", fields: [originalPostId], references: [id], onDelete: Cascade)
   originalPostId  String?
   reposts         Post[]      @relation("OriginalPost")
