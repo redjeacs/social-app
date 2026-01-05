@@ -121,13 +121,7 @@ exports.getAllPosts = async () => {
   return posts;
 };
 
-exports.getPosts = async (keys, queries) => {
-  const whereClause = {};
-
-  keys.forEach((key, index) => {
-    whereClause[key] = queries[index];
-  });
-
+exports.getPosts = async (whereClause) => {
   const posts = await prisma.post.findMany({
     where: whereClause,
     include: {
@@ -141,7 +135,9 @@ exports.getPosts = async (keys, queries) => {
           replies: true,
         },
       },
+      parentPost: { include: { user: true, likedBy: true, reposts: true } },
       reposts: true,
+      replies: { include: { user: true, likedBy: true, reposts: true } },
     },
     orderBy: {
       createdAt: "desc",

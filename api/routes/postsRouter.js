@@ -5,6 +5,11 @@ const postsRouter = Router();
 
 postsRouter.get("/", verifyToken, postsController.getAllPosts);
 postsRouter.get("/:userId", verifyToken, postsController.getPostsByUser);
+postsRouter.get(
+  "/:userId/replies",
+  verifyToken,
+  postsController.getPostsByReplies
+);
 postsRouter.get("/post/:postId", verifyToken, postsController.getPostById);
 postsRouter.post("/:userId", verifyToken, postsController.createPost);
 postsRouter.get(

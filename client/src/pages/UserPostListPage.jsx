@@ -5,7 +5,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useAlert } from "@/contexts/AlertContext";
 
 function UserPostListPage() {
-  const { user, token } = useAuth();
+  const { token } = useAuth();
   const { setAlert } = useAlert();
   const userId = useParams().userId;
   const [posts, setPosts] = useState(null);

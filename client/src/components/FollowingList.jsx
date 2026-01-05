@@ -88,10 +88,7 @@ function FollowingList({ yourRecentPosts }) {
   return (
     <div className="flex flex-col w-full">
       {Array.isArray(followsPosts) && followsPosts.length > 0 ? (
-        <PostList
-          yourRecentPost={yourRecentPosts}
-          followsPosts={followsPosts}
-        />
+        <PostList yourRecentPost={yourRecentPosts} postsData={followsPosts} />
       ) : (
         <div className="flex flex-col w-90 self-center m-10 gap-4">
           <h1 className="text-4xl font-bold">Welcome to X!</h1>

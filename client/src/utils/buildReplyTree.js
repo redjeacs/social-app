@@ -10,6 +10,8 @@ export function buildReplyTree(posts) {
     if (post.parentPostId) {
       if (map[post.parentPostId]) {
         map[post.parentPostId].replies.push(map[post.id]);
+      } else {
+        roots.push(map[post.id]);
       }
     } else {
       roots.push(map[post.id]);

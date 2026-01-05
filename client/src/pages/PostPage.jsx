@@ -69,7 +69,9 @@ function PostPage() {
       while (current.parentPostId) {
         try {
           const res = await fetch(
-            `${import.meta.env.VITE_API_URL}/posts/${current.parentPostId}`,
+            `${import.meta.env.VITE_API_URL}/posts/post/${
+              current.parentPostId
+            }`,
             {
               method: "GET",
               headers: {
@@ -132,7 +134,7 @@ function PostPage() {
         ))}
       <article className="w-full flex flex-col pt-4 border-b border-(--twitter-gray) px-4">
         <div className="flex w-full gap-2">
-          <div className="h-full w-10 bg-gray-400 rounded-full">
+          <div className="h-10 w-10 bg-gray-400 rounded-full">
             <img
               src={
                 (isRepost && post.originalPost.user?.profile) ||

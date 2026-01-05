@@ -51,12 +51,8 @@ function PostList({ yourRecentPosts, postsData = null }) {
 
   const replyTree = buildReplyTree(allPosts);
 
-  function renderPosts(posts, isRoot = true) {
-    const filteredPosts = isRoot
-      ? posts.filter((post) => !post.parentPostId)
-      : posts;
-
-    return filteredPosts.map((post) => (
+  function renderPosts(posts) {
+    return posts.map((post) => (
       <div key={post.id} className="mb-2">
         <PostCard post={post} />
         {post.replies && post.replies.length > 0 && (
