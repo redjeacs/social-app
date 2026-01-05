@@ -38,8 +38,6 @@ function UserPostListPage() {
     fetchUserPosts();
   }, [userId]);
 
-  console.log(posts);
-
   return (
     <div className="">
       <PostList postsData={posts} />

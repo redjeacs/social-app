@@ -69,9 +69,9 @@ function PostCard({ post }) {
           )}
           <img
             src={
-              (isRepost && post.originalPost.user.profile) ||
-              post.user.profile ||
-              userIcon
+              isRepost
+                ? post.originalPost.user.profile || userIcon
+                : post.user.profile || userIcon
             }
             alt="profile icon"
             className="w-10 h-10 rounded-full object-cover"
