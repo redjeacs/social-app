@@ -121,6 +121,36 @@ exports.getAllPosts = async () => {
   return posts;
 };
 
+exports.getPosts = async (keys, queries) => {
+  const whereClause = {};
+
+  keys.forEach((key, index) => {
+    whereClause[key] = queries[index];
+  });
+
+  const posts = await prisma.post.findMany({
+    where: whereClause,
+    include: {
+      user: true,
+      likedBy: true,
+      originalPost: {
+        include: {
+          user: true,
+          likedBy: true,
+          reposts: true,
+          replies: true,
+        },
+      },
+      reposts: true,
+    },
+    orderBy: {
+      createdAt: "desc",
+    },
+  });
+
+  return posts;
+};
+
 exports.getPostById = async (postId) => {
   const post = await prisma.post.findUnique({
     where: { id: postId },

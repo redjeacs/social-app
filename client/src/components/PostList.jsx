@@ -5,7 +5,7 @@ import PostCard from "./PostCard";
 import { buildReplyTree } from "../utils/buildReplyTree";
 import { useNavigate } from "react-router-dom";
 
-function PostList({ yourRecentPosts, followsPosts = null }) {
+function PostList({ yourRecentPosts, postsData = null }) {
   const { token } = useAuth();
   const [posts, setPosts] = useState([]);
   const { setAlert } = useAlert();
@@ -13,8 +13,8 @@ function PostList({ yourRecentPosts, followsPosts = null }) {
 
   useEffect(() => {
     const fetchPosts = async () => {
-      if (followsPosts) {
-        setPosts(Array.isArray(followsPosts) ? followsPosts : []);
+      if (postsData) {
+        setPosts(Array.isArray(postsData) ? postsData : []);
         return;
       }
       try {
@@ -40,7 +40,7 @@ function PostList({ yourRecentPosts, followsPosts = null }) {
       }
     };
     fetchPosts();
-  }, []);
+  }, [postsData]);
 
   const allPosts = [
     ...(yourRecentPosts || []),

@@ -30,7 +30,7 @@ function PostPage() {
     const fetchPost = async () => {
       try {
         const res = await fetch(
-          `${import.meta.env.VITE_API_URL}/posts/${postId}`,
+          `${import.meta.env.VITE_API_URL}/posts/post/${postId}`,
           {
             method: "GET",
             headers: {

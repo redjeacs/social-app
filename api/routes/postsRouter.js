@@ -4,7 +4,8 @@ const postsController = require("../controllers/postsController.js");
 const postsRouter = Router();
 
 postsRouter.get("/", verifyToken, postsController.getAllPosts);
-postsRouter.get("/:postId", verifyToken, postsController.getPostById);
+postsRouter.get("/:userId", verifyToken, postsController.getPostsByUser);
+postsRouter.get("/post/:postId", verifyToken, postsController.getPostById);
 postsRouter.post("/:userId", verifyToken, postsController.createPost);
 postsRouter.get(
   "/follows/:userId",

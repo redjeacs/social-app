@@ -62,7 +62,7 @@ function PostCard({ post }) {
         {/* Post User Info */}
         <div
           onClick={navigateToUserProfile}
-          className="h-full w-10 bg-gray-400 rounded-full"
+          className="h-full w-10 bg-gray-400 rounded-full hover:opacity-90"
         >
           {Array.isArray(post.replies) && post.replies.length > 0 && (
             <div className="absolute left-5 -translate-x-1/2 -bottom-3.5 border border-(--twitter-text)/60 h-[calc(100%-30px)]"></div>
@@ -79,7 +79,10 @@ function PostCard({ post }) {
         </div>
         <div className="flex flex-col flex-1">
           <div className="flex gap-2">
-            <span onClick={navigateToUserProfile} className="font-bold">
+            <span
+              onClick={navigateToUserProfile}
+              className="font-bold hover:underline"
+            >
               {(isRepost &&
                 `${post.originalPost.user.firstName} ${post.originalPost.user.lastName}`) ||
                 (post.user && `${post.user.firstName} ${post.user.lastName}`)}
@@ -95,8 +98,14 @@ function PostCard({ post }) {
             </span>
             <div className="text-(--twitter-text)">·</div>
             <span className="text-(--twitter-text)">
-              {(isRepost && formatDate(post.originalPost.createdAt)) ||
-                formatDate(post.createdAt)}
+              <time
+                dateTime={
+                  (isRepost && post.originalPost.createdAt) || post.createdAt
+                }
+              >
+                {(isRepost && formatDate(post.originalPost.createdAt)) ||
+                  formatDate(post.createdAt)}
+              </time>
             </span>
           </div>
           <p>{post.content}</p>

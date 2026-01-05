@@ -12,6 +12,19 @@ exports.getAllPosts = async (req, res) => {
   }
 };
 
+exports.getPostsByUser = async (req, res) => {
+  const { userId } = req.params;
+  try {
+    const posts = await db.getPosts(["userId"], [userId]);
+
+    if (!posts) return res.status(404).json({ message: "Posts not found" });
+
+    res.status(200).json(posts);
+  } catch (error) {
+    res.status(500).json({ message: "Error retrieving posts", error });
+  }
+};
+
 exports.getPostById = async (req, res) => {
   const { postId } = req.params;
   try {
