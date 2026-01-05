@@ -32,34 +32,6 @@ function TrendsBar() {
       </div>
       <div className="border border-(--twitter-gray)"></div>
       <div className="flex flex-col gap-4 border border-(--twitter-gray) rounded-lg p-3">
-        <h1 className="font-bold text-lg">What's happening</h1>
-        <div>
-          <p className="text-sm text-(--twitter-gray)">
-            Trending in the United States
-          </p>
-          <h2 className="font-bold">#ExampleTrend</h2>
-          <p className="text-sm text-(--twitter-gray)">20.4K Tweets</p>
-        </div>
-        <div>
-          <p className="text-sm text-(--twitter-gray)">
-            Trending in the United States
-          </p>
-          <h2 className="font-bold">#ExampleTrend</h2>
-          <p className="text-sm text-(--twitter-gray)">20.4K Tweets</p>
-        </div>
-        <div>
-          <p className="text-sm text-(--twitter-gray)">
-            Trending in the United States
-          </p>
-          <h2 className="font-bold">#ExampleTrend</h2>
-          <p className="text-sm text-(--twitter-gray)">20.4K Tweets</p>
-        </div>
-        <Link to="/" className="text-(--twitter-blue)">
-          {/* update link later */}
-          Show more
-        </Link>
-      </div>
-      <div className="flex flex-col gap-4 border border-(--twitter-gray) rounded-lg p-3">
         <h1 className="font-bold text-lg">Who to follow</h1>
         <div className="flex gap-2 items-center">
           <img
@@ -103,7 +75,7 @@ function TrendsBar() {
             Follow
           </Button>
         </div>
-        <Link to="/" className="text-(--twitter-blue)">
+        <Link to="/follow" className="text-(--twitter-blue)">
           {/* update link later */}
           Show more
         </Link>

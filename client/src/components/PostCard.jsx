@@ -19,6 +19,11 @@ function PostCard({ post }) {
   );
   const isRepost = Boolean(post?.originalPost);
 
+  const navigateToUserProfile = (e) => {
+    e.preventDefault();
+    navigate(`/profile/${post.userId}`);
+  };
+
   return (
     <Link
       to={`/post/${post.id}`}
@@ -26,6 +31,7 @@ function PostCard({ post }) {
         Array.isArray(post.replies) && post.replies.length > 0 ? "" : "border-b"
       } border-gray-700 hover:bg-[rgb(10,10,10)] ease-in-out duration-500 cursor-pointer `}
     >
+      {/* Repost */}
       {post.originalPost && (
         <div className="w-full text-(--twitter-text) flex items-center gap-2">
           <div className="w-10 flex justify-end">
@@ -53,7 +59,11 @@ function PostCard({ post }) {
         </div>
       )}
       <div className="relative flex w-full items-stretch gap-2 justify-center">
-        <div className="h-full w-10 bg-gray-400 rounded-full">
+        {/* Post User Info */}
+        <div
+          onClick={navigateToUserProfile}
+          className="h-full w-10 bg-gray-400 rounded-full"
+        >
           {Array.isArray(post.replies) && post.replies.length > 0 && (
             <div className="absolute left-5 -translate-x-1/2 -bottom-3.5 border border-(--twitter-text)/60 h-[calc(100%-30px)]"></div>
           )}
@@ -69,12 +79,15 @@ function PostCard({ post }) {
         </div>
         <div className="flex flex-col flex-1">
           <div className="flex gap-2">
-            <span className="font-bold">
+            <span onClick={navigateToUserProfile} className="font-bold">
               {(isRepost &&
                 `${post.originalPost.user.firstName} ${post.originalPost.user.lastName}`) ||
                 (post.user && `${post.user.firstName} ${post.user.lastName}`)}
             </span>
-            <span className="text-(--twitter-text)">
+            <span
+              onClick={navigateToUserProfile}
+              className="text-(--twitter-text)"
+            >
               @
               {post.originalPost
                 ? post.originalPost.user.username

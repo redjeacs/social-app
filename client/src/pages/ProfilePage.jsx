@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
 import { useAlert } from "@/contexts/AlertContext";
 import { formatDate } from "@/utils/formatDate";
+import userIcon from "@/assets/user.svg";
 
 function ProfilePage() {
   const { user, token } = useAuth();
@@ -49,7 +50,7 @@ function ProfilePage() {
     };
 
     fetchUserData();
-  }, [user]);
+  }, [userId]);
 
   useEffect(() => {
     const checkProfilePath = () => {
@@ -107,7 +108,7 @@ function ProfilePage() {
               <div className=" flex justify-center items-center absolute bottom-5 md:bottom-0 min-w-18 min-h-18 w-full aspect-square max-w-40 max-h-40 border-2 md:border-4 border-black rounded-full bg-gray-400">
                 <img
                   className=" w-full h-full rounded-full opacity-75 object-cover"
-                  src={userData.profile}
+                  src={userData.profile || userIcon}
                   alt="profile image"
                 ></img>
               </div>
@@ -163,7 +164,7 @@ function ProfilePage() {
           <div className="flex gap-4 text-sm">
             <span className="text-(--twitter-text)">
               <strong className="text-white mr-1">
-                {userData.following.length || 0}
+                {userData.following?.length || 0}
               </strong>
               Following
             </span>
