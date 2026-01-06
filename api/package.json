@@ -26,10 +26,10 @@
     "passport-github2": "^0.1.12",
     "passport-google-oauth20": "^2.0.0",
     "pg": "^8.16.3",
-    "prisma": "^7.1.0",
     "supertest": "^7.1.4"
   },
   "devDependencies": {
-    "dotenv": "^17.2.3"
+    "dotenv": "^17.2.3",
+    "prisma": "^7.2.0"
   }
 }

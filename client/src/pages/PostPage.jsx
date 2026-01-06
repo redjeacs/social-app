@@ -281,6 +281,11 @@ function PostPage() {
                 </svg>
               </div>
               <span className="absolute text-xs right-0 bottom-1.5">
+                {isRepost && post.originalPost.likes > 0
+                  ? post.originalPost.likes
+                  : "" || post.likes > 0
+                  ? post.likes
+                  : ""}
                 {(isRepost &&
                   Array.isArray(post.originalPost.likes) &&
                   post.originalPost.likes) ||

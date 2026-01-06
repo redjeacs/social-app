@@ -14,8 +14,9 @@ exports.getAllPosts = async (req, res) => {
 
 exports.getPostsByUser = async (req, res) => {
   const { userId } = req.params;
+
   try {
-    const posts = await db.getPosts({ userId: userId });
+    const posts = await db.getUserPosts(userId);
 
     if (!posts) return res.status(404).json({ message: "Posts not found" });
 
@@ -27,17 +28,28 @@ exports.getPostsByUser = async (req, res) => {
 
 exports.getPostsByReplies = async (req, res) => {
   const { userId } = req.params;
+
   try {
-    const posts = await db.getPosts({
-      userId: userId,
-      OR: [{ parentPostId: { not: null } }, { originalPostId: { not: null } }],
-    });
+    const posts = await db.getUserReplies(userId);
 
     if (!posts) return res.status(404).json({ message: "Posts not found" });
 
     res.status(200).json(posts);
   } catch (error) {
     res.status(500).json({ message: "Error retrieving posts", error });
+  }
+};
+
+exports.getPostsByLikes = async (req, res) => {
+  const { userId } = req.params;
+  try {
+    const posts = await db.getUserLikedPosts(userId);
+
+    if (!posts) res.status(404).json({ message: "Posts not found" });
+
+    res.status(200).json(posts);
+  } catch (err) {
+    res.status(500).json({ message: "Error retrieving posts", err });
   }
 };
 

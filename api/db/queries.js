@@ -121,30 +121,97 @@ exports.getAllPosts = async () => {
   return posts;
 };
 
-exports.getPosts = async (whereClause) => {
-  const posts = await prisma.post.findMany({
-    where: whereClause,
+exports.getUserPosts = async (userId) => {
+  const user = await prisma.user.findUnique({
+    where: { id: userId },
     include: {
-      user: true,
-      likedBy: true,
-      originalPost: {
+      posts: {
         include: {
           user: true,
           likedBy: true,
+          originalPost: {
+            include: {
+              user: true,
+              likedBy: true,
+              reposts: true,
+              replies: true,
+            },
+          },
           reposts: true,
-          replies: true,
+          replies: { include: { user: true, likedBy: true, reposts: true } },
+        },
+        orderBy: {
+          createdAt: "desc",
         },
       },
-      parentPost: { include: { user: true, likedBy: true, reposts: true } },
-      reposts: true,
-      replies: { include: { user: true, likedBy: true, reposts: true } },
-    },
-    orderBy: {
-      createdAt: "desc",
     },
   });
 
-  return posts;
+  return user.posts;
+};
+
+exports.getUserReplies = async (userId) => {
+  const user = await prisma.user.findUnique({
+    where: { id: userId },
+    include: {
+      posts: {
+        where: {
+          OR: [
+            { parentPostId: { not: null } },
+            { originalPostId: { not: null } },
+          ],
+        },
+        include: {
+          user: true,
+          likedBy: true,
+          originalPost: {
+            include: {
+              user: true,
+              likedBy: true,
+              reposts: true,
+              replies: true,
+            },
+          },
+          reposts: true,
+          replies: { include: { user: true, likedBy: true, reposts: true } },
+        },
+        orderBy: {
+          createdAt: "desc",
+        },
+      },
+    },
+  });
+
+  return user.posts;
+};
+
+exports.getUserLikedPosts = async (userId) => {
+  const user = await prisma.user.findUnique({
+    where: { id: userId },
+    include: {
+      likedPosts: {
+        include: {
+          user: true,
+          likedBy: true,
+          originalPost: {
+            include: {
+              user: true,
+              likedBy: true,
+              reposts: true,
+              replies: true,
+            },
+          },
+          reposts: true,
+          replies: { include: { user: true, likedBy: true, reposts: true } },
+        },
+        orderBy: {
+          createdAt: "desc",
+        },
+      },
+    },
+  });
+
+  return user.likedPosts;
 };
 
 exports.getPostById = async (postId) => {

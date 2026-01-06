@@ -10,6 +10,7 @@ postsRouter.get(
   verifyToken,
   postsController.getPostsByReplies
 );
+postsRouter.get("/:userId/likes", verifyToken, postsController.getPostsByLikes);
 postsRouter.get("/post/:postId", verifyToken, postsController.getPostById);
 postsRouter.post("/:userId", verifyToken, postsController.createPost);
 postsRouter.get(
