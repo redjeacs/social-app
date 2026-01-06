@@ -103,7 +103,7 @@ function ProfileEditPage() {
   };
 
   return (
-    <div className="absolute flex items-center justify-center top-0 left-0 w-full h-full bg-[rgba(91,112,131,0.4)] z-40">
+    <div className="fixed flex items-center justify-center top-0 left-0 w-full h-full bg-[rgba(91,112,131,0.4)] z-40">
       {isUploading && (
         <div className="absolute flex flex-col items-center gap-4 justify-center top-0 left-0 w-full h-full bg-[rgba(0,0,0,0.6)] z-50">
           <Spinner />

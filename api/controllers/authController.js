@@ -30,7 +30,9 @@ exports.createUser = [
       const payload = {
         id: user.id,
         email: user.email,
-        name: user.name,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        username: user.username,
       };
       const token = jwt.sign(payload, process.env.JWT_SECRET, {
         expiresIn: "1d",
@@ -91,6 +93,10 @@ exports.signin = [
         firstName: user.firstName,
         lastName: user.lastName,
         username: user.username,
+        bio: user.bio,
+        profile: user.profile,
+        coverImage: user.coverImage,
+        location: user.location,
       };
       const token = jwt.sign(payload, process.env.JWT_SECRET, {
         expiresIn: "1d",
@@ -111,6 +117,7 @@ exports.demoSignin = async (req, res, next) => {
     const demoPassword = process.env.DEMO_USER_PASSWORD;
 
     const user = await db.getUser("username", demoUsername);
+
     if (!user) return res.status(404).json({ message: "Demo user not found" });
 
     const valid = await bcrypt.compare(demoPassword, user.password);
@@ -123,6 +130,10 @@ exports.demoSignin = async (req, res, next) => {
       firstName: user.firstName,
       lastName: user.lastName,
       username: user.username,
+      bio: user.bio,
+      profile: user.profile,
+      coverImage: user.coverImage,
+      location: user.location,
     };
     const token = jwt.sign(payload, process.env.JWT_SECRET, {
       expiresIn: "1d",
@@ -144,7 +155,13 @@ exports.checkSignin = async (req, res, next) => {
     const payload = {
       id: user.id,
       email: user.email,
-      name: user.name,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      username: user.username,
+      bio: user.bio,
+      profile: user.profile,
+      coverImage: user.coverImage,
+      location: user.location,
     };
 
     res.status(200).json({ message: "User is signed in", user: payload });
@@ -167,6 +184,10 @@ exports.googleCallback = (req, res, next) => {
       firstName: user.firstName,
       lastName: user.lastName,
       username: user.username,
+      bio: user.bio,
+      profile: user.profile,
+      coverImage: user.coverImage,
+      location: user.location,
     };
     const token = jwt.sign(payload, process.env.JWT_SECRET, {
       expiresIn: "1d",
@@ -190,6 +211,10 @@ exports.githubCallback = (req, res, next) => {
       firstName: user.firstName,
       lastName: user.lastName,
       username: user.username,
+      bio: user.bio,
+      profile: user.profile,
+      coverImage: user.coverImage,
+      location: user.location,
     };
     const token = jwt.sign(payload, process.env.JWT_SECRET, {
       expiresIn: "1d",

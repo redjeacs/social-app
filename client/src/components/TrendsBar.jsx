@@ -76,7 +76,6 @@ function TrendsBar() {
           </Button>
         </div>
         <Link to="/follow" className="text-(--twitter-blue)">
-          {/* update link later */}
           Show more
         </Link>
       </div>

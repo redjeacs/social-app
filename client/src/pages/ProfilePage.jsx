@@ -226,7 +226,9 @@ function ProfilePage() {
             </div>
           </nav>
         </div>
-        <Outlet />
+        <div className="h-screen">
+          <Outlet />
+        </div>
       </div>
     </>
   );

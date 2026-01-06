@@ -188,12 +188,14 @@ function Sidebar() {
           className="relative flex gap-2 m-2 p-2 items-center rounded-full hover:bg-gray-800 cursor-pointer"
         >
           <img
-            src={user?.profilePicture || userIcon}
+            src={user?.profile || userIcon}
             alt="Logo"
-            className="w-10 h-10 rounded-full bg-gray-500"
+            className="w-10 h-10 object-cover rounded-full bg-gray-500"
           />
           <div className="hidden xl:flex xl:flex-col">
-            <span className="font-bold">{user?.name || "Guest"}</span>
+            <span className="font-bold">
+              {`${user?.firstName} ${user?.lastName}` || "Guest"}
+            </span>
             <span className="text-(--twitter-text)">
               @{user?.username || "username"}
             </span>
