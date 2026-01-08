@@ -4,7 +4,7 @@ import { useAuth } from "../contexts/AuthContext";
 import { useAlert } from "../contexts/AlertContext";
 import { useEffect, useState } from "react";
 
-function FollowCard({ userToFollow }) {
+function FollowCard({ userToFollow, trendsBar = false }) {
   const { user, token } = useAuth();
   const { setAlert } = useAlert();
   const [isFollowing, setIsFollowing] = useState(false);
@@ -74,17 +74,24 @@ function FollowCard({ userToFollow }) {
   };
 
   return (
-    <div key={userToFollow.id} className="p-4 border-b border-(--twitter-gray)">
+    <div
+      key={userToFollow.id}
+      className={`${
+        trendsBar ? "text-[15px]" : "p-4 border-b"
+      } border-(--twitter-gray)`}
+    >
       <div className="flex items-center justify-between">
         <div className="flex gap-4 w-full">
           <img
             src={userToFollow.profile || userIcon}
             alt={`${userToFollow.username}'s profile`}
-            className="w-12 h-12 rounded-full bg-gray-400 object-cover"
+            className={`${
+              trendsBar ? "w-10 h-10" : "w-12 h-12"
+            } rounded-full bg-gray-400 object-cover`}
           />
           <div className="flex flex-col gap-2 w-full">
             <div className="flex justify-between items-end">
-              <div className="flex flex-col">
+              <div className={`${trendsBar && "h-10"} flex flex-col`}>
                 <span className="font-bold">
                   {userToFollow.firstName} {userToFollow.lastName}
                 </span>
@@ -110,7 +117,7 @@ function FollowCard({ userToFollow }) {
                 {isFollowing ? "Following" : "Follow"}
               </Button>
             </div>
-            <p>{userToFollow.bio || ""}</p>
+            {!trendsBar && <p>{userToFollow.bio || ""}</p>}
           </div>
         </div>
       </div>

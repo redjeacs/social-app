@@ -23,6 +23,7 @@ const routes = [
         children: [
           { index: true, element: <PostListPage /> },
           { path: "/follow", element: <FollowPage /> },
+          { path: "/explore", element: <PostListPage filter="explore" /> },
           { path: "/post/:postId", element: <PostPage /> },
           {
             path: "/profile/:userId",

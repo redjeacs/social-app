@@ -67,8 +67,9 @@ exports.updateUserProfile = async (req, res, next) => {
 
 exports.getUsersToFollow = async (req, res, next) => {
   const userId = req.params.userId;
+  const take = parseInt(req.query.take) || 20;
   try {
-    const usersToFollow = await db.getUsersToFollow(userId);
+    const usersToFollow = await db.getUsersToFollow(userId, take);
 
     if (!usersToFollow)
       return res.status(404).json({ message: "No users to follow found" });

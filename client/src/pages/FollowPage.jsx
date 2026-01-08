@@ -3,7 +3,6 @@ import { useState } from "react";
 import { useAuth } from "../contexts/AuthContext";
 import WhoToFollow from "@/components/WhoToFollow";
 import CreatorsForYou from "@/components/CreatorsForYou";
-import TrendsBar from "@/components/TrendsBar";
 
 function FollowPage() {
   const { user, token } = useAuth();

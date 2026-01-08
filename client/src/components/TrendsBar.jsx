@@ -1,8 +1,39 @@
 import { Link } from "react-router-dom";
 import { Button } from "./ui/button";
 import userIcon from "../assets/user.svg";
+import { useEffect, useState } from "react";
+import { useAuth } from "@/contexts/AuthContext";
+import FollowCard from "./FollowCard";
 
 function TrendsBar() {
+  const { user, token } = useAuth();
+  const [followSuggestion, setFollowSuggestion] = useState([]);
+
+  useEffect(() => {
+    const fetchFollowSuggestions = async () => {
+      try {
+        const res = await fetch(
+          `${import.meta.env.VITE_API_URL}/users/follow/${user.id}?take=3`,
+          {
+            method: "GET",
+            headers: {
+              "Conent-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        const data = await res.json();
+
+        if (!res.ok) console.error("failed to fetch follow suggestons");
+
+        setFollowSuggestion(data);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+    fetchFollowSuggestions();
+  }, []);
+
   return (
     <div className="flex-col gap-4 min-w-[290px] hidden xl:w-[350px] lg:flex p-2 text-white">
       <label className="flex items-center border border-(--twitter-gray) text-(--twitter-gray) p-2 rounded-full">
@@ -33,48 +64,11 @@ function TrendsBar() {
       <div className="border border-(--twitter-gray)"></div>
       <div className="flex flex-col gap-4 border border-(--twitter-gray) rounded-lg p-3">
         <h1 className="font-bold text-lg">Who to follow</h1>
-        <div className="flex gap-2 items-center">
-          <img
-            src={userIcon}
-            alt=""
-            className="w-10 h-10 rounded-full object-fit bg-gray-400"
-          />
-          <div>
-            <h2>User's name</h2>
-            <span>@username</span>
-          </div>
-          <Button className="ml-auto bg-white text-black font-bold rounded-full">
-            Follow
-          </Button>
-        </div>
-        <div className="flex gap-2 items-center">
-          <img
-            src={userIcon}
-            alt=""
-            className="w-10 h-10 rounded-full object-fit bg-gray-400"
-          />
-          <div>
-            <h2>User's name</h2>
-            <span>@username</span>
-          </div>
-          <Button className="ml-auto bg-white text-black font-bold rounded-full">
-            Follow
-          </Button>
-        </div>
-        <div className="flex gap-2 items-center">
-          <img
-            src={userIcon}
-            alt=""
-            className="w-10 h-10 rounded-full object-fit bg-gray-400"
-          />
-          <div>
-            <h2>User's name</h2>
-            <span>@username</span>
-          </div>
-          <Button className="ml-auto bg-white text-black font-bold rounded-full">
-            Follow
-          </Button>
-        </div>
+        {followSuggestion.length > 0 &&
+          followSuggestion.map((user) => (
+            <FollowCard userToFollow={user} trendsBar={true} />
+          ))}
+
         <Link to="/follow" className="text-(--twitter-blue)">
           Show more
         </Link>

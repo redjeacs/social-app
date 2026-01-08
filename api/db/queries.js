@@ -44,15 +44,29 @@ exports.updateUserProfile = async (userId, updateData) => {
   return updatedUser;
 };
 
-exports.getUsersToFollow = async (userId) => {
+exports.getUsersToFollow = async (userId, take) => {
+  const followedUsers = await prisma.user.findUnique({
+    where: { id: userId },
+    select: {
+      following: {
+        select: { id: true },
+      },
+    },
+  });
+
+  const followedUsersIds =
+    followedUsers?.following.map((user) => user.id) || [];
+
   const users = await prisma.user.findMany({
     where: {
       id: {
         not: userId,
+        notIn: followedUsersIds,
       },
     },
     include: { followers: true },
-    take: 20,
+    orderBy: { followers: { _count: "desc" } },
+    take: take,
   });
   return users;
 };
