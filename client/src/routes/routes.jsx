@@ -5,6 +5,7 @@ import SigninPage from "../pages/SigninPage";
 import OAuthCallback from "../pages/OAuthCallback";
 import FollowPage from "../pages/FollowPage";
 import PostListPage from "../pages/PostListPage";
+import ExplorPage from "../pages/ExplorePage";
 import PostPage from "../pages/PostPage";
 import ProfilePage from "../pages/ProfilePage";
 import ProfileEditPage from "@/pages/ProfileEditPage";
@@ -23,7 +24,7 @@ const routes = [
         children: [
           { index: true, element: <PostListPage /> },
           { path: "/follow", element: <FollowPage /> },
-          { path: "/explore", element: <PostListPage filter="explore" /> },
+          { path: "/explore", element: <ExplorPage /> },
           { path: "/post/:postId", element: <PostPage /> },
           {
             path: "/profile/:userId",

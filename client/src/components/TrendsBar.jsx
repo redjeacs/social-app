@@ -83,7 +83,7 @@ function TrendsBar() {
           <h1 className="font-bold text-lg">Who to follow</h1>
           {followSuggestion.length > 0 &&
             followSuggestion.map((user) => (
-              <FollowCard userToFollow={user} trendsBar={true} />
+              <FollowCard key={user.id} userToFollow={user} trendsBar={true} />
             ))}
 
           <Link to="/follow" className="text-(--twitter-blue)">
