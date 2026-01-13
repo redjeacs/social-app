@@ -1,5 +1,6 @@
 import { useAuth } from "@/contexts/AuthContext";
 import { useEffect, useState } from "react";
+import PlainUserCard from "./PlainUserCard";
 
 function SearchList({ searchQuery }) {
   const { token } = useAuth();
@@ -29,8 +30,18 @@ function SearchList({ searchQuery }) {
     handleSearch();
   }, [searchQuery]);
 
-  console.log(users);
-  return <div className="">SearchList</div>;
+  return (
+    <div className="w-full flex flex-col items-stretch">
+      <button className="flex cursor-pointer leading-5 p-4 hover:bg-(--twitter-hover)">
+        <span>Search for "{searchQuery}"</span>
+      </button>
+      <div className="bg-[rgb(47,51,54)] my-1 h-px"></div>
+      {users &&
+        users.map((user) => {
+          return <PlainUserCard key={user.id} user={user} />;
+        })}
+    </div>
+  );
 }
 
 export default SearchList;

@@ -23,6 +23,11 @@ function ExplorePage() {
     setSearchQuery(e.target.value);
   };
 
+  const handleInputBlur = () => {
+    setTimeout(() => {
+      setSearchBarFocus(false);
+    }, 200);
+  };
   return (
     <div className="w-full h-full">
       <div className="px-4 w-full h-13 flex items-center justify-center">
@@ -71,7 +76,7 @@ function ExplorePage() {
               name="search"
               id="search"
               onFocus={toggleSearchBarFocus}
-              onBlur={toggleSearchBarFocus}
+              onBlur={handleInputBlur}
               onChange={(e) => handleSearchQuery(e)}
               className="text-sm outline-none placeholder-(--twitter-gray) bg-transparent w-full pl-1 pr-4 leading-5 text-white caret-(--twitter-blue)"
             />
@@ -80,14 +85,18 @@ function ExplorePage() {
             <div
               className={`absolute ${
                 searchBarFocus ? "flex" : "hidden"
-              } flex-col items-stretch  w-full min-h-[100px] max-h-(80vh-53px) overflow-y-auto bg-black overscroll-contain rounded-xl shadow-[0_0_15px_rgba(255,255,255,0.2),0_0_3px_1px_rgba(255,255,255,0.15)]`}
+              } flex-col items-stretch  w-full min-h-[100px] max-h-[calc(80vh-53px)] overflow-y-auto bg-black custom-scrollbar overscroll-contain rounded-xl shadow-[0_0_15px_rgba(255,255,255,0.2),0_0_3px_1px_rgba(255,255,255,0.15)]`}
             >
-              <div className="p-3 pt-5">
+              <div className="">
                 {/* implement search api fetch and display */}
-                <div className="text-[rgb(113,118,123)] leading-5 text-center">
-                  <span>Try searching for people</span>
-                </div>
-                {searchQuery && <SearchList searchQuery={searchQuery} />}
+
+                {searchQuery ? (
+                  <SearchList searchQuery={searchQuery} />
+                ) : (
+                  <div className="text-[rgb(113,118,123)] leading-5 text-center p-3 pt-5">
+                    <span>Try searching for people</span>
+                  </div>
+                )}
               </div>
             </div>
           </div>
