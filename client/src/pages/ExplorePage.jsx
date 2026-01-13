@@ -1,9 +1,11 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import SearchList from "@/components/SearchList";
 
 function ExplorePage() {
   const navigate = useNavigate();
   const [searchBarFocus, setSearchBarFocus] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
 
   const toggleSearchBarFocus = () => {
     setSearchBarFocus(!searchBarFocus);
@@ -15,6 +17,10 @@ function ExplorePage() {
       return;
     }
     navigate(-1);
+  };
+
+  const handleSearchQuery = (e) => {
+    setSearchQuery(e.target.value);
   };
 
   return (
@@ -60,21 +66,28 @@ function ExplorePage() {
             </svg>
             <input
               type="text"
+              autoComplete="off"
               placeholder="Search"
               name="search"
               id="search"
               onFocus={toggleSearchBarFocus}
               onBlur={toggleSearchBarFocus}
+              onChange={(e) => handleSearchQuery(e)}
               className="text-sm outline-none placeholder-(--twitter-gray) bg-transparent w-full pl-1 pr-4 leading-5 text-white caret-(--twitter-blue)"
             />
           </label>
           <div className="relative flex items-stretch flex-col flex-1">
-            <div className="w-full flex flex-col items-stretch absolute min-h-[100px] max-h-(80vh-53px) overflow-y-auto bg-black overscroll-contain rounded-xl shadow-[0_0_15px_rgba(255,255,255,0.2),0_0_3px_1px_rgba(255,255,255,0.15)]">
+            <div
+              className={`absolute ${
+                searchBarFocus ? "flex" : "hidden"
+              } flex-col items-stretch  w-full min-h-[100px] max-h-(80vh-53px) overflow-y-auto bg-black overscroll-contain rounded-xl shadow-[0_0_15px_rgba(255,255,255,0.2),0_0_3px_1px_rgba(255,255,255,0.15)]`}
+            >
               <div className="p-3 pt-5">
                 {/* implement search api fetch and display */}
                 <div className="text-[rgb(113,118,123)] leading-5 text-center">
                   <span>Try searching for people</span>
                 </div>
+                {searchQuery && <SearchList searchQuery={searchQuery} />}
               </div>
             </div>
           </div>

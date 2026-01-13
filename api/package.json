@@ -5,6 +5,7 @@
   "main": "app.js",
   "scripts": {
     "dev": "node --watch app.js",
+    "studio": "npx prisma studio",
     "test": "jest"
   },
   "keywords": [],

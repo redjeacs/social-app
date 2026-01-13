@@ -94,6 +94,19 @@ exports.getPopularUsers = async (req, res, next) => {
   }
 };
 
+exports.searchUsers = async (req, res, next) => {
+  const { searchQuery } = req.params;
+  try {
+    const users = await db.searchUsers(searchQuery);
+
+    if (!users) return res.status(200).json({ message: "no matching users" });
+
+    res.status(200).json(users);
+  } catch (err) {
+    next(err);
+  }
+};
+
 exports.followUser = async (req, res, next) => {
   const userId = req.params.userId;
   const followerId = req.user.id;

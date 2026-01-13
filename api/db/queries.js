@@ -83,6 +83,28 @@ exports.getPopularUsers = async (userId) => {
   return users;
 };
 
+exports.searchUsers = async (searchQuery) => {
+  const users = await prisma.user.findMany({
+    where: {
+      OR: [
+        { username: { contains: searchQuery, mode: "insensitive" } },
+        {
+          OR: [
+            {
+              firstName: { contains: searchQuery, mode: "insensitive" },
+            },
+            { lastName: { contains: searchQuery, mode: "insensitive" } },
+          ],
+        },
+      ],
+    },
+    orderBy: { followersCount: "desc" },
+    take: 8,
+  });
+
+  return users;
+};
+
 exports.followUser = async (followerId, userId) => {
   const followedUser = await prisma.user.update({
     where: { id: userId },

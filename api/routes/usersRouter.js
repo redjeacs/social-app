@@ -30,6 +30,11 @@ usersRouter.get(
   verifyToken,
   usersController.getUsersToFollow
 );
+usersRouter.get(
+  "/search/:searchQuery",
+  verifyToken,
+  usersController.searchUsers
+);
 usersRouter.post("/follow/:userId", verifyToken, usersController.followUser);
 usersRouter.post(
   "/unfollow/:userId",
