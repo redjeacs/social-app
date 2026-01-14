@@ -1,11 +1,43 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import SearchList from "@/components/SearchList";
+import PostList from "@/components/PostList";
+import { useAuth } from "@/contexts/AuthContext";
 
 function ExplorePage() {
   const navigate = useNavigate();
+  const { token } = useAuth();
+  const [searchParams] = useSearchParams();
+  const query = searchParams.get("q") || "";
   const [searchBarFocus, setSearchBarFocus] = useState(false);
-  const [searchQuery, setSearchQuery] = useState("");
+  const [searchQuery, setSearchQuery] = useState(query);
+  const [posts, setPosts] = useState([]);
+
+  useEffect(() => {
+    const searchPosts = async (query) => {
+      if (query !== "")
+        try {
+          const res = await fetch(
+            `${import.meta.env.VITE_API_URL}/posts/search/${query}`,
+            {
+              method: "GET",
+              headers: {
+                "Content-Type": "Application/json",
+                Authorization: `Bearer ${token}`,
+              },
+            }
+          );
+
+          const data = await res.json();
+
+          if (!res.ok) console.error("Unable to search posts");
+          setPosts(Array.isArray(data) ? data : []);
+        } catch (err) {
+          console.error(err);
+        }
+    };
+    searchPosts(query);
+  }, [query]);
 
   const toggleSearchBarFocus = () => {
     setSearchBarFocus(!searchBarFocus);
@@ -33,7 +65,7 @@ function ExplorePage() {
       <div className="px-4 w-full h-13 flex items-center justify-center">
         <div
           className={` ${
-            searchBarFocus ? "flex" : "hidden"
+            searchBarFocus || query ? "flex" : "hidden"
           } flex-col min-w-14 items-start self-stretch justify-center min-h-8`}
         >
           <button
@@ -52,7 +84,7 @@ function ExplorePage() {
             </svg>
           </button>
         </div>
-        <div className={`flex flex-col grow shrink`}>
+        <div className={`relative flex flex-col grow shrink`}>
           <label
             htmlFor="search"
             className={`flex items-center border mx-1 ${
@@ -75,21 +107,20 @@ function ExplorePage() {
               placeholder="Search"
               name="search"
               id="search"
+              value={searchQuery}
               onFocus={toggleSearchBarFocus}
               onBlur={handleInputBlur}
               onChange={(e) => handleSearchQuery(e)}
               className="text-sm outline-none placeholder-(--twitter-gray) bg-transparent w-full pl-1 pr-4 leading-5 text-white caret-(--twitter-blue)"
             />
           </label>
-          <div className="relative flex items-stretch flex-col flex-1">
+          <div className="relative flex items-stretch flex-col flex-1 bg-black z-2">
             <div
               className={`absolute ${
                 searchBarFocus ? "flex" : "hidden"
               } flex-col items-stretch  w-full min-h-[100px] max-h-[calc(80vh-53px)] overflow-y-auto bg-black custom-scrollbar overscroll-contain rounded-xl shadow-[0_0_15px_rgba(255,255,255,0.2),0_0_3px_1px_rgba(255,255,255,0.15)]`}
             >
               <div className="">
-                {/* implement search api fetch and display */}
-
                 {searchQuery ? (
                   <SearchList searchQuery={searchQuery} />
                 ) : (
@@ -110,7 +141,7 @@ function ExplorePage() {
           >
             <svg
               viewBox="0 0 24 24"
-              aria-hidden={true}
+              aria-hidden="true"
               fill="rgb(239,243,244)"
               className="w-full h-5"
             >
@@ -121,6 +152,7 @@ function ExplorePage() {
           </button>
         </div>
       </div>
+      {query ? <PostList postsData={posts} /> : <PostList />}
     </div>
   );
 }

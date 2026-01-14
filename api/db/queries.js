@@ -114,6 +114,22 @@ exports.searchPosts = async (searchQuery) => {
     where: {
       content: { contains: searchQuery, mode: "insensitive" },
     },
+    include: {
+      user: true,
+      likedBy: true,
+      originalPost: {
+        include: {
+          user: true,
+          likedBy: true,
+          reposts: true,
+          replies: true,
+        },
+      },
+      reposts: true,
+      replies: {
+        include: { user: true, likedBy: true, reposts: true },
+      },
+    },
     orderBy: { likes: "desc" },
     take: 20,
   });

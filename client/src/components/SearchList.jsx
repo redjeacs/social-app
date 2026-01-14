@@ -8,7 +8,6 @@ function SearchList({ searchQuery }) {
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
   const [users, setUsers] = useState([]);
-  const [posts, setPosts] = useState([]);
 
   useEffect(() => {
     searchUsers();
@@ -38,36 +37,11 @@ function SearchList({ searchQuery }) {
     }
   };
 
-  /* move to /search */
-  const searchPosts = async () => {
-    try {
-      const res = await fetch(
-        `${import.meta.env.VITE_API_URL}/posts/search/${searchQuery}`,
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "Application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-
-      const data = await res.json();
-
-      if (!res.ok) console.error("Unable to search posts");
-      setPosts(data);
-    } catch (err) {
-      console.error(err);
-    }
-  };
-
-  console.log(user);
-
   return (
     <div className="w-full flex flex-col items-stretch">
       <button
         onClick={() => {
-          navigate(`/search?q=${encodeURIComponent(searchQuery)}`);
+          navigate(`/explore?q=${encodeURIComponent(searchQuery)}`);
         }}
         className="flex cursor-pointer leading-5 p-4 hover:bg-(--twitter-hover)"
       >
