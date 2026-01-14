@@ -28,4 +28,10 @@ postsRouter.delete(
 
 postsRouter.post("/:postId/reply", verifyToken, postsController.replyToPost);
 
+postsRouter.get(
+  "/search/:searchQuery",
+  verifyToken,
+  postsController.searchPosts
+);
+
 module.exports = postsRouter;

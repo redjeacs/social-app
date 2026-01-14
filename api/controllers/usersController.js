@@ -97,11 +97,12 @@ exports.getPopularUsers = async (req, res, next) => {
 exports.searchUsers = async (req, res, next) => {
   const { searchQuery } = req.params;
   try {
-    const users = await db.searchUsers(searchQuery);
+    const searchResults = await db.searchUsers(searchQuery);
 
-    if (!users) return res.status(200).json({ message: "no matching users" });
+    if (!searchResults.users)
+      return res.status(200).json({ message: "no matching users" });
 
-    res.status(200).json(users);
+    res.status(200).json(searchResults);
   } catch (err) {
     next(err);
   }

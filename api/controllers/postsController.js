@@ -184,3 +184,17 @@ exports.replyToPost = async (req, res) => {
     res.status(500).json({ message: "Error adding reply", error });
   }
 };
+
+exports.searchPosts = async (req, res, next) => {
+  const { searchQuery } = req.params;
+
+  try {
+    const posts = await db.searchPosts(searchQuery);
+
+    if (!posts) return res.status(200).json({ message: "no matching posts" });
+
+    res.status(200).json(posts);
+  } catch (err) {
+    next(err);
+  }
+};

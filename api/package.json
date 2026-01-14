@@ -4,6 +4,7 @@
   "description": "",
   "main": "app.js",
   "scripts": {
+    "build": "npm run dev & npm run studio",
     "dev": "node --watch app.js",
     "studio": "npx prisma studio",
     "test": "jest"

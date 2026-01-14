@@ -84,6 +84,10 @@ exports.getPopularUsers = async (userId) => {
 };
 
 exports.searchUsers = async (searchQuery) => {
+  const user = await prisma.user.findUnique({
+    where: { username: searchQuery },
+  });
+
   const users = await prisma.user.findMany({
     where: {
       OR: [
@@ -102,7 +106,19 @@ exports.searchUsers = async (searchQuery) => {
     take: 8,
   });
 
-  return users;
+  return { user: user, users: users };
+};
+
+exports.searchPosts = async (searchQuery) => {
+  const posts = await prisma.post.findMany({
+    where: {
+      content: { contains: searchQuery, mode: "insensitive" },
+    },
+    orderBy: { likes: "desc" },
+    take: 20,
+  });
+
+  return posts;
 };
 
 exports.followUser = async (followerId, userId) => {
