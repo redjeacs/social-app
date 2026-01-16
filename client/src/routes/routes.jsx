@@ -12,6 +12,7 @@ import ProfileEditPage from "@/pages/ProfileEditPage";
 import UserPostListPage from "@/pages/UserPostListPage";
 import UserRepliesListPage from "@/pages/UserRepliesListPage";
 import UserLikesListPage from "@/pages/UserLikesListPage";
+import ChatPage from "@/pages/ChatPage";
 
 const routes = [
   {
@@ -26,6 +27,7 @@ const routes = [
           { path: "/follow", element: <FollowPage /> },
           { path: "/explore", element: <ExplorPage /> },
           { path: "/post/:postId", element: <PostPage /> },
+          { path: "/chat", element: <ChatPage /> },
           {
             path: "/profile/:userId",
             element: <ProfilePage />,

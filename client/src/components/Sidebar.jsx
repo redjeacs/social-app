@@ -14,7 +14,11 @@ function Sidebar() {
   };
 
   return (
-    <aside className="custom-scrollbar flex flex-col xl:items-start items-center p-2 overflow-auto fixed w-full bottom-0 h-16 md:top-0 md:h-screen md:w-22 xl:w-68 text-white md:flex-col shadow-lg z-40">
+    <aside
+      className={`custom-scrollbar flex flex-col xl:items-start items-center p-2 overflow-auto fixed w-full bottom-0 h-16 md:top-0 md:h-screen md:w-22 ${
+        location.pathname === "/chat" ? "" : "xl:w-68"
+      } text-white md:flex-col shadow-lg z-40"}`}
+    >
       <div className="flex flex-col flex-1 w-full">
         <div className="flex flex-col items-center xl:items-start xl:gap-1">
           <Link
@@ -57,9 +61,9 @@ function Sidebar() {
               </svg>
             </div>
             <div
-              className={`hidden xl:block text-xl mx-4 ${
-                location.pathname === "/" ? "font-bold" : ""
-              }`}
+              className={`hidden ${
+                location.pathname === "/chat" ? "xl:hidden" : "xl:block"
+              } text-xl mx-4 ${location.pathname === "/" ? "font-bold" : ""}`}
             >
               Home
             </div>
@@ -85,7 +89,9 @@ function Sidebar() {
               </svg>
             </div>
             <div
-              className={`hidden xl:block text-xl mx-4 ${
+              className={`hidden ${
+                location.pathname === "/chat" ? "xl:hidden" : "xl:block"
+              } text-xl mx-4 ${
                 location.pathname === "/explore" ? "font-bold" : ""
               }`}
             >
@@ -113,7 +119,9 @@ function Sidebar() {
               </svg>
             </div>
             <div
-              className={`hidden xl:block text-xl mx-4 ${
+              className={`hidden ${
+                location.pathname === "/chat" ? "xl:hidden" : "xl:block"
+              } text-xl mx-4 ${
                 location.pathname === "/follow" ? "font-bold" : ""
               }`}
             >
@@ -141,7 +149,9 @@ function Sidebar() {
               </svg>
             </div>
             <div
-              className={`hidden xl:block text-xl mx-4 ${
+              className={`hidden ${
+                location.pathname === "/chat" ? "xl:hidden" : "xl:block"
+              } text-xl mx-4 ${
                 location.pathname === "/chat" ? "font-bold" : ""
               }`}
             >
@@ -169,7 +179,9 @@ function Sidebar() {
               </svg>
             </div>
             <div
-              className={`hidden xl:block text-xl mx-4 ${
+              className={`hidden ${
+                location.pathname === "/chat" ? "xl:hidden" : "xl:block"
+              } text-xl mx-4 ${
                 location.pathname === "/profile" ? "font-bold" : ""
               }`}
             >
@@ -178,10 +190,20 @@ function Sidebar() {
           </Link>
         </div>
         <div className="flex flex-col items-center xl:items-start flex-1 my-2">
-          <button className="hidden xl:block rounded-full text-black text-lg font-bold bg-white w-[90%] h-14 cursor-pointer hover:bg-[rgba(255,255,255,0.9)] ease-in-out duration-500">
+          <button
+            className={`hidden ${
+              location.pathname === "/chat" ? "xl:hidden" : "xl:block"
+            } rounded-full text-black text-lg font-bold bg-white w-[90%] h-14 cursor-pointer hover:bg-[rgba(255,255,255,0.9)] ease-in-out duration-500`}
+          >
             Post
           </button>
-          <img src={logo} alt="Post" className="xl:hidden w-16 h-16 p-1" />
+          <img
+            src={logo}
+            alt="Post"
+            className={` ${
+              location.pathname === "/chat" ? "" : "xl:hidden"
+            } w-16 h-16 p-1`}
+          />
         </div>
         <div
           onClick={handleSignout}
@@ -192,7 +214,11 @@ function Sidebar() {
             alt="Logo"
             className="w-10 h-10 object-cover rounded-full bg-gray-500"
           />
-          <div className="hidden xl:flex xl:flex-col">
+          <div
+            className={`hidden ${
+              location.pathname === "/chat" ? "" : "xl:flex xl:flex-col"
+            }`}
+          >
             <span className="font-bold">
               {`${user?.firstName} ${user?.lastName}` || "Guest"}
             </span>
