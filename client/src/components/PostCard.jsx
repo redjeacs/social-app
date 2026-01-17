@@ -78,7 +78,7 @@ function PostCard({ post }) {
           />
         </div>
         <div className="flex flex-col flex-1">
-          <div className="flex gap-2">
+          <div className="flex flex-col md:flex-row md:gap-2">
             <span
               onClick={navigateToUserProfile}
               className="font-bold hover:underline"
@@ -87,29 +87,31 @@ function PostCard({ post }) {
                 `${post.originalPost.user.firstName} ${post.originalPost.user.lastName}`) ||
                 (post.user && `${post.user.firstName} ${post.user.lastName}`)}
             </span>
-            <span
-              onClick={navigateToUserProfile}
-              className="text-(--twitter-text)"
-            >
-              @
-              {post.originalPost
-                ? post.originalPost.user.username
-                : post.user && post.user.username}
-            </span>
-            <div className="text-(--twitter-text)">·</div>
-            <span className="text-(--twitter-text)">
-              <time
-                dateTime={
-                  (isRepost && post.originalPost.createdAt) || post.createdAt
-                }
+            <div className="flex gap-1">
+              <span
+                onClick={navigateToUserProfile}
+                className="text-(--twitter-text)"
               >
-                {(isRepost && formatDate(post.originalPost.createdAt)) ||
-                  formatDate(post.createdAt)}
-              </time>
-            </span>
+                @
+                {post.originalPost
+                  ? post.originalPost.user.username
+                  : post.user && post.user.username}
+              </span>
+              <div className="text-(--twitter-text)">·</div>
+              <span className="text-(--twitter-text)">
+                <time
+                  dateTime={
+                    (isRepost && post.originalPost.createdAt) || post.createdAt
+                  }
+                >
+                  {(isRepost && formatDate(post.originalPost.createdAt)) ||
+                    formatDate(post.createdAt)}
+                </time>
+              </span>
+            </div>
           </div>
           <p>{post.content}</p>
-          <div className="flex justify-around w-full text-(--twitter-text) mt-2">
+          <div className="flex justify-between md:justify-around w-full text-(--twitter-text) mt-2">
             <div className="flex items-center hover:text-(--twitter-blue)">
               <div className=" hover:bg-[rgba(29,155,240,0.2)] p-2 rounded-full ease-in-out duration-300">
                 <svg

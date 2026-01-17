@@ -15,15 +15,15 @@ function Sidebar() {
 
   return (
     <aside
-      className={`custom-scrollbar flex flex-col xl:items-start items-center p-2 overflow-auto fixed w-full bottom-0 h-16 md:top-0 md:h-screen md:w-22 ${
+      className={`custom-scrollbar flex flex-col xl:items-start items-center bg-black z-10 border-t border-(--twitter-border) p-2 md:overflow-auto fixed w-full bottom-0 h-16 md:top-0 md:h-screen md:w-22 ${
         location.pathname === "/chat" ? "" : "xl:w-68"
       } text-white md:flex-col shadow-lg z-40"}`}
     >
-      <div className="flex flex-col flex-1 w-full">
-        <div className="flex flex-col items-center xl:items-start xl:gap-1">
+      <div className="flex md:flex-col flex-1 justify-center w-full">
+        <div className="flex flex-1 justify-between md:justify-start md:flex-col items-center xl:items-start xl:gap-1">
           <Link
             to="/"
-            className="p-3 hover:bg-[rgba(239,243,244,0.1)] ease-in-out duration-500 rounded-full cursor-pointer"
+            className="hidden md:block p-3 hover:bg-[rgba(239,243,244,0.1)] ease-in-out duration-500 rounded-full cursor-pointer"
           >
             <div className="w-6.5 h-6.5">
               <svg
@@ -189,7 +189,7 @@ function Sidebar() {
             </div>
           </Link>
         </div>
-        <div className="flex flex-col items-center xl:items-start flex-1 my-2">
+        <div className="hidden md:flex flex-col items-center xl:items-start flex-1 my-2">
           <button
             className={`hidden ${
               location.pathname === "/chat" ? "xl:hidden" : "xl:block"
@@ -202,12 +202,12 @@ function Sidebar() {
             alt="Post"
             className={` ${
               location.pathname === "/chat" ? "" : "xl:hidden"
-            } w-16 h-16 p-1`}
+            } hidden md:block w-16 h-16 p-1`}
           />
         </div>
         <div
           onClick={handleSignout}
-          className="relative flex gap-2 m-2 p-2 items-center rounded-full hover:bg-gray-800 cursor-pointer"
+          className="relative hidden md:flex gap-2 m-2 p-2 items-center rounded-full hover:bg-gray-800 cursor-pointer"
         >
           <img
             src={user?.profile || userIcon}

@@ -13,7 +13,7 @@ function HomePage() {
       <div
         className={`md:w-[80vw] ${
           pathname === "/chat" ? "md:max-w-[1185px]" : "md:max-w-[600px]"
-        } w-screen border-x border-(--twitter-gray) text-white`}
+        } w-screen border-x border-(--twitter-border) text-white`}
       >
         <Outlet />
       </div>

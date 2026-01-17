@@ -79,6 +79,7 @@
   --twitter-gray: rgba(231, 233, 234, 0.4);
   --twitter-text: #71767b;
   --twitter-hover: rgba(239, 243, 244, 0.1);
+  --twitter-border: #2b2e31;
 }
 
 .dark {
