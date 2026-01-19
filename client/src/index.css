@@ -77,9 +77,16 @@
   --twitter-blue: rgb(29, 155, 240);
   --twitter-blue-hover: rgba(29, 155, 240, 0.8);
   --twitter-gray: rgba(231, 233, 234, 0.4);
+  --twitter-gray-0: hsl(220, 12%, 10%);
+  --twitter-gray-50: hsl(214, 10%, 14%);
+  --twitter-gray-700: hsl(210, 4%, 46%);
   --twitter-text: #71767b;
   --twitter-hover: rgba(239, 243, 244, 0.1);
   --twitter-border: #2b2e31;
+  --twitter-white: #e1e8ed;
+  --font-chirp:
+    TwitterChirp, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    Helvetica, Arial, sans-serif;
 }
 
 .dark {
