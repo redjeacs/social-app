@@ -1,3 +1,4 @@
+import MessageRequestList from "@/components/MessageRequestList";
 import { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -5,6 +6,7 @@ function ChatPage() {
   const navigate = useNavigate();
   const [searchFocus, setSearchFocus] = useState(false);
   const [searchValue, setSearchValue] = useState("");
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const searchInputRef = useRef(null);
   const searchDivRef = useRef(null);
 
@@ -15,8 +17,7 @@ function ChatPage() {
   }, [searchFocus]);
 
   const openMessageRequestList = () => {
-    // Logic to open message request list
-    console.log("Message request list opened");
+    setIsModalOpen(true);
   };
 
   const enableSearch = () => {
@@ -35,6 +36,9 @@ function ChatPage() {
 
   return (
     <div className="flex w-full h-full">
+      {isModalOpen && (
+        <MessageRequestList onClose={() => setIsModalOpen(false)} />
+      )}
       <div className="flex flex-col h-full md:min-w-[400px] w-full xl:w-[35%] shrink-0 md:border-x border-(--twitter-border)">
         {/* Header Section */}
         <div className="flex items-center justify-between py-2 px-4 h-16 text-(--twitter-white)">
