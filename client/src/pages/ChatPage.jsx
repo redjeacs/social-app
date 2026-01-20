@@ -1,10 +1,18 @@
 import { useState, useRef, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 function ChatPage() {
+  const navigate = useNavigate();
   const [searchFocus, setSearchFocus] = useState(false);
   const [searchValue, setSearchValue] = useState("");
   const searchInputRef = useRef(null);
   const searchDivRef = useRef(null);
+
+  useEffect(() => {
+    if (searchFocus && searchInputRef.current) {
+      searchInputRef.current.focus();
+    }
+  }, [searchFocus]);
 
   const openMessageRequestList = () => {
     // Logic to open message request list
@@ -25,15 +33,10 @@ function ChatPage() {
     setSearchValue("");
   };
 
-  useEffect(() => {
-    if (searchFocus && searchInputRef.current) {
-      searchInputRef.current.focus();
-    }
-  }, [searchFocus]);
-
   return (
     <div className="flex w-full h-full">
-      <div className="md:min-w-[400px] w-full xl:w-[35%] lg:block shrink-0 md:border border-(--twitter-border)">
+      <div className="flex flex-col h-full md:min-w-[400px] w-full xl:w-[35%] shrink-0 md:border-x border-(--twitter-border)">
+        {/* Header Section */}
         <div className="flex items-center justify-between py-2 px-4 h-16 text-(--twitter-white)">
           <h1 className="font-bold text-xl leading-6 font-[var-(--font-chirp)]">
             Chat
@@ -55,6 +58,7 @@ function ChatPage() {
             </button>
           </div>
         </div>
+        {/* Search Bar */}
         <div className="px-4 py-1">
           <div
             ref={searchDivRef}
@@ -95,8 +99,81 @@ function ChatPage() {
             </button>
           </div>
         </div>
+        {/* Buttons */}
+        <div className="py-3">
+          <div className="px-4">
+            <div className="inline-flex h-9 w-fit items-center justify-center rounded-lg gap-3">
+              <button className="flex items-center justify-center px-3 py-1 text-[15px] leading-5 font-semibold bg-(--twitter-white) border border-(--twitter-white) text-black rounded-full cursor-pointer">
+                All
+              </button>
+              <button
+                onClick={() => navigate("/chat/requests")}
+                className="flex items-center justify-center px-3 py-1 text-[15px] leading-5 font-medium border border-(--twitter-gray-100) text-(--twitter-gray-700) rounded-full cursor-pointer hover:bg-(--twitter-gray-50) duration-200"
+              >
+                Requests
+              </button>
+            </div>
+          </div>
+        </div>
+        {/* Inbox */}
+        <div className="flex flex-col grow items-center justify-center gap-2">
+          <div className="text-[76px] mb-10">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="currentColor"
+              data-icon="icon-messages-stroke"
+              viewBox="0 0 24 24"
+              width="1em"
+              height="1em"
+              display="flex"
+              role="img"
+              className="rotate-[-8.29deg]"
+            >
+              <path d="M1.998 5.5c0-1.381 1.119-2.5 2.5-2.5h15c1.381 0 2.5 1.119 2.5 2.5v13c0 1.381-1.119 2.5-2.5 2.5h-15c-1.381 0-2.5-1.119-2.5-2.5v-13zm2.5-.5c-.276 0-.5.224-.5.5v2.764l8 3.638 8-3.636V5.5c0-.276-.224-.5-.5-.5h-15zm15.5 5.463l-8 3.636-8-3.638V18.5c0 .276.224.5.5.5h15c.276 0 .5-.224.5-.5v-8.037z"></path>
+            </svg>
+          </div>
+          <div className="max-w-full whitespace-pre-wrap text-(--twitter-white) text-2xl leading-7 font-medium">
+            Empty inbox
+          </div>
+          <div className="max-w-full whitespace-pre-wrap text-(--twitter-gray-700) text-[15px]">
+            Message someone
+          </div>
+        </div>
       </div>
-      <div className="hidden lg:block w-full"></div>
+      {/* Message Box */}
+      <div className="hidden xl:flex flex-col w-full h-full justify-center items-center grow gap-6">
+        {/* Initial Placeholder */}
+        <div className="text-[48px] size-24 rounded-full bg-(--twitter-gray-0) flex items-center justify-center">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="currentColor"
+            data-icon="icon-messages-stroke"
+            viewBox="0 0 24 24"
+            width="1em"
+            height="1em"
+            display="flex"
+            role="img"
+          >
+            <path d="M1.998 5.5c0-1.381 1.119-2.5 2.5-2.5h15c1.381 0 2.5 1.119 2.5 2.5v13c0 1.381-1.119 2.5-2.5 2.5h-15c-1.381 0-2.5-1.119-2.5-2.5v-13zm2.5-.5c-.276 0-.5.224-.5.5v2.764l8 3.638 8-3.636V5.5c0-.276-.224-.5-.5-.5h-15zm15.5 5.463l-8 3.636-8-3.638V18.5c0 .276.224.5.5.5h15c.276 0 .5-.224.5-.5v-8.037z"></path>
+          </svg>
+        </div>
+        <div className="flex flex-col items-center gap-3">
+          <div className="max-w-full whitespace-pre-wrap text-(--twitter-white) font-bold text-center text-xl leading-6">
+            Start Conversation
+          </div>
+          <div className="max-w-full whitespace-pre-wrap text-(--twitter-gray-700) text-center leading-6">
+            Choose from your existing conversations, or start a new one.
+          </div>
+        </div>
+        <button
+          onClick={openMessageRequestList}
+          className="inline-flex gap-1 items-center bg-(--twitter-white) text-black rounded-full h-9 min-w-9 px-4 hover:bg-(--twitter-white)/80 duration-200 cursor-pointer"
+        >
+          <div className="max-w-full whitespace-pre-wrap font-bold">
+            New chat
+          </div>
+        </button>
+      </div>
     </div>
   );
 }
