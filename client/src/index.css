@@ -184,3 +184,7 @@ body {
   scrollbar-width: thin;
   scrollbar-color: rgb(43, 46, 49) transparent;
 }
+
+html {
+  line-height: 1.8;
+}
