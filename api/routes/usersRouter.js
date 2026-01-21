@@ -18,28 +18,33 @@ usersRouter.patch(
     { name: "profile", maxCount: 1 },
     { name: "coverImage", maxCount: 1 },
   ]),
-  usersController.updateUserProfile
+  usersController.updateUserProfile,
 );
 usersRouter.get(
   "/popular/:userId",
   verifyToken,
-  usersController.getPopularUsers
+  usersController.getPopularUsers,
 );
 usersRouter.get(
   "/follow/:userId",
   verifyToken,
-  usersController.getUsersToFollow
+  usersController.getUsersToFollow,
 );
 usersRouter.get(
   "/search/:searchQuery",
   verifyToken,
-  usersController.searchUsers
+  usersController.searchUsers,
+);
+usersRouter.get(
+  "/follow/:userId",
+  verifyToken,
+  usersController.getFollowedUsers,
 );
 usersRouter.post("/follow/:userId", verifyToken, usersController.followUser);
 usersRouter.post(
   "/unfollow/:userId",
   verifyToken,
-  usersController.unfollowUser
+  usersController.unfollowUser,
 );
 
 module.exports = usersRouter;

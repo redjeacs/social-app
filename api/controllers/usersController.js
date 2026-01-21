@@ -28,7 +28,7 @@ exports.updateUserProfile = async (req, res, next) => {
           (error, result) => {
             if (error) return reject(error);
             resolve(result);
-          }
+          },
         );
         uploadResult.end(buffer);
       });
@@ -39,7 +39,7 @@ exports.updateUserProfile = async (req, res, next) => {
         const profileImage = req.files.profile[0].buffer;
         const profileUpload = await uploadBufferToCloudinary(
           profileImage,
-          "user_profiles"
+          "user_profiles",
         );
         updates.profile = profileUpload.secure_url;
       }
@@ -48,7 +48,7 @@ exports.updateUserProfile = async (req, res, next) => {
         const coverImage = req.files.coverImage[0].buffer;
         const coverUpload = await uploadBufferToCloudinary(
           coverImage,
-          "user_covers"
+          "user_covers",
         );
         updates.coverImage = coverUpload.secure_url;
       }
@@ -103,6 +103,22 @@ exports.searchUsers = async (req, res, next) => {
       return res.status(200).json({ message: "no matching users" });
 
     res.status(200).json(searchResults);
+  } catch (err) {
+    next(err);
+  }
+};
+
+exports.getFollowedUsers = async (req, res, next) => {
+  const { userId } = req.params;
+  try {
+    const user = await db.getUser("id", userId);
+
+    if (!user)
+      return res
+        .status(404)
+        .json({ message: "an error occured while searching for user" });
+
+    res.status(200).json(user);
   } catch (err) {
     next(err);
   }

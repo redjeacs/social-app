@@ -15,7 +15,7 @@ model User {
   lastName        String
   coverImage      String?
   bio             String?
-  profile         String?
+  profile         String?     @default("https://res.cloudinary.com/dcqhyzxa7/image/upload/v1768973215/jinqrc9tfa0rdl1tvkkz.svg")
   location        String?
   
   createdAt       DateTime    @default(now())
