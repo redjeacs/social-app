@@ -22,7 +22,7 @@ function TrendsBar() {
               "Conent-Type": "application/json",
               Authorization: `Bearer ${token}`,
             },
-          }
+          },
         );
         const data = await res.json();
 
@@ -46,7 +46,7 @@ function TrendsBar() {
     checkBrowserPath();
   }, [pathname]);
 
-  if (pathname === "/chat") return null;
+  if (pathname.includes("/chat")) return null;
 
   return (
     <div className="flex-col gap-4 min-w-[290px] hidden xl:w-[350px] lg:flex p-2 text-white">

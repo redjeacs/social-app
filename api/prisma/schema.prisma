@@ -19,6 +19,7 @@ model User {
   location        String?
   
   createdAt       DateTime    @default(now())
+  messageStatus   String      @default("everyone")
 
   identities      Identity[]
   posts           Post[]

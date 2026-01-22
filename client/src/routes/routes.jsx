@@ -13,6 +13,8 @@ import UserPostListPage from "@/pages/UserPostListPage";
 import UserRepliesListPage from "@/pages/UserRepliesListPage";
 import UserLikesListPage from "@/pages/UserLikesListPage";
 import ChatPage from "@/pages/ChatPage";
+import InboxPlaceholder from "@/pages/ChatPage/InboxPlaceholder";
+import MessageSettings from "@/pages/ChatPage/MessageSettings";
 
 const routes = [
   {
@@ -27,7 +29,14 @@ const routes = [
           { path: "/follow", element: <FollowPage /> },
           { path: "/explore", element: <ExplorPage /> },
           { path: "/post/:postId", element: <PostPage /> },
-          { path: "/chat", element: <ChatPage /> },
+          {
+            path: "/chat",
+            element: <ChatPage />,
+            children: [
+              { index: true, element: <InboxPlaceholder /> },
+              { path: "/chat/settings", element: <MessageSettings /> },
+            ],
+          },
           {
             path: "/profile/:userId",
             element: <ProfilePage />,

@@ -12,7 +12,7 @@ function HomePage() {
       {(!user || !token) && <Navigate to="/signin" />}
       <div
         className={`md:w-[80vw] ${
-          pathname === "/chat" ? "md:max-w-[1185px]" : "md:max-w-[600px]"
+          pathname.includes("/chat") ? "md:max-w-[1185px]" : "md:max-w-[600px]"
         } w-screen border-x border-(--twitter-border) text-white`}
       >
         <Outlet />

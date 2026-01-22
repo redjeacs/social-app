@@ -1,12 +1,13 @@
 import MessageRequestList from "@/components/MessageRequestList";
 import { useState, useRef, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 
 function ChatPage() {
   const navigate = useNavigate();
   const [searchFocus, setSearchFocus] = useState(false);
   const [searchValue, setSearchValue] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const searchInputRef = useRef(null);
   const searchDivRef = useRef(null);
 
@@ -46,6 +47,21 @@ function ChatPage() {
             Chat
           </h1>
           <div className="flex items-center">
+            <button
+              onClick={() => navigate("/chat/settings")}
+              className="min-w-9 min-h-9 inline-flex gap-1 justify-center items-center cursor-pointer hover:bg-(--twitter-hover) duration-200 border-solid rounded-full"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="currentColor"
+                data-icon="icon-settings-stroke"
+                viewBox="0 0 24 24"
+                role="img"
+                className="w-5 h-5"
+              >
+                <path d="M10.54 1.75h2.92l1.57 2.36c.11.17.32.25.53.21l2.53-.59 2.17 2.17-.58 2.54c-.05.2.04.41.21.53l2.36 1.57v2.92l-2.36 1.57c-.17.12-.26.33-.21.53l.58 2.54-2.17 2.17-2.53-.59c-.21-.04-.42.04-.53.21l-1.57 2.36h-2.92l-1.58-2.36c-.11-.17-.32-.25-.52-.21l-2.54.59-2.17-2.17.58-2.54c.05-.2-.03-.41-.21-.53l-2.35-1.57v-2.92L4.1 8.97c.18-.12.26-.33.21-.53L3.73 5.9 5.9 3.73l2.54.59c.2.04.41-.04.52-.21l1.58-2.36zm1.07 2l-.98 1.47C10.05 6.08 9 6.5 7.99 6.27l-1.46-.34-.6.6.33 1.46c.24 1.01-.18 2.07-1.05 2.64l-1.46.98v.78l1.46.98c.87.57 1.29 1.63 1.05 2.64l-.33 1.46.6.6 1.46-.34c1.01-.23 2.06.19 2.64 1.05l.98 1.47h.78l.97-1.47c.58-.86 1.63-1.28 2.65-1.05l1.45.34.61-.6-.34-1.46c-.23-1.01.18-2.07 1.05-2.64l1.47-.98v-.78l-1.47-.98c-.87-.57-1.28-1.63-1.05-2.64l.34-1.46-.61-.6-1.45.34c-1.02.23-2.07-.19-2.65-1.05l-.97-1.47h-.78zM12 10.5c-.83 0-1.5.67-1.5 1.5s.67 1.5 1.5 1.5c.82 0 1.5-.67 1.5-1.5s-.68-1.5-1.5-1.5zM8.5 12c0-1.93 1.56-3.5 3.5-3.5 1.93 0 3.5 1.57 3.5 3.5s-1.57 3.5-3.5 3.5c-1.94 0-3.5-1.57-3.5-3.5z"></path>
+              </svg>
+            </button>
             <button
               onClick={openMessageRequestList}
               className="min-w-9 min-h-9 inline-flex gap-1 justify-center items-center cursor-pointer hover:bg-(--twitter-hover) duration-200 border-solid rounded-full"
@@ -146,37 +162,7 @@ function ChatPage() {
       </div>
       {/* Message Box */}
       <div className="hidden xl:flex flex-col w-full h-full justify-center items-center grow gap-6">
-        {/* Initial Placeholder */}
-        <div className="text-[48px] size-24 rounded-full bg-(--twitter-gray-0) flex items-center justify-center">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="currentColor"
-            data-icon="icon-messages-stroke"
-            viewBox="0 0 24 24"
-            width="1em"
-            height="1em"
-            display="flex"
-            role="img"
-          >
-            <path d="M1.998 5.5c0-1.381 1.119-2.5 2.5-2.5h15c1.381 0 2.5 1.119 2.5 2.5v13c0 1.381-1.119 2.5-2.5 2.5h-15c-1.381 0-2.5-1.119-2.5-2.5v-13zm2.5-.5c-.276 0-.5.224-.5.5v2.764l8 3.638 8-3.636V5.5c0-.276-.224-.5-.5-.5h-15zm15.5 5.463l-8 3.636-8-3.638V18.5c0 .276.224.5.5.5h15c.276 0 .5-.224.5-.5v-8.037z"></path>
-          </svg>
-        </div>
-        <div className="flex flex-col items-center gap-3">
-          <div className="max-w-full whitespace-pre-wrap text-(--twitter-white) font-bold text-center text-xl leading-6">
-            Start Conversation
-          </div>
-          <div className="max-w-full whitespace-pre-wrap text-(--twitter-gray-700) text-center leading-6">
-            Choose from your existing conversations, or start a new one.
-          </div>
-        </div>
-        <button
-          onClick={openMessageRequestList}
-          className="inline-flex gap-1 items-center bg-(--twitter-white) text-black rounded-full h-9 min-w-9 px-4 hover:bg-(--twitter-white)/80 duration-200 cursor-pointer"
-        >
-          <div className="max-w-full whitespace-pre-wrap font-bold">
-            New chat
-          </div>
-        </button>
+        <Outlet context={{ openMessageRequestList }} />
       </div>
     </div>
   );

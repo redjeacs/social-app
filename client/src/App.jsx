@@ -28,7 +28,7 @@ function App() {
       <Sidebar />
       <main
         className={`flex-1 md:h-screen md:ml-22 ${
-          location.pathname === "/chat" ? "" : "xl:ml-68"
+          location.pathname.includes("/chat") ? "" : "xl:ml-68"
         }`}
       >
         <Outlet />

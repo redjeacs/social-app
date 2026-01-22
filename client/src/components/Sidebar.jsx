@@ -16,7 +16,7 @@ function Sidebar() {
   return (
     <aside
       className={`custom-scrollbar flex flex-col xl:items-start items-center bg-black z-10 border-t border-(--twitter-border) p-2 md:overflow-auto fixed w-full bottom-0 h-16 md:top-0 md:h-screen md:w-22 ${
-        location.pathname === "/chat" ? "" : "xl:w-68"
+        location.pathname.includes("/chat") ? "" : "xl:w-68"
       } text-white md:flex-col shadow-lg z-40"}`}
     >
       <div className="flex md:flex-col flex-1 justify-center w-full">
@@ -62,7 +62,7 @@ function Sidebar() {
             </div>
             <div
               className={`hidden ${
-                location.pathname === "/chat" ? "xl:hidden" : "xl:block"
+                location.pathname.includes("/chat") ? "xl:hidden" : "xl:block"
               } text-xl mx-4 ${location.pathname === "/" ? "font-bold" : ""}`}
             >
               Home
@@ -90,7 +90,7 @@ function Sidebar() {
             </div>
             <div
               className={`hidden ${
-                location.pathname === "/chat" ? "xl:hidden" : "xl:block"
+                location.pathname.includes("/chat") ? "xl:hidden" : "xl:block"
               } text-xl mx-4 ${
                 location.pathname === "/explore" ? "font-bold" : ""
               }`}
@@ -120,7 +120,7 @@ function Sidebar() {
             </div>
             <div
               className={`hidden ${
-                location.pathname === "/chat" ? "xl:hidden" : "xl:block"
+                location.pathname.includes("/chat") ? "xl:hidden" : "xl:block"
               } text-xl mx-4 ${
                 location.pathname === "/follow" ? "font-bold" : ""
               }`}
@@ -141,7 +141,7 @@ function Sidebar() {
               >
                 <path
                   d={`${
-                    location.pathname === "/chat"
+                    location.pathname.includes("/chat")
                       ? "M1.998 4.499c0-.828.671-1.499 1.5-1.499h17c.828 0 1.5.671 1.5 1.499v2.858l-10 4.545-10-4.547V4.499zm0 5.053V19.5c0 .828.671 1.5 1.5 1.5h17c.828 0 1.5-.672 1.5-1.5V9.554l-10 4.545-10-4.547z"
                       : "M1.998 5.5c0-1.381 1.119-2.5 2.5-2.5h15c1.381 0 2.5 1.119 2.5 2.5v13c0 1.381-1.119 2.5-2.5 2.5h-15c-1.381 0-2.5-1.119-2.5-2.5v-13zm2.5-.5c-.276 0-.5.224-.5.5v2.764l8 3.638 8-3.636V5.5c0-.276-.224-.5-.5-.5h-15zm15.5 5.463l-8 3.636-8-3.638V18.5c0 .276.224.5.5.5h15c.276 0 .5-.224.5-.5v-8.037z"
                   }`}
@@ -150,9 +150,9 @@ function Sidebar() {
             </div>
             <div
               className={`hidden ${
-                location.pathname === "/chat" ? "xl:hidden" : "xl:block"
+                location.pathname.includes("/chat") ? "xl:hidden" : "xl:block"
               } text-xl mx-4 ${
-                location.pathname === "/chat" ? "font-bold" : ""
+                location.pathname.includes("/chat") ? "font-bold" : ""
               }`}
             >
               Chat
@@ -180,7 +180,7 @@ function Sidebar() {
             </div>
             <div
               className={`hidden ${
-                location.pathname === "/chat" ? "xl:hidden" : "xl:block"
+                location.pathname.includes("/chat") ? "xl:hidden" : "xl:block"
               } text-xl mx-4 ${
                 location.pathname === "/profile" ? "font-bold" : ""
               }`}
@@ -192,7 +192,7 @@ function Sidebar() {
         <div className="hidden md:flex flex-col items-center xl:items-start flex-1 my-2">
           <button
             className={`hidden ${
-              location.pathname === "/chat" ? "xl:hidden" : "xl:block"
+              location.pathname.includes("/chat") ? "xl:hidden" : "xl:block"
             } rounded-full text-black text-lg font-bold bg-white w-[90%] h-14 cursor-pointer hover:bg-[rgba(255,255,255,0.9)] ease-in-out duration-500`}
           >
             Post
@@ -201,7 +201,7 @@ function Sidebar() {
             src={logo}
             alt="Post"
             className={` ${
-              location.pathname === "/chat" ? "" : "xl:hidden"
+              location.pathname.includes("/chat") ? "" : "xl:hidden"
             } hidden md:block w-16 h-16 p-1`}
           />
         </div>
@@ -216,7 +216,7 @@ function Sidebar() {
           />
           <div
             className={`hidden ${
-              location.pathname === "/chat" ? "" : "xl:flex xl:flex-col"
+              location.pathname.includes("/chat") ? "" : "xl:flex xl:flex-col"
             }`}
           >
             <span className="font-bold">
