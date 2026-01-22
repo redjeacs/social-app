@@ -1,5 +1,4 @@
 import { useAuth } from "@/contexts/AuthContext";
-import { meta } from "@eslint/js";
 import { useEffect, useState } from "react";
 import MessageRequestCard from "./MessageRequestCard";
 
@@ -39,7 +38,7 @@ function MessageRequestList({ onClose }) {
     const searchUsers = async () => {
       try {
         const res = await fetch(
-          `${import.meta.env.VITE_API_URL}/users/search/${searchQuery}`,
+          `${import.meta.env.VITE_API_URL}/users/search/${searchQuery}/message`,
           {
             method: "GET",
             headers: {

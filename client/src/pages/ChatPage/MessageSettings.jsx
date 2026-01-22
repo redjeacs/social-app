@@ -1,10 +1,46 @@
+import { useAuth } from "@/contexts/AuthContext";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 function MessageSettings() {
   const navigate = useNavigate();
+  const { user, token } = useAuth();
+  const [requestStatus, setRequestStatus] = useState("");
+
+  useEffect(() => {
+    const checkUserRequestStatus = async () => {
+      const userId = user.id;
+      try {
+        const res = await fetch(
+          `${import.meta.env.VITE_API_URL}/users/${userId}`,
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+          },
+        );
+        const data = await res.json();
+
+        if (!res.ok) console.error("failed to fetch user");
+
+        setRequestStatus(data.messageStatus);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
+    checkUserRequestStatus();
+  }, [user.id]);
+
+  const handleRequestStatusChange = async () => {
+    //handle it
+  };
 
   return (
     <div className="flex flex-col w-full items-center h-full overflow-y-auto custom-scrollbar pb-16 px-4">
+      {/* Header */}
       <div className="flex w-full gap-4 items-center py-4 sticky top-0 bg-black z-10">
         <button
           onClick={() => navigate(-1)}
@@ -26,8 +62,71 @@ function MessageSettings() {
           Settings
         </div>
       </div>
+      {/* Message Request Status */}
       <div className="flex flex-col w-full max-w-2xl flex-1">
-        <div className="flex flex-col gap-2 py-3">Allow</div>
+        <div className="flex flex-col gap-2 py-3">
+          <div className="max-w-full text-[15px] leading-5">
+            Allow message requests from:
+          </div>
+          <div className="maxd-w-full text-(--twitter-gray-700) text-[13px] leading-4">
+            <span>People you follow will always be able to message you. </span>
+            <a
+              className="text-(--twitter-blue) hover:underline"
+              rel="noopener noreferrer"
+              href="https://help.x.com/en/using-x/direct-messages#receive"
+              target="_blank"
+            >
+              Learn more
+            </a>
+          </div>
+          <form
+            role="radiogroup"
+            aria-required="false"
+            onSubmit={handleRequestStatusChange}
+            className="flex flex-col gap-3 pt-2"
+          >
+            <div className="flex justify-between items-start">
+              <div className="max-w-full text-[15px] leading-5">No one</div>
+              <button
+                aria-checked="true"
+                className="border-(--twitter-gray-700) border-2 text-(--twitter-gray-0) size-5 shrink-0 rounded-full shadow-xs cursor-pointer outline-none"
+              >
+                <span className="relative flex items-center justify-center">
+                  <svg
+                    fill="currentColor"
+                    xmlns="http://www.w3.org/2000/svg"
+                    data-icon="icon-circle-fill"
+                    viewBox="0 0 24 24"
+                    role="img"
+                    className={`${requestStatus === "No one" && "fill-(--twitter-blue)"} absolute top-1/2 left-1/2 size-4 -translate-x-1/2 -translate-y-1/2`}
+                  >
+                    <circle cx="12" cy="12" r="10.3"></circle>
+                  </svg>
+                </span>
+              </button>
+            </div>
+            <div className="flex justify-between items-start">
+              <div className="max-w-full text-[15px] leading-5">Everyone</div>
+              <button
+                aria-checked="true"
+                className="border-(--twitter-gray-700) border-2 text-(--twitter-gray-0) size-5 shrink-0 rounded-full shadow-xs cursor-pointer outline-none"
+              >
+                <span className="relative flex items-center justify-center">
+                  <svg
+                    fill="currentColor"
+                    xmlns="http://www.w3.org/2000/svg"
+                    data-icon="icon-circle-fill"
+                    viewBox="0 0 24 24"
+                    role="img"
+                    className={`${requestStatus === "everyone" && "fill-(--twitter-blue)"} absolute top-1/2 left-1/2 size-4 -translate-x-1/2 -translate-y-1/2`}
+                  >
+                    <circle cx="12" cy="12" r="10.3"></circle>
+                  </svg>
+                </span>
+              </button>
+            </div>
+          </form>
+        </div>
       </div>
     </div>
   );
