@@ -32,7 +32,7 @@ function ProfilePage() {
               "Content-Type": "application/json",
               Authorization: `Bearer ${token}`,
             },
-          }
+          },
         );
         const data = await res.json();
         if (!res.ok) {
@@ -226,7 +226,7 @@ function ProfilePage() {
             </div>
           </nav>
         </div>
-        <div className="h-screen">
+        <div className="mb-15">
           <Outlet />
         </div>
       </div>

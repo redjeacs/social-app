@@ -22,7 +22,7 @@ function PostPage() {
   const [parentChain, setParentChain] = useState([]);
   const likedPost = post?.originalPost || post;
   const isLiked = likedPost?.likedBy?.some(
-    (likedUser) => likedUser.id === user.id
+    (likedUser) => likedUser.id === user.id,
   );
   const isRepost = Boolean(post?.originalPost);
 
@@ -37,7 +37,7 @@ function PostPage() {
               "Content-Type": "application/json",
               Authorization: `Bearer ${token}`,
             },
-          }
+          },
         );
         const data = await res.json();
 
@@ -78,7 +78,7 @@ function PostPage() {
                 "Content-Type": "application/json",
                 Authorization: `Bearer ${token}`,
               },
-            }
+            },
           );
           const data = await res.json();
           if (!res.ok) {
@@ -189,9 +189,9 @@ function PostPage() {
                 post.originalPost.replies.length > 0
                   ? post.originalPost.replies.length
                   : "" ||
-                    (Array.isArray(post.replies) && post.replies?.length > 0)
-                  ? post.replies.length
-                  : ""}
+                      (Array.isArray(post.replies) && post.replies?.length > 0)
+                    ? post.replies.length
+                    : ""}
               </span>
             </div>
           </div>
@@ -251,9 +251,9 @@ function PostPage() {
                 {isRepost && Array.isArray(post.originalPost.reposts)
                   ? post.originalPost.reposts.length
                   : "" ||
-                    (Array.isArray(post.reposts) && post.reposts.length > 0)
-                  ? post.reposts.length
-                  : ""}
+                      (Array.isArray(post.reposts) && post.reposts.length > 0)
+                    ? post.reposts.length
+                    : ""}
               </span>
             </div>
           </div>
@@ -284,8 +284,8 @@ function PostPage() {
                 {isRepost && post.originalPost.likes > 0
                   ? post.originalPost.likes
                   : "" || post.likes > 0
-                  ? post.likes
-                  : ""}
+                    ? post.likes
+                    : ""}
                 {(isRepost &&
                   Array.isArray(post.originalPost.likes) &&
                   post.originalPost.likes) ||
@@ -318,7 +318,7 @@ function PostPage() {
         </div>
       </article>
       <ReplyForm />
-      <div>
+      <div className="min-h-50 mb-20">
         {post.replies &&
           Array.isArray(post.replies) &&
           post.replies.length > 0 &&

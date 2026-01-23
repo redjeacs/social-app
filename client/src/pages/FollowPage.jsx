@@ -65,7 +65,7 @@ function FollowPage() {
           ></div>
         </div>
       </div>
-      <div className="max-w-[600px] flex flex-col">
+      <div className="max-w-[600px] flex flex-col mb-15">
         {selectedTab === "Who to Follow" && <WhoToFollow />}
         {selectedTab === "Creators for you" && <CreatorsForYou />}
       </div>

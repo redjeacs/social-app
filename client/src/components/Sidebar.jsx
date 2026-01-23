@@ -15,7 +15,7 @@ function Sidebar() {
 
   return (
     <aside
-      className={`custom-scrollbar flex flex-col xl:items-start items-center bg-black z-10 border-t border-(--twitter-border) p-2 md:overflow-auto fixed w-full bottom-0 h-16 md:top-0 md:h-screen md:w-22 ${
+      className={`custom-scrollbar flex flex-col xl:items-start items-center z-10 bg-black p-2 md:overflow-auto fixed w-full bottom-0 h-16 md:top-0 md:h-screen md:w-22 ${
         location.pathname.includes("/chat") ? "" : "xl:w-68"
       } text-white md:flex-col shadow-lg z-40"}`}
     >

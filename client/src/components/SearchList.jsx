@@ -23,7 +23,7 @@ function SearchList({ searchQuery }) {
             "Content-Type": "Application/json",
             Authorization: `Bearer ${token}`,
           },
-        }
+        },
       );
       const data = await res.json();
 
@@ -45,7 +45,9 @@ function SearchList({ searchQuery }) {
         }}
         className="flex cursor-pointer leading-5 p-4 hover:bg-(--twitter-hover)"
       >
-        <span>Search for "{searchQuery}"</span>
+        <span className="text-(--twitter-white)">
+          Search for "{searchQuery}"
+        </span>
       </button>
       <div className="bg-[rgb(47,51,54)] my-1 h-px"></div>
       {users &&

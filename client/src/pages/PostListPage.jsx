@@ -55,7 +55,7 @@ function PostsPage() {
             Authorization: `Bearer ${token}`,
           },
           body: JSON.stringify({ content: post }),
-        }
+        },
       );
       const data = await res.json();
       if (!res.ok) {
@@ -166,7 +166,7 @@ function PostsPage() {
           </div>
         </div>
       </div>
-      <div className="max-w-[600px] flex flex-col">
+      <div className="max-w-[600px] flex flex-co pb-15">
         {selectedTab === "Following" && (
           <FollowingList yourRecentPosts={yourRecentPosts} />
         )}

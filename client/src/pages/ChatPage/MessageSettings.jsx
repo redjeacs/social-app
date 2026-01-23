@@ -79,16 +79,15 @@ function MessageSettings() {
               Learn more
             </a>
           </div>
-          <form
+          <div
             role="radiogroup"
             aria-required="false"
-            onSubmit={handleRequestStatusChange}
             className="flex flex-col gap-3 pt-2"
           >
             <div className="flex justify-between items-start">
               <div className="max-w-full text-[15px] leading-5">No one</div>
               <button
-                aria-checked="true"
+                onClick={handleRequestStatusChange}
                 className="border-(--twitter-gray-700) border-2 text-(--twitter-gray-0) size-5 shrink-0 rounded-full shadow-xs cursor-pointer outline-none"
               >
                 <span className="relative flex items-center justify-center">
@@ -108,7 +107,7 @@ function MessageSettings() {
             <div className="flex justify-between items-start">
               <div className="max-w-full text-[15px] leading-5">Everyone</div>
               <button
-                aria-checked="true"
+                onClick={handleRequestStatusChange}
                 className="border-(--twitter-gray-700) border-2 text-(--twitter-gray-0) size-5 shrink-0 rounded-full shadow-xs cursor-pointer outline-none"
               >
                 <span className="relative flex items-center justify-center">
@@ -125,7 +124,7 @@ function MessageSettings() {
                 </span>
               </button>
             </div>
-          </form>
+          </div>
         </div>
       </div>
     </div>

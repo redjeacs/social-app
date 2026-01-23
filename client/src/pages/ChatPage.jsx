@@ -40,7 +40,9 @@ function ChatPage() {
       {isModalOpen && (
         <MessageRequestList onClose={() => setIsModalOpen(false)} />
       )}
-      <div className="flex flex-col h-full md:min-w-[400px] w-full xl:w-[35%] shrink-0 md:border-x border-(--twitter-border)">
+      <div
+        className={`${location.pathname === "/chat" ? "flex" : "hidden"} xl:flex flex-col h-full md:min-w-[400px] w-full xl:w-[35%] shrink-0 md:border-x border-(--twitter-border)`}
+      >
         {/* Header Section */}
         <div className="flex items-center justify-between py-2 px-4 h-16 text-(--twitter-white)">
           <h1 className="font-bold text-xl leading-6 font-[var-(--font-chirp)]">
@@ -161,7 +163,9 @@ function ChatPage() {
         </div>
       </div>
       {/* Message Box */}
-      <div className="hidden xl:flex flex-col w-full h-full justify-center items-center grow gap-6">
+      <div
+        className={`${location.pathname === "/chat" ? "hidden" : "flex"} xl:flex flex-col w-full h-full justify-center items-center grow gap-6`}
+      >
         <Outlet context={{ openMessageRequestList }} />
       </div>
     </div>

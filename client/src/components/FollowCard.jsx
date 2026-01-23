@@ -30,7 +30,7 @@ function FollowCard({ userToFollow, trendsBar = false }) {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-      }
+      },
     );
     const data = await res.json();
     if (!res.ok)
@@ -56,7 +56,7 @@ function FollowCard({ userToFollow, trendsBar = false }) {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-      }
+      },
     );
     const data = await res.json();
     if (!res.ok)
@@ -76,9 +76,7 @@ function FollowCard({ userToFollow, trendsBar = false }) {
   return (
     <div
       key={userToFollow.id}
-      className={`${
-        trendsBar ? "text-[15px]" : "p-4 border-b"
-      } border-(--twitter-gray)`}
+      className={`${trendsBar ? "text-[15px]" : "px-4 py-3"}`}
     >
       <div className="flex items-center justify-between">
         <div className="flex gap-4 w-full">
@@ -90,7 +88,7 @@ function FollowCard({ userToFollow, trendsBar = false }) {
             } rounded-full bg-gray-400 object-cover`}
           />
           <div className="flex flex-col gap-2 w-full">
-            <div className="flex justify-between items-end">
+            <div className="flex justify-between items-center">
               <div className={`${trendsBar && "h-10"} flex flex-col`}>
                 <span className="font-bold">
                   {userToFollow.firstName} {userToFollow.lastName}

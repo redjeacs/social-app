@@ -25,7 +25,7 @@ function ExplorePage() {
                 "Content-Type": "Application/json",
                 Authorization: `Bearer ${token}`,
               },
-            }
+            },
           );
 
           const data = await res.json();
@@ -61,7 +61,7 @@ function ExplorePage() {
     }, 200);
   };
   return (
-    <div className="w-full h-full">
+    <div className="w-full h-full mb-15">
       <div className="px-4 w-full h-13 flex items-center justify-center">
         <div
           className={` ${
