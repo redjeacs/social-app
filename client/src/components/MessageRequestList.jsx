@@ -27,7 +27,7 @@ function MessageRequestList({ onClose }) {
 
         if (!res.ok) console.error("failed to fetch user");
 
-        const users = [user, ...data.following];
+        const users = [data, ...data.following];
 
         setFollowedUsers(users);
       } catch (err) {
@@ -38,7 +38,7 @@ function MessageRequestList({ onClose }) {
     const searchUsers = async () => {
       try {
         const res = await fetch(
-          `${import.meta.env.VITE_API_URL}/users/search/${searchQuery}/message`,
+          `${import.meta.env.VITE_API_URL}/users/search/${searchQuery}`,
           {
             method: "GET",
             headers: {
@@ -150,8 +150,11 @@ function MessageRequestList({ onClose }) {
           <ul>
             {searchQuery ? (
               searchedUsers.length > 0 ? (
-                searchedUsers.map((user) => (
-                  <MessageRequestCard key={user.id} user={user} />
+                searchedUsers.map((searchedUser) => (
+                  <MessageRequestCard
+                    key={searchedUser.id}
+                    searchedUser={searchedUser}
+                  />
                 ))
               ) : (
                 <div className="flex justify-center text-(--twitter-gray-700)">
@@ -160,8 +163,11 @@ function MessageRequestList({ onClose }) {
               )
             ) : (
               followedUsers.length > 0 &&
-              followedUsers.map((user) => (
-                <MessageRequestCard key={user.id} user={user} />
+              followedUsers.map((searchedUser) => (
+                <MessageRequestCard
+                  key={searchedUser.id}
+                  searchedUser={searchedUser}
+                />
               ))
             )}
           </ul>

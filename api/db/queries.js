@@ -27,7 +27,7 @@ exports.getUser = async (colName, query) => {
     where: key,
     include: {
       followers: true,
-      following: true,
+      following: { include: { following: true } },
       likedPosts: true,
     },
   });
@@ -102,6 +102,7 @@ exports.searchUsers = async (searchQuery) => {
         },
       ],
     },
+    include: { following: true },
     orderBy: { followersCount: "desc" },
     take: 8,
   });
