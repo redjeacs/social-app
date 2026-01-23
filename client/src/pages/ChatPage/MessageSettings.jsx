@@ -1,11 +1,12 @@
 import { useAuth } from "@/contexts/AuthContext";
+import { MessagesSquare } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 function MessageSettings() {
   const navigate = useNavigate();
   const { user, token } = useAuth();
-  const [requestStatus, setRequestStatus] = useState("");
+  const [messageStatus, setMessageStatus] = useState("");
 
   useEffect(() => {
     const checkUserRequestStatus = async () => {
@@ -25,7 +26,7 @@ function MessageSettings() {
 
         if (!res.ok) console.error("failed to fetch user");
 
-        setRequestStatus(data.messageStatus);
+        setMessageStatus(data.messageStatus);
       } catch (err) {
         console.error(err);
       }
@@ -34,9 +35,30 @@ function MessageSettings() {
     checkUserRequestStatus();
   }, [user.id]);
 
-  const handleRequestStatusChange = async () => {
-    //handle it
-  };
+  useEffect(() => {
+    const updateMessageRequestStatus = async () => {
+      if (!messageStatus) return;
+      try {
+        const res = await fetch(
+          `${import.meta.env.VITE_API_URL}/users/message/${user.id}`,
+          {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify({ messageStatus: messageStatus }),
+          },
+        );
+        const data = await res.json();
+        if (!res.ok) console.error(data.message);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
+    updateMessageRequestStatus();
+  }, [messageStatus]);
 
   return (
     <div className="flex flex-col w-full items-center h-full overflow-y-auto custom-scrollbar pb-16 px-4">
@@ -87,7 +109,7 @@ function MessageSettings() {
             <div className="flex justify-between items-start">
               <div className="max-w-full text-[15px] leading-5">No one</div>
               <button
-                onClick={handleRequestStatusChange}
+                onClick={() => setMessageStatus("No one")}
                 className="border-(--twitter-gray-700) border-2 text-(--twitter-gray-0) size-5 shrink-0 rounded-full shadow-xs cursor-pointer outline-none"
               >
                 <span className="relative flex items-center justify-center">
@@ -97,7 +119,7 @@ function MessageSettings() {
                     data-icon="icon-circle-fill"
                     viewBox="0 0 24 24"
                     role="img"
-                    className={`${requestStatus === "No one" && "fill-(--twitter-blue)"} absolute top-1/2 left-1/2 size-4 -translate-x-1/2 -translate-y-1/2`}
+                    className={`${messageStatus === "No one" && "fill-(--twitter-blue)"} absolute top-1/2 left-1/2 size-4 -translate-x-1/2 -translate-y-1/2`}
                   >
                     <circle cx="12" cy="12" r="10.3"></circle>
                   </svg>
@@ -107,7 +129,7 @@ function MessageSettings() {
             <div className="flex justify-between items-start">
               <div className="max-w-full text-[15px] leading-5">Everyone</div>
               <button
-                onClick={handleRequestStatusChange}
+                onClick={() => setMessageStatus("Everyone")}
                 className="border-(--twitter-gray-700) border-2 text-(--twitter-gray-0) size-5 shrink-0 rounded-full shadow-xs cursor-pointer outline-none"
               >
                 <span className="relative flex items-center justify-center">
@@ -117,7 +139,7 @@ function MessageSettings() {
                     data-icon="icon-circle-fill"
                     viewBox="0 0 24 24"
                     role="img"
-                    className={`${requestStatus === "everyone" && "fill-(--twitter-blue)"} absolute top-1/2 left-1/2 size-4 -translate-x-1/2 -translate-y-1/2`}
+                    className={`${messageStatus === "Everyone" && "fill-(--twitter-blue)"} absolute top-1/2 left-1/2 size-4 -translate-x-1/2 -translate-y-1/2`}
                   >
                     <circle cx="12" cy="12" r="10.3"></circle>
                   </svg>

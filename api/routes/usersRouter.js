@@ -46,5 +46,10 @@ usersRouter.post(
   verifyToken,
   usersController.unfollowUser,
 );
+usersRouter.put(
+  "/message/:userId",
+  verifyToken,
+  usersController.updateMessageStatus,
+);
 
 module.exports = usersRouter;

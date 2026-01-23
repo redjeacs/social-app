@@ -161,3 +161,18 @@ exports.unfollowUser = async (req, res, next) => {
     next(err);
   }
 };
+
+exports.updateMessageStatus = async (req, res, next) => {
+  const { userId } = req.params;
+  const { messageStatus } = req.body;
+
+  try {
+    const user = await db.updateMessageRequestStatus(userId, messageStatus);
+
+    if (!user) res.status(404).json({ message: "failed to update status" });
+
+    res.status(200).json(user);
+  } catch (err) {
+    next(err);
+  }
+};

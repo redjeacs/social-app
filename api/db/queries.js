@@ -167,6 +167,17 @@ exports.unfollowUser = async (followerId, userId) => {
   return unfollowedUser;
 };
 
+exports.updateMessageRequestStatus = async (userId, messageStatus) => {
+  const user = await prisma.user.update({
+    where: { id: userId },
+    data: {
+      messageStatus: messageStatus,
+    },
+  });
+
+  return user;
+};
+
 exports.getAllPosts = async () => {
   const posts = await prisma.post.findMany({
     include: {
