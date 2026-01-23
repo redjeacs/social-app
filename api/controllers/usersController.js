@@ -96,7 +96,7 @@ exports.getPopularUsers = async (req, res, next) => {
 
 exports.searchUsers = async (req, res, next) => {
   const { searchQuery } = req.params;
-  console.log("test");
+
   try {
     const searchResults = await db.searchUsers(searchQuery);
 

@@ -2,11 +2,12 @@ import { useAuth } from "@/contexts/AuthContext";
 
 function MessageRequestCard({ searchedUser }) {
   const { user } = useAuth();
+  console.log(searchedUser);
 
   return (
     <li className="w-full">
       <div
-        className={`flex w-full gap-3 p-2 items-center rounded-lg select-none ${searchedUser.messageStatus === "No one" ? "opacity-20" : "hover:bg-(--twitter-gray-50) cursor-pointer"}`}
+        className={`flex w-full gap-3 p-2 items-center rounded-lg select-none ${!searchedUser.following.some((followedUser) => followedUser.id === user.id) && searchedUser.messageStatus === "No one" ? "opacity-20" : "hover:bg-(--twitter-gray-50) cursor-pointer"}`}
       >
         <div className="relative isolate min-size flex overflow-hidden bg-(--twitter-gray-300) rounded-full min-w-10 min-h-10 size-10 transition duration-200 hover:brightness-90">
           <img

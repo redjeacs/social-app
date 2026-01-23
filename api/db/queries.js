@@ -102,7 +102,7 @@ exports.searchUsers = async (searchQuery) => {
         },
       ],
     },
-    include: { following: true },
+    include: { following: true, followers: true },
     orderBy: { followersCount: "desc" },
     take: 8,
   });
