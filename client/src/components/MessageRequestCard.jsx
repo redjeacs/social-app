@@ -1,13 +1,35 @@
 import { useAuth } from "@/contexts/AuthContext";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
-function MessageRequestCard({ searchedUser }) {
+function MessageRequestCard({ searchedUser, onClose }) {
+  const navigate = useNavigate();
   const { user } = useAuth();
-  console.log(searchedUser);
+  const [isRequestAllowed, setIsRequestAllowed] = useState(false);
+
+  useEffect(() => {
+    if (
+      searchedUser.following.some(
+        (followedUser) => followedUser.id === user.id,
+      ) ||
+      searchedUser.id === user.id ||
+      searchedUser.messageStatus === "Everyone"
+    )
+      setIsRequestAllowed(true);
+  }, [searchedUser]);
 
   return (
-    <li className="w-full">
+    <li
+      onClick={() => {
+        if (isRequestAllowed) {
+          onClose();
+          navigate(`/chat/${searchedUser.id}`);
+        }
+      }}
+      className="w-full"
+    >
       <div
-        className={`flex w-full gap-3 p-2 items-center rounded-lg select-none ${!searchedUser.following.some((followedUser) => followedUser.id === user.id) && searchedUser.messageStatus === "No one" ? "opacity-20" : "hover:bg-(--twitter-gray-50) cursor-pointer"}`}
+        className={`flex w-full gap-3 p-2 items-center rounded-lg select-none ${isRequestAllowed ? "hover:bg-(--twitter-gray-50) cursor-pointer" : "opacity-20"}`}
       >
         <div className="relative isolate min-size flex overflow-hidden bg-(--twitter-gray-300) rounded-full min-w-10 min-h-10 size-10 transition duration-200 hover:brightness-90">
           <img

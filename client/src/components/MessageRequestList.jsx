@@ -153,6 +153,7 @@ function MessageRequestList({ onClose }) {
                 searchedUsers.map((searchedUser) => (
                   <MessageRequestCard
                     key={searchedUser.id}
+                    onClose={onClose}
                     searchedUser={searchedUser}
                   />
                 ))
@@ -166,6 +167,7 @@ function MessageRequestList({ onClose }) {
               followedUsers.map((searchedUser) => (
                 <MessageRequestCard
                   key={searchedUser.id}
+                  onClose={onClose}
                   searchedUser={searchedUser}
                 />
               ))

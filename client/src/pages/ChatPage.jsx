@@ -7,7 +7,6 @@ function ChatPage() {
   const [searchFocus, setSearchFocus] = useState(false);
   const [searchValue, setSearchValue] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const searchInputRef = useRef(null);
   const searchDivRef = useRef(null);
 
