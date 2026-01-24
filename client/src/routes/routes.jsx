@@ -16,6 +16,7 @@ import ChatPage from "@/pages/ChatPage";
 import InboxPlaceholder from "@/pages/ChatPage/InboxPlaceholder";
 import MessageSettings from "@/pages/ChatPage/MessageSettings";
 import Chatbox from "@/pages/ChatPage/Chatbox";
+import ChatroomInfo from "@/pages/ChatPage/ChatroomInfo";
 
 const routes = [
   {
@@ -36,7 +37,16 @@ const routes = [
             children: [
               { index: true, element: <InboxPlaceholder /> },
               { path: "/chat/settings", element: <MessageSettings /> },
-              { path: "/chat/:userId", element: <Chatbox /> },
+              {
+                path: "/chat/:conversationId",
+                element: <Chatbox />,
+                children: [
+                  {
+                    path: "/chat/:conversationId/info",
+                    element: <ChatroomInfo />,
+                  },
+                ],
+              },
             ],
           },
           {
