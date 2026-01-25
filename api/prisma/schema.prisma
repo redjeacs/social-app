@@ -69,9 +69,10 @@ model Post {
 model Conversation {
   id        String   @id @default(uuid())
   isGroup   Boolean  @default(false)
-  name      String? // only for groups
+  name      String? 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  uniqueKey String   @unique @default(uuid())
 
   participants ConversationParticipant[]
   messages     Message[]
@@ -91,7 +92,6 @@ model ConversationParticipant {
   leftAt     DateTime?
   lastReadAt DateTime?
 
-  @@unique([conversationId, userId])
   @@map("conversation_participants")
 }
 

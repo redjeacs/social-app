@@ -11,12 +11,12 @@ conversationsRouter.get(
 );
 
 conversationsRouter.get(
-  "/:userId-:recipientId",
+  "/:userId/with/:recipientId",
   verifyToken,
   conversationsController.getConversation,
 );
 conversationsRouter.post(
-  "/:userId-:recipientId",
+  "/:userId/with/:recipientId",
   verifyToken,
   conversationsController.createConversation,
 );

@@ -498,34 +498,63 @@ exports.getUserConversations = async (userId) => {
   return user.conversations;
 };
 
-exports.createConversation = async (userId, recipientId) => {
-  const existingConversation = await prisma.conversation.findFirst({
+exports.getConversation = async (userId, recipientId) => {
+  const sameUser = userId === recipientId;
+  const ids = sameUser ? [userId] : [userId, recipientId];
+
+  const conversations = await prisma.conversation.findMany({
     where: {
-      participants: {
-        every: {
-          id: { in: [userId, recipientId] },
-        },
-      },
-      participantsCount: 2,
-    },
-  });
-
-  if (existingConversation) {
-    return existingConversation;
-  }
-
-  const newConversation = await prisma.conversation.create({
-    data: {
-      participants: {
-        connect: [{ id: userId }, { id: recipientId }],
-      },
-      participantsCount: 2,
+      isGroup: false,
+      participants: { every: { userId: { in: ids } } },
     },
     include: {
       participants: true,
-      messages: true,
+      messages: { orderBy: { createdAt: "desc" }, include: { sender: true } },
     },
   });
 
-  return newConversation;
+  return (
+    conversations.find((c) => c.participants.length === ids.length) || null
+  );
+};
+
+exports.createConversation = async (userId, recipientId) => {
+  const sameUser = userId === recipientId;
+  const ids = sameUser ? [userId] : [userId, recipientId];
+  const uniqueKey = ids.slice().sort().join("|");
+
+  const users = await prisma.user.findMany({ where: { id: { in: ids } } });
+  if (users.length !== ids.length)
+    throw new Error("Cannot create conversation: user not found");
+
+  console.log("Creating conversation with key:", uniqueKey);
+
+  try {
+    return await prisma.conversation.create({
+      data: {
+        uniqueKey,
+        participants: {
+          create: ids.map((id) => ({ user: { connect: { id } } })),
+        },
+      },
+      include: {
+        participants: true,
+        messages: { orderBy: { createdAt: "desc" }, include: { sender: true } },
+      },
+    });
+  } catch (e) {
+    if (e.code === "P2002") {
+      return prisma.conversation.findUnique({
+        where: { uniqueKey },
+        include: {
+          participants: true,
+          messages: {
+            orderBy: { createdAt: "desc" },
+            include: { sender: true },
+          },
+        },
+      });
+    }
+    throw e;
+  }
 };

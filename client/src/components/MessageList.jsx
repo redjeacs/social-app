@@ -8,12 +8,12 @@ function MessageList({ friend, conversationId }) {
   const [conversation, setConversation] = useState([]);
 
   useEffect(() => {
-    const fetchConversation = async () => {
+    const createOrFetchConversation = async () => {
       try {
         const res = await fetch(
-          `${import.meta.env.VITE_API_URL}/conversation/${user.id}-${conversationId}`,
+          `${import.meta.env.VITE_API_URL}/conversations/${user.id}/with/${friend.id}`,
           {
-            method: "GET",
+            method: "POST",
             headers: {
               "CONTENT-TYPE": "application/json",
               Authorization: `Bearer ${token}`,
@@ -30,7 +30,11 @@ function MessageList({ friend, conversationId }) {
         console.error(err);
       }
     };
+
+    createOrFetchConversation();
   }, [conversationId]);
+
+  console.log("Conversation:", conversation);
 
   if (!friend) return <div>loading</div>;
   return (
