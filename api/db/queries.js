@@ -481,21 +481,29 @@ exports.getUserConversations = async (userId) => {
     select: {
       conversations: {
         include: {
-          participants: true,
-          messages: {
-            orderBy: { createdAt: "desc" },
-            take: 1,
-            include: { sender: true },
+          conversation: {
+            include: {
+              participants: {
+                include: {
+                  user: true,
+                },
+              },
+              messages: {
+                orderBy: { createdAt: "desc" },
+                take: 1,
+                include: { sender: true },
+              },
+            },
           },
         },
         orderBy: {
-          updatedAt: "desc",
+          conversation: { updatedAt: "desc" },
         },
       },
     },
   });
 
-  return user.conversations;
+  return user.conversations.map((cp) => cp.conversation);
 };
 
 exports.getConversation = async (userId, recipientId) => {
@@ -526,8 +534,6 @@ exports.createConversation = async (userId, recipientId) => {
   const users = await prisma.user.findMany({ where: { id: { in: ids } } });
   if (users.length !== ids.length)
     throw new Error("Cannot create conversation: user not found");
-
-  console.log("Creating conversation with key:", uniqueKey);
 
   try {
     return await prisma.conversation.create({

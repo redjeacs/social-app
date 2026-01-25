@@ -1,14 +1,46 @@
+import EmptyInbox from "@/components/EmptyInbox";
+import InboxList from "@/components/InboxList";
 import MessageRequestList from "@/components/MessageRequestList";
+import { useAuth } from "@/contexts/AuthContext";
 import { useState, useRef, useEffect } from "react";
 import { Outlet, useNavigate } from "react-router-dom";
 
 function ChatPage() {
   const navigate = useNavigate();
+  const { user, token } = useAuth();
+  const [conversations, setConversations] = useState([]);
   const [searchFocus, setSearchFocus] = useState(false);
   const [searchValue, setSearchValue] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const searchInputRef = useRef(null);
   const searchDivRef = useRef(null);
+
+  useEffect(() => {
+    const fetchUserConversations = async () => {
+      try {
+        const res = await fetch(
+          `${import.meta.env.VITE_API_URL}/conversations/${user.id}`,
+          {
+            method: "GET",
+            headers: {
+              "CONTENT-TYPE": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+          },
+        );
+        const data = await res.json();
+
+        if (!res.ok)
+          console.error(`Failed to fetch conversations: ${data.message}`);
+
+        setConversations(data);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
+    fetchUserConversations();
+  }, []);
 
   useEffect(() => {
     if (searchFocus && searchInputRef.current) {
@@ -138,27 +170,11 @@ function ChatPage() {
         </div>
         {/* Inbox */}
         <div className="flex flex-col grow items-center justify-center gap-2">
-          <div className="text-[76px] mb-10">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="currentColor"
-              data-icon="icon-messages-stroke"
-              viewBox="0 0 24 24"
-              width="1em"
-              height="1em"
-              display="flex"
-              role="img"
-              className="rotate-[-8.29deg]"
-            >
-              <path d="M1.998 5.5c0-1.381 1.119-2.5 2.5-2.5h15c1.381 0 2.5 1.119 2.5 2.5v13c0 1.381-1.119 2.5-2.5 2.5h-15c-1.381 0-2.5-1.119-2.5-2.5v-13zm2.5-.5c-.276 0-.5.224-.5.5v2.764l8 3.638 8-3.636V5.5c0-.276-.224-.5-.5-.5h-15zm15.5 5.463l-8 3.636-8-3.638V18.5c0 .276.224.5.5.5h15c.276 0 .5-.224.5-.5v-8.037z"></path>
-            </svg>
-          </div>
-          <div className="max-w-full whitespace-pre-wrap text-(--twitter-white) text-2xl leading-7 font-medium">
-            Empty inbox
-          </div>
-          <div className="max-w-full whitespace-pre-wrap text-(--twitter-gray-700) text-[15px]">
-            Message someone
-          </div>
+          {conversations.length === 0 ? (
+            <EmptyInbox />
+          ) : (
+            <InboxList conversations={conversations} />
+          )}
         </div>
       </div>
       {/* Message Box */}

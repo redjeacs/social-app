@@ -34,8 +34,6 @@ function MessageList({ friend, conversationId }) {
     createOrFetchConversation();
   }, [conversationId]);
 
-  console.log("Conversation:", conversation);
-
   if (!friend) return <div>loading</div>;
   return (
     <div className="h-screen! w-full custom-scrollbar overflow-auto">
