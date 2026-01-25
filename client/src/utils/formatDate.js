@@ -67,3 +67,10 @@ export const formatDateFull = (dateString) => {
 
   return `${monthNames[month]} ${day}, ${year} · ${hours}:${minutes} `;
 };
+
+export const formatDateSimple = (date) =>
+  new Intl.DateTimeFormat("en-US", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  }).format(date);

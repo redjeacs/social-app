@@ -7,57 +7,110 @@ datasource db {
 }
 
 model User {
-  id              String      @id @default(uuid())
-  email           String      @unique
-  username        String      @unique
-  password        String
-  firstName       String
-  lastName        String
-  coverImage      String?
-  bio             String?
-  profile         String?     @default("https://res.cloudinary.com/dcqhyzxa7/image/upload/v1768973215/jinqrc9tfa0rdl1tvkkz.svg")
-  location        String?
-  
-  createdAt       DateTime    @default(now())
-  messageStatus   String      @default("No one")
+  id         String  @id @default(uuid())
+  email      String  @unique
+  username   String  @unique
+  password   String
+  firstName  String
+  lastName   String
+  coverImage String?
+  bio        String?
+  profile    String? @default("https://res.cloudinary.com/dcqhyzxa7/image/upload/v1768973215/jinqrc9tfa0rdl1tvkkz.svg")
+  location   String?
 
-  identities      Identity[]
-  posts           Post[]
-  followers       User[]      @relation("UserFollowers")
-  following       User[]      @relation("UserFollowers")
-  followersCount  Int         @default(0)
-  likedPosts      Post[]      @relation("PostLikes") 
+  createdAt     DateTime @default(now())
+  messageStatus String   @default("No one")
+
+  identities     Identity[]
+  posts          Post[]
+  followers      User[]     @relation("UserFollowers")
+  following      User[]     @relation("UserFollowers")
+  followersCount Int        @default(0)
+  likedPosts     Post[]     @relation("PostLikes")
+
+  conversations ConversationParticipant[]
+  sentMessages  Message[]
 
   @@map("app_users")
 }
 
 model Identity {
-  id            String   @id @default(uuid())
-  provider      String
-  providerId    String
-  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId        String
+  id         String @id @default(uuid())
+  provider   String
+  providerId String
+  user       User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId     String
 
   @@unique([provider, providerId])
   @@map("user_identities")
 }
 
 model Post {
-  id              String      @id @default(uuid())
-  content         String
-  createdAt       DateTime    @default(now())
-  user            User        @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId          String
-  
-  likes           Int         @default(0)    
-  likedBy         User[]      @relation("PostLikes")
+  id        String   @id @default(uuid())
+  content   String
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String
 
-  originalPost    Post?       @relation("OriginalPost", fields: [originalPostId], references: [id], onDelete: Cascade)
-  originalPostId  String?
-  reposts         Post[]      @relation("OriginalPost")
+  likes   Int    @default(0)
+  likedBy User[] @relation("PostLikes")
 
-  parentPost     Post?       @relation("ParentPost", fields: [parentPostId], references: [id], onDelete: Cascade)
-  parentPostId   String?
-  replies        Post[]      @relation("ParentPost")
+  originalPost   Post?   @relation("OriginalPost", fields: [originalPostId], references: [id], onDelete: Cascade)
+  originalPostId String?
+  reposts        Post[]  @relation("OriginalPost")
+
+  parentPost   Post?   @relation("ParentPost", fields: [parentPostId], references: [id], onDelete: Cascade)
+  parentPostId String?
+  replies      Post[]  @relation("ParentPost")
+
   @@map("posts")
+}
+
+model Conversation {
+  id        String   @id @default(uuid())
+  isGroup   Boolean  @default(false)
+  name      String? // only for groups
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  participants ConversationParticipant[]
+  messages     Message[]
+
+  @@map("conversations")
+}
+
+model ConversationParticipant {
+  id             String       @id @default(uuid())
+  conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  conversationId String
+  user           User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId         String
+
+  role       ParticipantRole @default(MEMBER)
+  joinedAt   DateTime        @default(now())
+  leftAt     DateTime?
+  lastReadAt DateTime?
+
+  @@unique([conversationId, userId])
+  @@map("conversation_participants")
+}
+
+enum ParticipantRole {
+  MEMBER
+  ADMIN
+}
+
+model Message {
+  id             String       @id @default(uuid())
+  conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  conversationId String
+  sender         User         @relation(fields: [senderId], references: [id], onDelete: Cascade)
+  senderId       String
+
+  body        String
+  attachments String[] // store attachment URLs directly on the message
+  createdAt   DateTime @default(now())
+
+  @@index([conversationId, createdAt])
+  @@map("messages")
 }

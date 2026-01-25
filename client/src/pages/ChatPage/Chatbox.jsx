@@ -79,6 +79,7 @@ function Chatbox() {
           </Link>
         </div>
       </div>
+      {/* Message List */}
       <div className="flex-1 overflow-hidden isolate relative h-full">
         <MessageList friend={friend} conversationId={conversationId} />
       </div>

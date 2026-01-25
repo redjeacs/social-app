@@ -472,3 +472,60 @@ exports.replyToPost = async (postId, userId, content) => {
 
   return reply;
 };
+
+exports.getUserConversations = async (userId) => {
+  const user = await prisma.user.findUnique({
+    where: {
+      id: userId,
+    },
+    select: {
+      conversations: {
+        include: {
+          participants: true,
+          messages: {
+            orderBy: { createdAt: "desc" },
+            take: 1,
+            include: { sender: true },
+          },
+        },
+        orderBy: {
+          updatedAt: "desc",
+        },
+      },
+    },
+  });
+
+  return user.conversations;
+};
+
+exports.createConversation = async (userId, recipientId) => {
+  const existingConversation = await prisma.conversation.findFirst({
+    where: {
+      participants: {
+        every: {
+          id: { in: [userId, recipientId] },
+        },
+      },
+      participantsCount: 2,
+    },
+  });
+
+  if (existingConversation) {
+    return existingConversation;
+  }
+
+  const newConversation = await prisma.conversation.create({
+    data: {
+      participants: {
+        connect: [{ id: userId }, { id: recipientId }],
+      },
+      participantsCount: 2,
+    },
+    include: {
+      participants: true,
+      messages: true,
+    },
+  });
+
+  return newConversation;
+};
