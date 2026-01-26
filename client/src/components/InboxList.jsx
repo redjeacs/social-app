@@ -16,13 +16,12 @@ function InboxList({ conversations }) {
   }, [conversations, user.id]);
 
   if (!conversationsWithRecipient) return <div>No conversations found.</div>;
-  console.log(conversationsWithRecipient);
 
   return (
     <ul className="w-full h-full">
       {conversationsWithRecipient?.map((conversation) => {
         const other = conversation.recipient || conversation.participants[0];
-        console.log(other);
+
         return (
           <li
             key={conversation.id}
