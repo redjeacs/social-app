@@ -74,3 +74,9 @@ export const formatDateSimple = (date) =>
     month: "long",
     day: "numeric",
   }).format(date);
+
+export const formatTimeSimple = (date) =>
+  new Intl.DateTimeFormat("en-US", {
+    hour: "numeric",
+    minute: "numeric",
+  }).format(date);

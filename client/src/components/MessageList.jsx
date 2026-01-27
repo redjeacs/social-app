@@ -8,19 +8,8 @@ function MessageList({ friend, conversationId }) {
   const { user, token } = useAuth();
   const [conversation, setConversation] = useState([]);
   const [isMessaging, setIsMessaging] = useState(false);
+  const [message, setMessage] = useState("");
   const textAreaRef = useRef(null);
-
-  const handleTextareaInput = () => {
-    if (textAreaRef.current) {
-      textAreaRef.current.style.height = "auto";
-      textAreaRef.current.style.height = `${textAreaRef.current.scrollHeight}px`;
-    }
-    if (textAreaRef.current.value === "") {
-      setIsMessaging(false);
-    } else {
-      setIsMessaging(true);
-    }
-  };
 
   useEffect(() => {
     const createOrFetchConversation = async () => {
@@ -48,6 +37,40 @@ function MessageList({ friend, conversationId }) {
 
     createOrFetchConversation();
   }, [conversationId]);
+
+  const handleTextareaInput = () => {
+    if (textAreaRef.current) {
+      textAreaRef.current.style.height = "auto";
+      textAreaRef.current.style.height = `${textAreaRef.current.scrollHeight}px`;
+    }
+    if (textAreaRef.current.value === "") {
+      setIsMessaging(false);
+    } else {
+      setIsMessaging(true);
+    }
+  };
+
+  const handleMessageSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      fetch(`${import.meta.env.VITE_API_URL}/messages/${conversation.id}`, {
+        method: "POST",
+        headers: {
+          "CONTENT-TYPE": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          senderId: user.id,
+          body: message,
+        }),
+      });
+      setMessage("");
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  console.log(conversation);
 
   if (!friend) return <div>loading</div>;
   return (
@@ -93,7 +116,10 @@ function MessageList({ friend, conversationId }) {
               </div>
             </li>
             {/* Message Bubbles List */}
-            <MessageBubble />
+            {conversation.messages &&
+              conversation.messages.map((message) => (
+                <MessageBubble key={message.id} message={message} />
+              ))}
           </ul>
           <div className="h-[92px]"></div>
         </div>
@@ -144,7 +170,10 @@ function MessageList({ friend, conversationId }) {
               ></path>
             </svg>
           </button>
-          <form className="flex-1 relative">
+          <form
+            onSubmit={(e) => handleMessageSubmit(e)}
+            className="flex-1 relative"
+          >
             <div className="flex flex-col items-center w-full overflow-hidden placeholder:text-(--twitter-gray-800) bg-(--twitter-gray-50) rounded-3xl py-2 text-lg leading-6">
               <div className="flex justify-end w-full px-2">
                 <textarea
@@ -153,6 +182,8 @@ function MessageList({ friend, conversationId }) {
                   id="body"
                   placeholder="Message"
                   rows={1}
+                  value={message}
+                  onChange={(e) => setMessage(e.target.value)}
                   onInput={handleTextareaInput}
                   className={`box-border text-(--twitter-white) m-0 w-full resize-none bg-transparent outline-none placeholder:text-(--twitter-gray-700) flex-1 min-h-8 max-h-60 px-2 py-1 custom-scrollbar`}
                 ></textarea>

@@ -517,7 +517,7 @@ exports.getConversation = async (userId, recipientId) => {
     },
     include: {
       participants: true,
-      messages: { orderBy: { createdAt: "desc" }, include: { sender: true } },
+      messages: { orderBy: { createdAt: "asc" }, include: { sender: true } },
     },
   });
 
@@ -545,22 +545,31 @@ exports.createConversation = async (userId, recipientId) => {
       },
       include: {
         participants: true,
-        messages: { orderBy: { createdAt: "desc" }, include: { sender: true } },
+        messages: { orderBy: { createdAt: "asc" }, include: { sender: true } },
       },
     });
   } catch (e) {
     if (e.code === "P2002") {
-      return prisma.conversation.findUnique({
-        where: { uniqueKey },
-        include: {
-          participants: true,
-          messages: {
-            orderBy: { createdAt: "desc" },
-            include: { sender: true },
-          },
-        },
-      });
+      return this.getConversation(userId, recipientId);
     }
     throw e;
   }
+};
+
+exports.createMessage = async (conversationId, senderId, body) => {
+  const newMessage = await prisma.message.create({
+    data: {
+      body: body,
+      conversation: { connect: { id: conversationId } },
+      sender: { connect: { id: senderId } },
+    },
+    include: { sender: true },
+  });
+
+  await prisma.conversation.update({
+    where: { id: conversationId },
+    data: { updatedAt: new Date() },
+  });
+
+  return newMessage;
 };

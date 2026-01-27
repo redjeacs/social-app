@@ -13,7 +13,6 @@ function PostList({ yourRecentPosts, postsData = null }) {
 
   useEffect(() => {
     const fetchPosts = async () => {
-      console.log(postsData);
       if (postsData) {
         setPosts(Array.isArray(postsData) ? postsData : []);
         return;
@@ -47,7 +46,7 @@ function PostList({ yourRecentPosts, postsData = null }) {
   const allPosts = [
     ...(yourRecentPosts || []),
     ...posts.filter(
-      (post) => !yourRecentPosts?.some((recent) => recent.id === post.id)
+      (post) => !yourRecentPosts?.some((recent) => recent.id === post.id),
     ),
   ];
 

@@ -1,6 +1,9 @@
+import { useAuth } from "@/contexts/AuthContext";
+import { formatDateSimple, formatTimeSimple } from "@/utils/formatDate";
 import { useState } from "react";
 
 function MessageBubble({ message }) {
+  const { user } = useAuth();
   const [bubbleHover, setBubbleHover] = useState(false);
   return (
     <>
@@ -14,19 +17,14 @@ function MessageBubble({ message }) {
           >
             {/* bg-(--twitter-gray-50) for friend */}
             <div className="flex items-end px-4 py-2 rounded-2xl bg-(--twitter-blue) gap-1">
-              <span className="max-w-full leading-4.5">
-                Lorem ipsum dolor, sit amet consectetur adipisicing elit.
-                Nostrum omnis aliquid tempore, suscipit officia non placeat
-                facilis? Molestias, sint? Non voluptate harum accusantium quis
-                quae tenetur ut excepturi consequatur ducimus!
-              </span>
+              <span className="max-w-full leading-4.5">{message.body}</span>
               {/* hidden if not end of message chain */}
               <span
                 aria-hidden="true"
                 className="inline-block pl-2 user-select-none"
               >
                 <div className="flex items-center justify-end text-white ml-auto shrink-0 gap-1 max-w-full text-xs leading-3">
-                  3:39pm
+                  {formatTimeSimple(new Date(message.createdAt))}
                 </div>
               </span>
             </div>
