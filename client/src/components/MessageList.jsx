@@ -9,6 +9,7 @@ function MessageList({ friend }) {
   const [conversation, setConversation] = useState([]);
   const [isMessaging, setIsMessaging] = useState(false);
   const [message, setMessage] = useState("");
+  const [previousMessage, setPreviousMessage] = useState(null);
   const textAreaRef = useRef(null);
 
   useEffect(() => {
@@ -115,8 +116,12 @@ function MessageList({ friend }) {
             </li>
             {/* Message Bubbles List */}
             {conversation.messages &&
-              conversation.messages.map((message) => (
-                <MessageBubble key={message.id} message={message} />
+              conversation.messages.map((message, i) => (
+                <MessageBubble
+                  key={message.id}
+                  message={message}
+                  nextMessage={conversation.messages[i + 1]}
+                />
               ))}
           </ul>
           <div className="h-[92px]"></div>

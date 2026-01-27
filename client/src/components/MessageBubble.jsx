@@ -1,12 +1,22 @@
 import { useAuth } from "@/contexts/AuthContext";
-import { formatDateSimple, formatTimeSimple } from "@/utils/formatDate";
+import { formatTimeSimple } from "@/utils/formatDate";
 import { useState } from "react";
+import { Spinner } from "./ui/spinner";
 
-function MessageBubble({ message }) {
+function MessageBubble({ message, nextMessage }) {
   const { user } = useAuth();
-  const [isSender, setIsSender] = useState(message.senderId === user.id);
-  const [isEnd, setIsEnd] = useState(true); // For now, assume all messages are end of chain
   const [bubbleHover, setBubbleHover] = useState(false);
+
+  const isSender = message?.senderId === user?.id;
+  const isEnd = !nextMessage || nextMessage?.senderId !== message?.senderId;
+
+  if (!message)
+    return (
+      <div className="w-full flex justify-center p-2">
+        <Spinner />
+      </div>
+    );
+
   return (
     <>
       <li className="w-full">
