@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import MessageBubble from "./MessageBubble";
 
-function MessageList({ friend, conversationId }) {
+function MessageList({ friend }) {
   const { user, token } = useAuth();
   const [conversation, setConversation] = useState([]);
   const [isMessaging, setIsMessaging] = useState(false);
@@ -36,7 +36,7 @@ function MessageList({ friend, conversationId }) {
     };
 
     createOrFetchConversation();
-  }, [conversationId]);
+  }, [user.id, friend.id]);
 
   const handleTextareaInput = () => {
     if (textAreaRef.current) {
@@ -69,8 +69,6 @@ function MessageList({ friend, conversationId }) {
       console.error(err);
     }
   };
-
-  console.log(conversation);
 
   if (!friend) return <div>loading</div>;
   return (

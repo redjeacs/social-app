@@ -21,10 +21,7 @@ exports.getConversation = async (req, res, next) => {
   const { userId, recipientId } = req.params;
 
   try {
-    const conversation = await db.getConversationBetweenUsers(
-      userId,
-      recipientId,
-    );
+    const conversation = await db.getConversation(userId, recipientId);
     if (!conversation)
       return res
         .status(404)

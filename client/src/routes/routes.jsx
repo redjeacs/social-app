@@ -38,11 +38,11 @@ const routes = [
               { index: true, element: <InboxPlaceholder /> },
               { path: "/chat/settings", element: <MessageSettings /> },
               {
-                path: "/chat/:conversationId",
+                path: "/chat/:userId/with/:recipientId",
                 element: <Chatbox />,
                 children: [
                   {
-                    path: "/chat/:conversationId/info",
+                    path: "/chat/:userId/with/:recipientId/info",
                     element: <ChatroomInfo />,
                   },
                 ],

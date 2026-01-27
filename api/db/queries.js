@@ -509,11 +509,11 @@ exports.getUserConversations = async (userId) => {
 exports.getConversation = async (userId, recipientId) => {
   const sameUser = userId === recipientId;
   const ids = sameUser ? [userId] : [userId, recipientId];
+  const uniqueKey = ids.slice().sort().join("|");
 
-  const conversations = await prisma.conversation.findMany({
+  const conversation = await prisma.conversation.findUnique({
     where: {
-      isGroup: false,
-      participants: { every: { userId: { in: ids } } },
+      uniqueKey: uniqueKey,
     },
     include: {
       participants: true,
@@ -521,9 +521,9 @@ exports.getConversation = async (userId, recipientId) => {
     },
   });
 
-  return (
-    conversations.find((c) => c.participants.length === ids.length) || null
-  );
+  if (!conversation) return null;
+
+  return conversation;
 };
 
 exports.createConversation = async (userId, recipientId) => {

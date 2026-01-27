@@ -6,14 +6,14 @@ import { Outlet, useParams, Link } from "react-router-dom";
 
 function Chatbox() {
   const { user, token } = useAuth();
-  const { conversationId } = useParams();
+  const { recipientId } = useParams();
   const [friend, setFriend] = useState(null);
 
   useEffect(() => {
     const fetchFriend = async () => {
       try {
         const res = await fetch(
-          `${import.meta.env.VITE_API_URL}/users/${conversationId}`,
+          `${import.meta.env.VITE_API_URL}/users/${recipientId}`,
           {
             method: "GET",
             headers: {
@@ -34,7 +34,7 @@ function Chatbox() {
     };
 
     fetchFriend();
-  }, [conversationId]);
+  }, [user.id, recipientId]);
 
   if (!friend) {
     return <Spinner />;
@@ -46,7 +46,7 @@ function Chatbox() {
       {/* Header */}
       <div className="flex w-full p-4 gap-4 items-center justify-between absolute z-10">
         <Link
-          to={`/chat/${conversationId}/info`}
+          to={`/chat/${user.id}/with/${recipientId}/info`}
           className="flex items-center gap-2 cursor-pointer"
         >
           <div className="min-size flex overflow-hidden bg-(--twitter-gray-300) rounded-full min-h-12 min-w-12 size-12">
@@ -64,7 +64,7 @@ function Chatbox() {
         </Link>
         <div className="flex items-center gap-2">
           <Link
-            to={`/chat/${conversationId}/info`}
+            to={`/chat/${user.id}/with/${recipientId}/info`}
             className="inline-flex items-center gap-1 justify-center bg-(--twitter-gray-0) text-[15px] leading-5 text-(--twitter-white) hover:bg-(--twitter-gray-50) rounded-full min-w-1- w-12 h-12 cursor-pointer"
           >
             <svg
@@ -80,7 +80,7 @@ function Chatbox() {
         </div>
       </div>
       {/* Message List */}
-      <MessageList friend={friend} conversationId={conversationId} />
+      <MessageList friend={friend} />
     </div>
   );
 }

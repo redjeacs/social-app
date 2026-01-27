@@ -25,7 +25,7 @@ function InboxList({ conversations }) {
         return (
           <li
             key={conversation.id}
-            onClick={() => navigate(`/chat/${other.user.id}`)}
+            onClick={() => navigate(`/chat/${user.id}/with/${other.user.id}`)}
             className="w-full h-20"
           >
             <div className="flex px-4 gap-4 items-stretch cursor-pointer hover:bg-(--twitter-gray-50)">
