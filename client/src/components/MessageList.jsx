@@ -54,18 +54,34 @@ function MessageList({ friend }) {
   const handleMessageSubmit = async (e) => {
     e.preventDefault();
     try {
-      fetch(`${import.meta.env.VITE_API_URL}/messages/${conversation.id}`, {
-        method: "POST",
-        headers: {
-          "CONTENT-TYPE": "application/json",
-          Authorization: `Bearer ${token}`,
+      const res = await fetch(
+        `${import.meta.env.VITE_API_URL}/messages/${conversation.id}`,
+        {
+          method: "POST",
+          headers: {
+            "CONTENT-TYPE": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+            senderId: user.id,
+            body: message,
+          }),
         },
-        body: JSON.stringify({
-          senderId: user.id,
-          body: message,
-        }),
-      });
+      );
+      const data = await res.json();
+
+      if (!res.ok) {
+        console.error(`Failed to send message: ${data.message}`);
+        return;
+      }
+
+      setConversation((prevConversation) => ({
+        ...prevConversation,
+        messages: [...prevConversation.messages, data],
+      }));
       setMessage("");
+      textAreaRef.current.style.height = "auto";
+      setIsMessaging(false);
     } catch (err) {
       console.error(err);
     }

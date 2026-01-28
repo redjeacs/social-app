@@ -29,13 +29,13 @@ function MessageBubble({ message, nextMessage }) {
             className="grid gap-x-2 gapy-y-0.5 max-w-[calc(55%+128px)] grid-cols-[auto_auto_auto_auto] items-center -me-4"
           >
             <div
-              className={`flex items-end px-4 py-2 rounded-2xl gap-1 ${isSender ? "bg-(--twitter-blue)" : "bg-(--twitter-gray-50)"}`}
+              className={`relative flex items-end px-4 py-2 rounded-2xl gap-1 ${isSender ? "bg-(--twitter-blue)" : "bg-(--twitter-gray-50)"}`}
             >
               <span className="max-w-full leading-4.5">{message.body}</span>
               {/* hidden if not end of message chain */}
               <span
                 aria-hidden="true"
-                className={`${isEnd ? "inline-block" : "hidden"} pl-2 user-select-none`}
+                className={`${isEnd ? "inline-block" : "hidden"} min-w-13 pl-2 user-select-none`}
               >
                 <div className="flex items-center justify-end text-white ml-auto shrink-0 gap-1 max-w-full text-xs leading-3">
                   {formatTimeSimple(new Date(message.createdAt))}

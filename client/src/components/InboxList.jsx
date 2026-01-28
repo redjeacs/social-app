@@ -43,13 +43,13 @@ function InboxList({ conversations }) {
                   />
                 </Link>
               </div>
-              <div className="flex flex-col gap-1 justify-center border-b border-(--twitter-gray-50) flex-1">
+              <div className="flex flex-col gap-1 justify-center border-b border-(--twitter-gray-50) flex-1 overflow-hidden">
                 <div className="flex justify-between items-center text-(--twitter-white)">
                   <div className="flex max-w-full line-clamp-1 font-bold leading-5">
                     {other?.user.firstName} {other?.user.lastName}
                   </div>
                 </div>
-                <div className="flex gap-1.5 items-center shrink-0 text-(--twitter-gray-700) leading-5">
+                <div className="truncate text-(--twitter-gray-700) leading-5">
                   {conversation.messages[conversation.messages.length - 1]
                     ?.body || "No messages yet."}
                 </div>
