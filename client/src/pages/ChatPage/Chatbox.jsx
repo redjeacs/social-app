@@ -42,7 +42,7 @@ function Chatbox() {
 
   return (
     <div className="flex flex-col w-full h-full grow relative">
-      {/* <Outlet /> work on info modal later*/}
+      <Outlet />
       {/* Header */}
       <div className="absolute top-0 start-0 end-0 z-10 h-20 pointer-events-none bg-linear-to-b from-black via-black/90 to-transparent"></div>
       <div className="flex w-full p-4 gap-4 items-center justify-between absolute z-10">
