@@ -1,11 +1,17 @@
-import logo from "../assets/logo.webp";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@radix-ui/react-dropdown-menu";
 import userIcon from "../assets/user.svg";
 import { useAuth } from "../contexts/AuthContext";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 
 function Sidebar() {
   const { user } = useAuth();
   const location = useLocation();
+  const navigate = useNavigate();
 
   const handleSignout = () => {
     localStorage.removeItem("user");
@@ -191,50 +197,77 @@ function Sidebar() {
         </div>
         <div className="hidden md:flex flex-col items-center xl:items-start flex-1 my-2">
           <button
+            onClick={() => navigate("/post")}
             className={`hidden ${
               location.pathname.includes("/chat") ? "xl:hidden" : "xl:block"
             } rounded-full text-black text-lg font-bold bg-white w-[90%] h-14 cursor-pointer hover:bg-[rgba(255,255,255,0.9)] ease-in-out duration-500`}
           >
             Post
           </button>
-          <img
-            src={logo}
-            alt="Post"
-            className={` ${
-              location.pathname.includes("/chat") ? "" : "xl:hidden"
-            } hidden md:block w-16 h-16 p-1`}
-          />
-        </div>
-        <div
-          onClick={handleSignout}
-          className="relative hidden md:flex gap-2 m-2 p-2 items-center rounded-full hover:bg-gray-800 cursor-pointer"
-        >
-          <img
-            src={user?.profile || userIcon}
-            alt="Logo"
-            className="w-10 h-10 object-cover rounded-full bg-gray-500"
-          />
-          <div
-            className={`hidden ${
-              location.pathname.includes("/chat") ? "" : "xl:flex xl:flex-col"
-            }`}
+          {/* post route*/}
+          <Link
+            to="/post"
+            className="flex flex-col min-w-13 min-h-13 rounded-full justify-center items-stretch"
           >
-            <span className="font-bold">
-              {`${user?.firstName} ${user?.lastName}` || "Guest"}
-            </span>
-            <span className="text-(--twitter-text)">
-              @{user?.username || "username"}
-            </span>
-          </div>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="#ffffff"
-            className="bi bi-twitter-x hidden xl:block w-5 h-5 ml-auto"
-            viewBox="0 0 24 24"
-          >
-            <path d="M3 12c0-1.1.9-2 2-2s2 .9 2 2-.9 2-2 2-2-.9-2-2zm9 2c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm7 0c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2z"></path>
-          </svg>
+            <div
+              className={` ${
+                location.pathname.includes("/chat") ? "" : "xl:hidden"
+              } hidden md:flex w-full h-full justify-center items-center font-bold bg-white rounded-full`}
+            >
+              <svg
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+                fill="black"
+                className="w-6 h-6 max-w-full"
+              >
+                <g>
+                  <path d="M23 3c-6.62-.1-10.38 2.421-13.05 6.03C7.29 12.61 6 17.331 6 22h2c0-1.007.07-2.012.19-3H12c4.1 0 7.48-3.082 7.94-7.054C22.79 10.147 23.17 6.359 23 3zm-7 8h-1.5v2H16c.63-.016 1.2-.08 1.72-.188C16.95 15.24 14.68 17 12 17H8.55c.57-2.512 1.57-4.851 3-6.78 2.16-2.912 5.29-4.911 9.45-5.187C20.95 8.079 19.9 11 16 11zM4 9V6H1V4h3V1h2v3h3v2H6v3H4z"></path>
+                </g>
+              </svg>
+            </div>
+          </Link>
         </div>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <div className="relative hidden md:flex gap-2 m-2 p-3 items-center rounded-full hover:bg-gray-800 cursor-pointer">
+              <img
+                src={user?.profile || userIcon}
+                alt="Logo"
+                className="w-10 h-10 object-cover rounded-full bg-gray-500"
+              />
+              <div
+                className={`hidden ${
+                  location.pathname.includes("/chat")
+                    ? ""
+                    : "xl:flex xl:flex-col"
+                }`}
+              >
+                <span className="font-bold leading-5 py-px">
+                  {`${user?.firstName} ${user?.lastName}` || "Guest"}
+                </span>
+                <span className="text-(--twitter-text) leading-5">
+                  @{user?.username || "username"}
+                </span>
+              </div>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="#ffffff"
+                className="bi bi-twitter-x hidden xl:block w-5 h-5 ml-auto"
+                viewBox="0 0 24 24"
+              >
+                <path d="M3 12c0-1.1.9-2 2-2s2 .9 2 2-.9 2-2 2-2-.9-2-2zm9 2c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm7 0c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2z"></path>
+              </svg>
+            </div>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent className="flex flex-col items-stretch py-3 min-w-[260px] min-h-[30px] max-w-[360px] w-[300px] overflow-auto shadow-[0_0_15px_rgba(255,255,255,0.2),0_0_3px_1px_rgba(255,255,255,0.15)] bg-black rounded-2xl">
+            <DropdownMenuItem
+              onClick={handleSignout}
+              className=" duration-200 transition-all w-full hover:bg-[rgb(22,24,28)] px-4 py-3 cursor-pointer"
+            >
+              Sign Out
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </div>
     </aside>
   );

@@ -23,7 +23,7 @@ function MessageRequestCard({ searchedUser, onClose }) {
       onClick={() => {
         if (isRequestAllowed) {
           onClose();
-          navigate(`/chat/${searchedUser.id}`);
+          navigate(`/chat/${user.id}/with/${searchedUser.id}`);
         }
       }}
       className="w-full"
