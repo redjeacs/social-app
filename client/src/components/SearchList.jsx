@@ -25,6 +25,7 @@ function SearchList({ searchQuery }) {
           },
         },
       );
+
       const data = await res.json();
 
       if (!res.ok) console.error("Unable to search users");

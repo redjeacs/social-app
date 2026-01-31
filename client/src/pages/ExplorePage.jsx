@@ -1,47 +1,20 @@
-import { useEffect, useState } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import SearchList from "@/components/SearchList";
 import PostList from "@/components/PostList";
-import { useAuth } from "@/contexts/AuthContext";
+import HandleSearch from "@/utils/HandleSearch";
 
 function ExplorePage() {
+  const {
+    searchBarFocus,
+    setSearchBarFocus,
+    searchQuery,
+    query,
+    toggleSearchBarFocus,
+    handleInputBlur,
+    handleSearchQuery,
+    posts,
+  } = HandleSearch();
   const navigate = useNavigate();
-  const { token } = useAuth();
-  const [searchParams] = useSearchParams();
-  const query = searchParams.get("q") || "";
-  const [searchBarFocus, setSearchBarFocus] = useState(false);
-  const [searchQuery, setSearchQuery] = useState(query);
-  const [posts, setPosts] = useState([]);
-
-  useEffect(() => {
-    const searchPosts = async (query) => {
-      if (query !== "")
-        try {
-          const res = await fetch(
-            `${import.meta.env.VITE_API_URL}/posts/search/${query}`,
-            {
-              method: "GET",
-              headers: {
-                "Content-Type": "Application/json",
-                Authorization: `Bearer ${token}`,
-              },
-            },
-          );
-
-          const data = await res.json();
-
-          if (!res.ok) console.error("Unable to search posts");
-          setPosts(Array.isArray(data) ? data : []);
-        } catch (err) {
-          console.error(err);
-        }
-    };
-    searchPosts(query);
-  }, [query]);
-
-  const toggleSearchBarFocus = () => {
-    setSearchBarFocus(!searchBarFocus);
-  };
 
   const handleBackNavigate = () => {
     if (searchBarFocus) {
@@ -51,15 +24,6 @@ function ExplorePage() {
     navigate(-1);
   };
 
-  const handleSearchQuery = (e) => {
-    setSearchQuery(e.target.value);
-  };
-
-  const handleInputBlur = () => {
-    setTimeout(() => {
-      setSearchBarFocus(false);
-    }, 200);
-  };
   return (
     <div className="w-full h-full mb-15">
       <div className="px-4 w-full h-13 flex items-center justify-center">
@@ -118,7 +82,7 @@ function ExplorePage() {
             <div
               className={`absolute ${
                 searchBarFocus ? "flex" : "hidden"
-              } flex-col items-stretch  w-full min-h-[100px] max-h-[calc(80vh-53px)] overflow-y-auto bg-black custom-scrollbar overscroll-contain rounded-xl shadow-[0_0_15px_rgba(255,255,255,0.2),0_0_3px_1px_rgba(255,255,255,0.15)]`}
+              } flex-col items-stretch  w-full min-h-25 max-h-[calc(80vh-53px)] overflow-y-auto bg-black custom-scrollbar overscroll-contain rounded-xl shadow-[0_0_15px_rgba(255,255,255,0.2),0_0_3px_1px_rgba(255,255,255,0.15)]`}
             >
               <div className="">
                 {searchQuery ? (

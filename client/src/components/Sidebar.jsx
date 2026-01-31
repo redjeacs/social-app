@@ -21,11 +21,11 @@ function Sidebar() {
 
   return (
     <aside
-      className={`custom-scrollbar flex flex-col xl:items-start items-center z-10 bg-black p-2 md:overflow-auto fixed w-full bottom-0 h-16 md:top-0 md:h-screen md:w-22 ${
+      className={`custom-scrollbar flex flex-col xl:items-center items-center z-10 bg-black p-2 md:overflow-auto fixed w-full bottom-0 h-16 md:top-0 md:h-screen md:w-22 ${
         location.pathname.includes("/chat") ? "" : "xl:w-68"
       } text-white md:flex-col shadow-lg z-40"}`}
     >
-      <div className="flex md:flex-col flex-1 justify-center w-full">
+      <div className="flex md:flex-col flex-1 items-end xl:items-stretch justify-center w-full">
         <div className="flex flex-1 justify-between md:justify-start md:flex-col items-center xl:items-start xl:gap-1">
           <Link
             to="/"
@@ -229,7 +229,7 @@ function Sidebar() {
         </div>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <div className="relative hidden md:flex gap-2 m-2 p-3 items-center rounded-full hover:bg-gray-800 cursor-pointer">
+            <div className="relative hidden md:flex gap-2 m-2 p-2 items-center rounded-full hover:bg-gray-800 cursor-pointer">
               <img
                 src={user?.profile || userIcon}
                 alt="Logo"
@@ -259,7 +259,7 @@ function Sidebar() {
               </svg>
             </div>
           </DropdownMenuTrigger>
-          <DropdownMenuContent className="flex flex-col items-stretch py-3 min-w-[260px] min-h-[30px] max-w-[360px] w-[300px] overflow-auto shadow-[0_0_15px_rgba(255,255,255,0.2),0_0_3px_1px_rgba(255,255,255,0.15)] bg-black rounded-2xl">
+          <DropdownMenuContent className="flex flex-col items-stretch py-3 min-w-65 min-h-7.5 max-w-90 w-75 overflow-auto shadow-[0_0_15px_rgba(255,255,255,0.2),0_0_3px_1px_rgba(255,255,255,0.15)] bg-black rounded-2xl">
             <DropdownMenuItem
               onClick={handleSignout}
               className=" duration-200 transition-all w-full hover:bg-[rgb(22,24,28)] px-4 py-3 cursor-pointer"
