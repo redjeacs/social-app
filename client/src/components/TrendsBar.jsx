@@ -10,13 +10,10 @@ function TrendsBar() {
   const { user, token } = useAuth();
   const {
     searchBarFocus,
-    setSearchBarFocus,
     searchQuery,
-    query,
     toggleSearchBarFocus,
     handleInputBlur,
     handleSearchQuery,
-    posts,
   } = HandleSearch();
   const [followSuggestion, setFollowSuggestion] = useState([]);
   const [followContainer, setFollowContainer] = useState(true);
