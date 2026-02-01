@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { useAlert } from "../contexts/AlertContext";
-import { useAuth } from "../contexts/AuthContext";
+import { useAlert } from "../../contexts/AlertContext";
+import { useAuth } from "../../contexts/AuthContext";
 import userIcon from "@/assets/user.svg";
-import { formatDateFull } from "../utils/formatDate";
+import { formatDateFull } from "../../utils/formatDate";
 import ReplyForm from "@/components/ReplyForm";
 
 import {

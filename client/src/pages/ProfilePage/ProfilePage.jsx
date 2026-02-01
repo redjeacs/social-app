@@ -5,7 +5,7 @@ import {
   useParams,
   useLocation,
 } from "react-router-dom";
-import { useAuth } from "../contexts/AuthContext";
+import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
 import { useAlert } from "@/contexts/AlertContext";

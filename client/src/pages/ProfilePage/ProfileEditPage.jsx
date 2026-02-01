@@ -1,5 +1,5 @@
 import { useAuth } from "@/contexts/AuthContext";
-import userIcon from "../assets/user.svg";
+import userIcon from "@/assets/user.svg";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAlert } from "@/contexts/AlertContext";
@@ -44,7 +44,7 @@ function ProfileEditPage() {
             Authorization: `Bearer ${token}`,
           },
           body: multipartFormData,
-        }
+        },
       );
 
       if (!res.ok) {

@@ -1,6 +1,6 @@
 import { Navigate, Link } from "react-router-dom";
 import { useState } from "react";
-import { useAuth } from "../contexts/AuthContext";
+import { useAuth } from "@/contexts/AuthContext";
 import WhoToFollow from "@/components/WhoToFollow";
 import CreatorsForYou from "@/components/CreatorsForYou";
 
@@ -65,7 +65,7 @@ function FollowPage() {
           ></div>
         </div>
       </div>
-      <div className="max-w-[600px] flex flex-col mb-15">
+      <div className="max-w-150 flex flex-col mb-15">
         {selectedTab === "Who to Follow" && <WhoToFollow />}
         {selectedTab === "Creators for you" && <CreatorsForYou />}
       </div>

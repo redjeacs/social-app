@@ -187,6 +187,4 @@ function ChatPage() {
   );
 }
 
-// Add profile icon onto explore and chat page homepage profile and logo above
-
 export default ChatPage;
