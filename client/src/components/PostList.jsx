@@ -5,7 +5,7 @@ import PostCard from "./PostCard";
 import { buildReplyTree } from "../utils/buildReplyTree";
 import { useNavigate, Link } from "react-router-dom";
 
-function PostList({ yourRecentPosts, postsData = null }) {
+function PostList({ postsData = null }) {
   const { token } = useAuth();
   const [posts, setPosts] = useState([]);
   const { setAlert } = useAlert();
@@ -43,14 +43,7 @@ function PostList({ yourRecentPosts, postsData = null }) {
     fetchPosts();
   }, [postsData]);
 
-  const allPosts = [
-    ...(yourRecentPosts || []),
-    ...posts.filter(
-      (post) => !yourRecentPosts?.some((recent) => recent.id === post.id),
-    ),
-  ];
-
-  const replyTree = buildReplyTree(allPosts);
+  const replyTree = buildReplyTree(posts);
 
   function renderPosts(posts) {
     return posts.map((post) => (

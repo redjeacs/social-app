@@ -5,9 +5,11 @@ import globeIcon from "../assets/globe.png";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { useState, useRef, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
-function PostForm({ yourRecentPosts, setYourRecentPosts }) {
+function PostForm({ isPostFormOpen, setIsPostFormOpen }) {
   const { user, token } = useAuth();
+  const navigate = useNavigate();
   const [post, setPost] = useState("");
   const [isSubmittingPost, setIsSubmittingPost] = useState(false);
   const [progress, setProgress] = useState(0);
@@ -62,8 +64,9 @@ function PostForm({ yourRecentPosts, setYourRecentPosts }) {
         return;
       }
       setPost("");
-      setYourRecentPosts([{ ...data.post, user }, ...yourRecentPosts]);
       setAlert({ type: "success", message: "Post submitted successfully!" });
+      if (window.location.pathname == "/") navigate(0);
+      setIsPostFormOpen(false);
     } catch (err) {
       setAlert({
         type: "error",
@@ -83,7 +86,7 @@ function PostForm({ yourRecentPosts, setYourRecentPosts }) {
       </div>
 
       <div className="flex flex-col flex-1">
-        <div className="border-b border-(--twitter-gray)">
+        <div className="border-b border-(--twitter-gray) grow">
           {isSubmittingPost && (
             <Progress
               className="absolute top-0 left-0 w-full"
@@ -101,7 +104,7 @@ function PostForm({ yourRecentPosts, setYourRecentPosts }) {
             onChange={(e) => setPost(e.target.value)}
             onInput={handleTextareaInput}
             maxLength="280"
-            className="p-2 text-xl resize-none text-gray-200 min-h-10 bg-transparent w-full focus:outline-none"
+            className={`p-2 text-xl resize-none text-gray-200 bg-transparent w-full focus:outline-none ${isPostFormOpen ? "min-h-24" : "min-h-10"}`}
           ></textarea>
           <span className="p-2 flex gap-2 items-center text-sm font-bold text-(--twitter-blue)">
             <img

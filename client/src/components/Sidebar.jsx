@@ -6,12 +6,14 @@ import {
 } from "@radix-ui/react-dropdown-menu";
 import userIcon from "../assets/user.svg";
 import { useAuth } from "../contexts/AuthContext";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
+import PostFormModal from "./PostFormModal";
+import { useState } from "react";
 
 function Sidebar() {
   const { user } = useAuth();
   const location = useLocation();
-  const navigate = useNavigate();
+  const [isPostFormOpen, setIsPostFormOpen] = useState(false);
 
   const handleSignout = () => {
     localStorage.removeItem("user");
@@ -25,6 +27,10 @@ function Sidebar() {
         location.pathname.includes("/chat") ? "" : "xl:w-68"
       } text-white md:flex-col shadow-lg z-40"}`}
     >
+      <PostFormModal
+        isPostFormOpen={isPostFormOpen}
+        setIsPostFormOpen={setIsPostFormOpen}
+      />
       <div className="flex md:flex-col flex-1 items-end xl:items-stretch justify-center w-full">
         <div className="flex flex-1 justify-between md:justify-start md:flex-col items-center xl:items-start xl:gap-1">
           <Link
@@ -197,7 +203,7 @@ function Sidebar() {
         </div>
         <div className="hidden md:flex flex-col items-center xl:items-start flex-1 my-2">
           <button
-            onClick={() => navigate("/post")}
+            onClick={() => setIsPostFormOpen(true)}
             className={`hidden ${
               location.pathname.includes("/chat") ? "xl:hidden" : "xl:block"
             } rounded-full text-black text-lg font-bold bg-white w-[90%] h-14 cursor-pointer hover:bg-[rgba(255,255,255,0.9)] ease-in-out duration-500`}
@@ -205,8 +211,8 @@ function Sidebar() {
             Post
           </button>
           {/* post route*/}
-          <Link
-            to="/post"
+          <button
+            onClick={() => setIsPostFormOpen(true)}
             className="flex flex-col min-w-13 min-h-13 rounded-full justify-center items-stretch"
           >
             <div
@@ -225,7 +231,7 @@ function Sidebar() {
                 </g>
               </svg>
             </div>
-          </Link>
+          </button>
         </div>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>

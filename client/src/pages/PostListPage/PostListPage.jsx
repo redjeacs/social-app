@@ -5,11 +5,10 @@ import PostForm from "@/components/PostForm";
 
 function PostsPage() {
   const [selectedTab, setSelectedTab] = useState("For you");
-  const [yourRecentPosts, setYourRecentPosts] = useState([]);
 
   return (
     <>
-      <div className="sticky w-full top-0 z-10 bg-black flex grow border-b border-(--twitter-gray)">
+      <div className="sticky w-full top-0 z-2 bg-black flex grow border-b border-(--twitter-gray)">
         <div
           className={`relative flex flex-col text-gray-400 justify-center items-center flex-1 h-13 cursor-pointer ${
             selectedTab === "For you" ? "text-white" : ""
@@ -42,18 +41,11 @@ function PostsPage() {
         </div>
       </div>
       {/* Post Form */}
-      <PostForm
-        yourRecentPosts={yourRecentPosts}
-        setYourRecentPosts={setYourRecentPosts}
-      />
+      <PostForm />
       {/* Tabs */}
       <div className="max-w-150 flex flex-co pb-15">
-        {selectedTab === "Following" && (
-          <FollowingList yourRecentPosts={yourRecentPosts} />
-        )}
-        {selectedTab === "For you" && (
-          <PostList yourRecentPosts={yourRecentPosts} />
-        )}
+        {selectedTab === "Following" && <FollowingList />}
+        {selectedTab === "For you" && <PostList />}
       </div>
     </>
   );

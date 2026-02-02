@@ -24,7 +24,7 @@ function App() {
   }
 
   return (
-    <div className="flex max-w-[1420px] justify-self-center">
+    <div className="flex max-w-355 justify-self-center">
       <Sidebar />
       <main
         className={`flex-1 md:h-screen md:ml-22 ${

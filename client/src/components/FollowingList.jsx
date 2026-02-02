@@ -6,7 +6,7 @@ import { useAuth } from "../contexts/AuthContext";
 import { useAlert } from "../contexts/AlertContext";
 import PostList from "./PostList";
 
-function FollowingList({ yourRecentPosts }) {
+function FollowingList() {
   const { user, token } = useAuth();
   const { setAlert } = useAlert();
   const [userData, setUserData] = useState(null);
@@ -23,7 +23,7 @@ function FollowingList({ yourRecentPosts }) {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
           },
-        }
+        },
       );
       const data = await res.json();
       if (!res.ok) {
@@ -59,7 +59,7 @@ function FollowingList({ yourRecentPosts }) {
               "Content-Type": "application/json",
               Authorization: `Bearer ${token}`,
             },
-          }
+          },
         );
         const data = await res.json();
 
@@ -88,7 +88,7 @@ function FollowingList({ yourRecentPosts }) {
   return (
     <div className="flex flex-col w-full">
       {Array.isArray(followsPosts) && followsPosts.length > 0 ? (
-        <PostList yourRecentPost={yourRecentPosts} postsData={followsPosts} />
+        <PostList postsData={followsPosts} />
       ) : (
         <div className="flex flex-col w-90 self-center m-10 gap-4">
           <h1 className="text-4xl font-bold">Welcome to X!</h1>

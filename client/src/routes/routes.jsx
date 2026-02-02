@@ -17,7 +17,6 @@ import InboxPlaceholder from "@/pages/ChatPage/InboxPlaceholder";
 import MessageSettings from "@/pages/ChatPage/MessageSettings";
 import Chatbox from "@/pages/ChatPage/Chatbox";
 import ChatroomInfo from "@/pages/ChatPage/ChatroomInfo";
-import PostFormModal from "@/pages/PostFormPage/PostFormModal";
 
 const routes = [
   {
@@ -66,7 +65,6 @@ const routes = [
               },
             ],
           },
-          { path: "/post", element: <PostFormModal /> },
         ],
       },
     ],
