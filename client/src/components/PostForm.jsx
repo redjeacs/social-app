@@ -42,7 +42,6 @@ function PostForm({ isPostFormOpen, setIsPostFormOpen }) {
     }
   };
 
-  console.log(socket);
   const handlePostSubmit = async (e) => {
     e.preventDefault();
     setIsSubmittingPost(true);
@@ -67,12 +66,8 @@ function PostForm({ isPostFormOpen, setIsPostFormOpen }) {
         return;
       }
 
-      if (socket) {
-        socket.emit("postCreated", { post: data, userId: user.id });
-      }
-
       setPost("");
-      setAlert({ type: "success", message: "Post submitted successfully!" });
+      if (window.location.pathname === `/`) navigate(0);
       if (isPostFormOpen) setIsPostFormOpen(false);
     } catch (err) {
       setAlert({

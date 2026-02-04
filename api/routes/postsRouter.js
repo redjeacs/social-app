@@ -8,7 +8,7 @@ postsRouter.get("/:userId", verifyToken, postsController.getPostsByUser);
 postsRouter.get(
   "/:userId/replies",
   verifyToken,
-  postsController.getPostsByReplies
+  postsController.getPostsByReplies,
 );
 postsRouter.get("/:userId/likes", verifyToken, postsController.getPostsByLikes);
 postsRouter.get("/post/:postId", verifyToken, postsController.getPostById);
@@ -16,14 +16,14 @@ postsRouter.post("/:userId", verifyToken, postsController.createPost);
 postsRouter.get(
   "/follows/:userId",
   verifyToken,
-  postsController.getFollowsPosts
+  postsController.getFollowsPosts,
 );
 postsRouter.post("/:postId/like", verifyToken, postsController.likePost);
 postsRouter.post("/:postId/repost", verifyToken, postsController.repost);
 postsRouter.delete(
   "/:postId/undo-repost",
   verifyToken,
-  postsController.undoRepost
+  postsController.undoRepost,
 );
 
 postsRouter.post("/:postId/reply", verifyToken, postsController.replyToPost);
@@ -31,7 +31,7 @@ postsRouter.post("/:postId/reply", verifyToken, postsController.replyToPost);
 postsRouter.get(
   "/search/:searchQuery",
   verifyToken,
-  postsController.searchPosts
+  postsController.searchPosts,
 );
 
 module.exports = postsRouter;

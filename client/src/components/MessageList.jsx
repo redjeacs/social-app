@@ -3,13 +3,16 @@ import { formatDateSimple } from "@/utils/formatDate";
 import { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import MessageBubble from "./MessageBubble";
+import { useSocket } from "@/contexts/SocketContext";
+import { useAlert } from "@/contexts/AlertContext";
 
 function MessageList({ friend }) {
   const { user, token } = useAuth();
+  const { socket } = useSocket();
+  const { setAlert } = useAlert();
   const [conversation, setConversation] = useState([]);
   const [isMessaging, setIsMessaging] = useState(false);
   const [message, setMessage] = useState("");
-  const [previousMessage, setPreviousMessage] = useState(null);
   const textAreaRef = useRef(null);
 
   useEffect(() => {
@@ -39,6 +42,23 @@ function MessageList({ friend }) {
     createOrFetchConversation();
   }, [user.id, friend.id]);
 
+  useEffect(() => {
+    if (!socket) return;
+
+    const handleReceiveMessage = (newMessage) => {
+      setConversation((prevConversation) => ({
+        ...prevConversation,
+        messages: [...prevConversation.messages, newMessage],
+      }));
+    };
+
+    socket.on("sendMessage", handleReceiveMessage);
+
+    return () => {
+      socket.off("sendMessage", handleReceiveMessage);
+    };
+  }, [socket]);
+
   const handleTextareaInput = () => {
     if (textAreaRef.current) {
       textAreaRef.current.style.height = "auto";
@@ -53,35 +73,32 @@ function MessageList({ friend }) {
 
   const handleMessageSubmit = async (e) => {
     e.preventDefault();
+
+    if (!socket) {
+      setAlert({ type: "error", message: "Socket not connected" });
+      return;
+    }
+
+    if (!message.trim()) return;
+
     try {
-      const res = await fetch(
-        `${import.meta.env.VITE_API_URL}/api/messages/${conversation.id}`,
+      socket.emit(
+        "sendMessage",
         {
-          method: "POST",
-          headers: {
-            "CONTENT-TYPE": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify({
-            senderId: user.id,
-            body: message,
-          }),
+          conversationId: conversation.id,
+          senderId: user.id,
+          body: message,
+        },
+        (res) => {
+          if (res?.status === "ok") {
+            setMessage("");
+            textAreaRef.current.style.height = "auto";
+            setIsMessaging(false);
+          } else {
+            setAlert({ type: "error", message: "Failed to send message" });
+          }
         },
       );
-      const data = await res.json();
-
-      if (!res.ok) {
-        console.error(`Failed to send message: ${data.message}`);
-        return;
-      }
-
-      setConversation((prevConversation) => ({
-        ...prevConversation,
-        messages: [...prevConversation.messages, data],
-      }));
-      setMessage("");
-      textAreaRef.current.style.height = "auto";
-      setIsMessaging(false);
     } catch (err) {
       console.error(err);
     }
@@ -92,7 +109,7 @@ function MessageList({ friend }) {
     <>
       <div className="flex-1 overflow-hidden isolate relative h-full">
         <div className="h-screen! w-full custom-scrollbar overflow-auto">
-          <div className="h-[84px]"></div>
+          <div className="h-21"></div>
           <div className="h-5"></div>
           <ul className="relative w-full">
             <li className=" w-full">
@@ -140,7 +157,7 @@ function MessageList({ friend }) {
                 />
               ))}
           </ul>
-          <div className="h-[92px]"></div>
+          <div className="h-23"></div>
         </div>
       </div>
       {/* Message Input */}
