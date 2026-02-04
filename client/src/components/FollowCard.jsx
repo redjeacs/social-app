@@ -23,7 +23,7 @@ function FollowCard({ userToFollow, trendsBar = false }) {
 
   const handleUserFollow = async (userId) => {
     const res = await fetch(
-      `${import.meta.env.VITE_API_URL}/users/follow/${userId}`,
+      `${import.meta.env.VITE_API_URL}/api/users/follow/${userId}`,
       {
         method: "POST",
         headers: {
@@ -49,7 +49,7 @@ function FollowCard({ userToFollow, trendsBar = false }) {
 
   const handleUserUnfollow = async (userId) => {
     const res = await fetch(
-      `${import.meta.env.VITE_API_URL}/users/unfollow/${userId}`,
+      `${import.meta.env.VITE_API_URL}/api/users/unfollow/${userId}`,
       {
         method: "POST",
         headers: {

@@ -16,7 +16,7 @@ export const handlePostLike = async ({
 
   try {
     const res = await fetch(
-      `${import.meta.env.VITE_API_URL}/posts/${postId}/like`,
+      `${import.meta.env.VITE_API_URL}/api/posts/${postId}/like`,
       {
         method: "POST",
         headers: {
@@ -24,7 +24,7 @@ export const handlePostLike = async ({
           Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({ userId }),
-      }
+      },
     );
 
     let data;
@@ -70,7 +70,7 @@ export const handleRepost = async ({
 
   try {
     const res = await fetch(
-      `${import.meta.env.VITE_API_URL}/posts/${postId}/repost`,
+      `${import.meta.env.VITE_API_URL}/api/posts/${postId}/repost`,
       {
         method: "POST",
         headers: {
@@ -78,7 +78,7 @@ export const handleRepost = async ({
           Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({ userId: user.id }),
-      }
+      },
     );
 
     let data;
@@ -128,7 +128,7 @@ export const handleUndoRepost = async ({ e, user, post, token, setAlert }) => {
 
   try {
     const res = await fetch(
-      `${import.meta.env.VITE_API_URL}/posts/${postId}/undo-repost`,
+      `${import.meta.env.VITE_API_URL}/api/posts/${postId}/undo-repost`,
       {
         method: "DELETE",
         headers: {
@@ -136,7 +136,7 @@ export const handleUndoRepost = async ({ e, user, post, token, setAlert }) => {
           Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({ userId: user.id }),
-      }
+      },
     );
 
     let data;

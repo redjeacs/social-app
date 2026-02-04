@@ -47,7 +47,7 @@ function ReplyForm() {
     setIsSubmittingReply(true);
     try {
       const res = await fetch(
-        `${import.meta.env.VITE_API_URL}/posts/${postId}/reply`,
+        `${import.meta.env.VITE_API_URL}/api/posts/${postId}/reply`,
         {
           method: "POST",
           headers: {
@@ -55,7 +55,7 @@ function ReplyForm() {
             Authorization: `Bearer ${token}`,
           },
           body: JSON.stringify({ content: reply, userId: user.id }),
-        }
+        },
       );
       const data = await res.json();
 

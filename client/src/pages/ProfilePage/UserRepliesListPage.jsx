@@ -14,14 +14,14 @@ function UserRepliesListPage() {
     const fetchUserReplies = async () => {
       try {
         const res = await fetch(
-          `${import.meta.env.VITE_API_URL}/posts/${userId}/replies`,
+          `${import.meta.env.VITE_API_URL}/api/posts/${userId}/replies`,
           {
             method: "GET",
             headers: {
               "Application-Type": "response/json",
               Authorization: `Bearer ${token}`,
             },
-          }
+          },
         );
         const data = await res.json();
 

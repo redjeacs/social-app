@@ -1,6 +1,7 @@
 require("dotenv").config();
 const express = require("express");
 const passport = require("passport");
+const socketConfig = require("./configs/socketConfig");
 require("./configs/passportConfig");
 require("./configs/cloudinaryConfig");
 const app = express();
@@ -26,7 +27,9 @@ app.use("/api/users", usersRouter);
 app.use("/api/conversations", conversationsRouter);
 app.use("/api/messages", messagessRouter);
 
-app.listen(PORT, (err) => {
+const server = socketConfig(app);
+
+server.listen(PORT, (err) => {
   if (err) throw err;
   console.log(`Express app listening on port ${PORT}`);
 });

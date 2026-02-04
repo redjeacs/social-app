@@ -38,20 +38,23 @@ export function LoginForm({ className, ...props }) {
     e.preventDefault();
     setLoading(true);
     try {
-      const res = await fetch(`${import.meta.env.VITE_API_URL}/auth/signin`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          username: e.target.username.value,
-          password: e.target.password.value,
-        }),
-      });
+      const res = await fetch(
+        `${import.meta.env.VITE_API_URL}/api/auth/signin`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            username: e.target.username.value,
+            password: e.target.password.value,
+          }),
+        },
+      );
       const data = await res.json();
       if (!res.ok) {
         alert(
           data.errors
             ? data.errors.map((err) => err.msg).join("\n")
-            : "Signin failed"
+            : "Signin failed",
         );
         setLoading(false);
         return;
@@ -72,7 +75,7 @@ export function LoginForm({ className, ...props }) {
     setLoading(true);
     try {
       const res = await fetch(
-        `${import.meta.env.VITE_API_URL}/auth/demo-signin`
+        `${import.meta.env.VITE_API_URL}/api/auth/demo-signin`,
       );
 
       const data = await res.json();
@@ -81,7 +84,7 @@ export function LoginForm({ className, ...props }) {
         alert(
           data.errors
             ? data.errors.map((err) => err.msg).join("\n")
-            : "Demo signin failed"
+            : "Demo signin failed",
         );
 
         setLoading(false);
@@ -100,11 +103,11 @@ export function LoginForm({ className, ...props }) {
   };
 
   const handleGoogleSignin = () => {
-    window.location.href = `${import.meta.env.VITE_API_URL}/auth/google`;
+    window.location.href = `${import.meta.env.VITE_API_URL}/api/auth/google`;
   };
 
   const handleGithubSignin = () => {
-    window.location.href = `${import.meta.env.VITE_API_URL}/auth/github`;
+    window.location.href = `${import.meta.env.VITE_API_URL}/api/auth/github`;
   };
 
   return loading ? (

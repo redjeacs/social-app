@@ -14,7 +14,7 @@ function MessageRequestList({ onClose }) {
       const userId = user.id;
       try {
         const res = await fetch(
-          `${import.meta.env.VITE_API_URL}/users/${userId}`,
+          `${import.meta.env.VITE_API_URL}/api/users/${userId}`,
           {
             method: "GET",
             headers: {
@@ -38,7 +38,7 @@ function MessageRequestList({ onClose }) {
     const searchUsers = async () => {
       try {
         const res = await fetch(
-          `${import.meta.env.VITE_API_URL}/users/search/${searchQuery}`,
+          `${import.meta.env.VITE_API_URL}/api/users/search/${searchQuery}`,
           {
             method: "GET",
             headers: {

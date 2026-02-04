@@ -29,25 +29,28 @@ export function SignupForm({ ...props }) {
     e.preventDefault();
     setLoading(true);
     try {
-      const res = await fetch(`${import.meta.env.VITE_API_URL}/auth/signup`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          firstName: e.target.firstName.value,
-          lastName: e.target.lastName.value,
-          email: e.target.email.value,
-          username: e.target.username.value,
-          password: e.target.password.value,
-          confirmPassword: e.target.confirmPassword.value,
-        }),
-      });
+      const res = await fetch(
+        `${import.meta.env.VITE_API_URL}/api/auth/signup`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            firstName: e.target.firstName.value,
+            lastName: e.target.lastName.value,
+            email: e.target.email.value,
+            username: e.target.username.value,
+            password: e.target.password.value,
+            confirmPassword: e.target.confirmPassword.value,
+          }),
+        },
+      );
       const data = await res.json();
 
       if (!res.ok) {
         alert(
           data.errors
             ? data.errors.map((err) => err.msg).join("\n")
-            : "Signup failed"
+            : "Signup failed",
         );
         setLoading(false);
         return;

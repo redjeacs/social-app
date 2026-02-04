@@ -16,7 +16,7 @@ function SearchList({ searchQuery }) {
   const searchUsers = async () => {
     try {
       const res = await fetch(
-        `${import.meta.env.VITE_API_URL}/users/search/${searchQuery}`,
+        `${import.meta.env.VITE_API_URL}/api/users/search/${searchQuery}`,
         {
           method: "GET",
           headers: {

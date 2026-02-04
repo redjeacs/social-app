@@ -25,7 +25,7 @@ function ProfilePage() {
     const fetchUserData = async () => {
       try {
         const res = await fetch(
-          `${import.meta.env.VITE_API_URL}/users/${userId}`,
+          `${import.meta.env.VITE_API_URL}/api/users/${userId}`,
           {
             method: "GET",
             headers: {

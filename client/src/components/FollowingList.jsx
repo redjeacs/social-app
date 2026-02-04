@@ -16,7 +16,7 @@ function FollowingList() {
     const getUserData = async () => {
       const userId = user.id;
       const res = await fetch(
-        `${import.meta.env.VITE_API_URL}/users/${userId}`,
+        `${import.meta.env.VITE_API_URL}/api/users/${userId}`,
         {
           method: "GET",
           headers: {
@@ -52,7 +52,7 @@ function FollowingList() {
       const userId = user.id;
       try {
         const res = await fetch(
-          `${import.meta.env.VITE_API_URL}/posts/follows/${userId}`,
+          `${import.meta.env.VITE_API_URL}/api/posts/follows/${userId}`,
           {
             method: "GET",
             headers: {

@@ -12,14 +12,14 @@ function WhoToFollow() {
     const fetchUsersToFollow = async () => {
       try {
         const res = await fetch(
-          `${import.meta.env.VITE_API_URL}/users/follow/${user.id}`,
+          `${import.meta.env.VITE_API_URL}/api/users/follow/${user.id}`,
           {
             method: "GET",
             headers: {
               "Content-Type": "application/json",
               Authorization: `Bearer ${token}`,
             },
-          }
+          },
         );
         const data = await res.json();
 

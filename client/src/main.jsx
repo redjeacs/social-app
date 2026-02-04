@@ -5,15 +5,18 @@ import routes from "./routes/routes";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import { AuthProvider } from "./contexts/AuthContext";
 import { AlertProvider } from "./contexts/AlertContext";
+import { SocketProvider } from "./contexts/SocketContext";
 
 const router = createBrowserRouter(routes);
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <AuthProvider>
-      <AlertProvider>
-        <RouterProvider router={router} />
-      </AlertProvider>
+      <SocketProvider>
+        <AlertProvider>
+          <RouterProvider router={router} />
+        </AlertProvider>
+      </SocketProvider>
     </AuthProvider>
-  </StrictMode>
+  </StrictMode>,
 );

@@ -13,7 +13,7 @@ function MessageSettings() {
       const userId = user.id;
       try {
         const res = await fetch(
-          `${import.meta.env.VITE_API_URL}/users/${userId}`,
+          `${import.meta.env.VITE_API_URL}/api/users/${userId}`,
           {
             method: "GET",
             headers: {
@@ -40,7 +40,7 @@ function MessageSettings() {
       if (!messageStatus) return;
       try {
         const res = await fetch(
-          `${import.meta.env.VITE_API_URL}/users/message/${user.id}`,
+          `${import.meta.env.VITE_API_URL}/api/users/message/${user.id}`,
           {
             method: "PUT",
             headers: {

@@ -6,9 +6,11 @@ import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { useSocket } from "@/contexts/SocketContext";
 
 function PostForm({ isPostFormOpen, setIsPostFormOpen }) {
   const { user, token } = useAuth();
+  const { socket } = useSocket();
   const navigate = useNavigate();
   const [post, setPost] = useState("");
   const [isSubmittingPost, setIsSubmittingPost] = useState(false);
@@ -40,12 +42,13 @@ function PostForm({ isPostFormOpen, setIsPostFormOpen }) {
     }
   };
 
+  console.log(socket);
   const handlePostSubmit = async (e) => {
     e.preventDefault();
     setIsSubmittingPost(true);
     try {
       const res = await fetch(
-        `${import.meta.env.VITE_API_URL}/posts/${user.id}`,
+        `${import.meta.env.VITE_API_URL}/api/posts/${user.id}`,
         {
           method: "POST",
           headers: {
@@ -63,10 +66,14 @@ function PostForm({ isPostFormOpen, setIsPostFormOpen }) {
         });
         return;
       }
+
+      if (socket) {
+        socket.emit("postCreated", { post: data, userId: user.id });
+      }
+
       setPost("");
       setAlert({ type: "success", message: "Post submitted successfully!" });
-      if (window.location.pathname == "/") navigate(0);
-      setIsPostFormOpen(false);
+      if (isPostFormOpen) setIsPostFormOpen(false);
     } catch (err) {
       setAlert({
         type: "error",

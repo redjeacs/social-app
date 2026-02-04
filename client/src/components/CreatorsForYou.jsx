@@ -12,14 +12,14 @@ function CreatorsForYou() {
     const fetchPopularUsers = async () => {
       try {
         const res = await fetch(
-          `${import.meta.env.VITE_API_URL}/users/popular/${user.id}`,
+          `${import.meta.env.VITE_API_URL}/api/users/popular/${user.id}`,
           {
             method: "GET",
             headers: {
               "Content-Type": "application/json",
               Authorization: `Bearer ${token}`,
             },
-          }
+          },
         );
         const data = await res.json();
 

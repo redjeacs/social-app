@@ -19,7 +19,7 @@ function PostList({ postsData = null }) {
       }
 
       try {
-        const res = await fetch(`${import.meta.env.VITE_API_URL}/posts`, {
+        const res = await fetch(`${import.meta.env.VITE_API_URL}/api/posts`, {
           method: "GET",
           headers: {
             "Content-Type": "application/json",

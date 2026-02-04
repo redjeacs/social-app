@@ -16,7 +16,7 @@ function MessageList({ friend }) {
     const createOrFetchConversation = async () => {
       try {
         const res = await fetch(
-          `${import.meta.env.VITE_API_URL}/conversations/${user.id}/with/${friend.id}`,
+          `${import.meta.env.VITE_API_URL}/api/conversations/${user.id}/with/${friend.id}`,
           {
             method: "POST",
             headers: {
@@ -55,7 +55,7 @@ function MessageList({ friend }) {
     e.preventDefault();
     try {
       const res = await fetch(
-        `${import.meta.env.VITE_API_URL}/messages/${conversation.id}`,
+        `${import.meta.env.VITE_API_URL}/api/messages/${conversation.id}`,
         {
           method: "POST",
           headers: {

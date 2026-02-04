@@ -19,7 +19,7 @@ function ChatPage() {
     const fetchUserConversations = async () => {
       try {
         const res = await fetch(
-          `${import.meta.env.VITE_API_URL}/conversations/${user.id}`,
+          `${import.meta.env.VITE_API_URL}/api/conversations/${user.id}`,
           {
             method: "GET",
             headers: {

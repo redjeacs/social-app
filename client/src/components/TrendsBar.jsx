@@ -24,7 +24,7 @@ function TrendsBar() {
     const fetchFollowSuggestions = async () => {
       try {
         const res = await fetch(
-          `${import.meta.env.VITE_API_URL}/users/follow/${user.id}?take=3`,
+          `${import.meta.env.VITE_API_URL}/api/users/follow/${user.id}?take=3`,
           {
             method: "GET",
             headers: {

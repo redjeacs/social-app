@@ -14,14 +14,14 @@ function UserPostListPage() {
     const fetchUserPosts = async () => {
       try {
         const res = await fetch(
-          `${import.meta.env.VITE_API_URL}/posts/${userId}`,
+          `${import.meta.env.VITE_API_URL}/api/posts/${userId}`,
           {
             method: "GET",
             headers: {
               "Application-Type": "response/json",
               Authorization: `Bearer ${token}`,
             },
-          }
+          },
         );
         const data = await res.json();
 

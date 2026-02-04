@@ -33,7 +33,7 @@ function HandleSearch() {
       if (query !== "") {
         try {
           const res = await fetch(
-            `${import.meta.env.VITE_API_URL}/posts/search/${query}`,
+            `${import.meta.env.VITE_API_URL}/api/posts/search/${query}`,
             {
               method: "GET",
               headers: {
