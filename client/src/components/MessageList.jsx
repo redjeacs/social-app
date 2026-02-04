@@ -14,6 +14,15 @@ function MessageList({ friend }) {
   const [isMessaging, setIsMessaging] = useState(false);
   const [message, setMessage] = useState("");
   const textAreaRef = useRef(null);
+  const messagesEndRef = useRef(null);
+
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [conversation.messages]);
 
   useEffect(() => {
     const createOrFetchConversation = async () => {
@@ -156,6 +165,7 @@ function MessageList({ friend }) {
                   nextMessage={conversation.messages[i + 1]}
                 />
               ))}
+            <div ref={messagesEndRef} />
           </ul>
           <div className="h-23"></div>
         </div>
