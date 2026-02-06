@@ -13,6 +13,13 @@ import { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import EmojiPicker from "emoji-picker-react";
 import { GiphyFetch } from "@giphy/js-fetch-api";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "./ui/carousel";
 
 function PostForm({ isPostFormOpen, setIsPostFormOpen }) {
   const { user, token } = useAuth();
@@ -23,7 +30,7 @@ function PostForm({ isPostFormOpen, setIsPostFormOpen }) {
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const [showGifPicker, setShowGifPicker] = useState(false);
   const [gifs, setGifs] = useState([]);
-  const [selectedGif, setSelectedGif] = useState(null);
+  const [selectedImages, setSelectedImages] = useState([]);
   const { setAlert } = useAlert();
   const textareaRef = useRef(null);
   const giphyFetch = new GiphyFetch(import.meta.env.VITE_GIPHY_API_KEY);
@@ -104,7 +111,10 @@ function PostForm({ isPostFormOpen, setIsPostFormOpen }) {
   };
 
   const handleGifSelect = (gif) => {
-    setSelectedGif(gif.images.fixed_height.url);
+    setSelectedImages((prevImages) => [
+      ...prevImages,
+      gif.images.fixed_height.url,
+    ]);
     setShowGifPicker(false);
   };
 
@@ -139,21 +149,44 @@ function PostForm({ isPostFormOpen, setIsPostFormOpen }) {
             maxLength="280"
             className={`p-2 text-xl resize-none text-gray-200 bg-transparent w-full focus:outline-none ${isPostFormOpen ? "min-h-24" : "min-h-10"}`}
           ></textarea>
-          {selectedGif && (
-            <div className="p-2">
-              <img
-                src={selectedGif}
-                alt="selected gif"
-                className="w-32 h-32 rounded object-cover"
-              />
-              <button
-                onClick={() => setSelectedGif(null)}
-                className="text-sm text-(--twitter-blue) mt-1"
-              >
-                Remove
-              </button>
+          {selectedImages.length > 0 && (
+            <div
+              className={`w-full relative rounded overflow-hidden ${selectedImages.length > 2 ? "grid grid-cols-2 gap-1" : "flex gap-2"}`}
+            >
+              {selectedImages.map((image, index) => (
+                <div
+                  key={index}
+                  className="relative w-full h-full aspect-square p-2"
+                >
+                  <img
+                    src={image}
+                    alt={`selected ${index}`}
+                    className="w-full h-full object-cover rounded-2xl"
+                  />
+                  <button
+                    onClick={() =>
+                      setSelectedImages((prev) =>
+                        prev.filter((_, i) => i !== index),
+                      )
+                    }
+                    className="absolute flex top-3 right-3 gap-1 items-center transition bg-[rgb(15,20,25,0.75)] hover:bg-[rgb(15,20,25,0.5)] justify-center h-7.5 min-w-7.5 rounded-full cursor-pointer"
+                  >
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="currentColor"
+                      aria-hidden="true"
+                      className="w-4 h-4"
+                    >
+                      <g>
+                        <path d="M10.59 12L4.54 5.96l1.42-1.42L12 10.59l6.04-6.05 1.42 1.42L13.41 12l6.05 6.04-1.42 1.42L12 13.41l-6.04 6.05-1.42-1.42L10.59 12z"></path>
+                      </g>
+                    </svg>
+                  </button>
+                </div>
+              ))}
             </div>
           )}
+
           <span className="p-2 flex gap-2 items-center text-sm font-bold text-(--twitter-blue)">
             <img
               src={globeIcon}
@@ -172,7 +205,7 @@ function PostForm({ isPostFormOpen, setIsPostFormOpen }) {
                   onClick={() => {
                     if (!showGifPicker) searchGifs("trending");
                   }}
-                  className="text-(--twitter-blue) hover:bg-(--twitter-blue)/10 rounded-full p-2 cursor-pointer"
+                  className="flex items-center justify-center text-(--twitter-blue) hover:bg-(--twitter-blue)/10 rounded-full p-1.5 cursor-pointer"
                 >
                   <svg
                     viewBox="0 0 24 24"
@@ -186,12 +219,12 @@ function PostForm({ isPostFormOpen, setIsPostFormOpen }) {
                   </svg>
                 </button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent className="w-64 p-2 bg-gray-900 border-gray-700">
+              <DropdownMenuContent className="w-64 p-2 bg-black border-black custom-scrollbar">
                 <input
                   type="text"
                   placeholder="Search GIFs..."
                   onChange={(e) => searchGifs(e.target.value)}
-                  className="w-full p-2 bg-gray-800 text-white rounded mb-2 focus:outline-none text-sm"
+                  className="w-full p-2 text-white mb-2 border-2 border-(--twitter-gray-700) outline-none focus:border-(--twitter-blue) text-sm rounded-full"
                 />
                 <div className="grid grid-cols-2 gap-2 max-h-80 overflow-y-auto">
                   {gifs.map((gif) => (
