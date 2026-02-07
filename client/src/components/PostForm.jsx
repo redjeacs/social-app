@@ -13,13 +13,6 @@ import { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import EmojiPicker from "emoji-picker-react";
 import { GiphyFetch } from "@giphy/js-fetch-api";
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
-} from "./ui/carousel";
 
 function PostForm({ isPostFormOpen, setIsPostFormOpen }) {
   const { user, token } = useAuth();
@@ -33,6 +26,7 @@ function PostForm({ isPostFormOpen, setIsPostFormOpen }) {
   const [selectedImages, setSelectedImages] = useState([]);
   const { setAlert } = useAlert();
   const textareaRef = useRef(null);
+  const fileInputRef = useRef(null);
   const giphyFetch = new GiphyFetch(import.meta.env.VITE_GIPHY_API_KEY);
 
   useEffect(() => {
@@ -63,15 +57,31 @@ function PostForm({ isPostFormOpen, setIsPostFormOpen }) {
     e.preventDefault();
     setIsSubmittingPost(true);
     try {
+      const formData = new FormData();
+      formData.append("content", post);
+
+      selectedImages.forEach((item, index) => {
+        if (item.type === "gif") {
+          formData.append("gifUrls", item.file);
+        } else {
+          const file =
+            item.file instanceof File
+              ? item.file
+              : new File([item.file], item.name || `image-${index}.jpg`, {
+                  type: item.file.type || "image/jpeg",
+                });
+          formData.append("images", file);
+        }
+      });
+
       const res = await fetch(
         `${import.meta.env.VITE_API_URL}/api/posts/${user.id}`,
         {
           method: "POST",
           headers: {
-            "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
           },
-          body: JSON.stringify({ content: post }),
+          body: formData,
         },
       );
       const data = await res.json();
@@ -84,6 +94,7 @@ function PostForm({ isPostFormOpen, setIsPostFormOpen }) {
       }
 
       setPost("");
+      setSelectedImages([]);
       if (window.location.pathname === `/`) navigate(0);
       if (isPostFormOpen) setIsPostFormOpen(false);
     } catch (err) {
@@ -92,6 +103,21 @@ function PostForm({ isPostFormOpen, setIsPostFormOpen }) {
         message: `An error occured - ${err.message}`,
       });
     }
+  };
+
+  const handleImageUpload = (e) => {
+    const files = Array.from(e.target.files || []);
+    files.forEach((file) => {
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        setSelectedImages((prev) => [
+          ...prev,
+          { type: "image", file: event.target?.result },
+        ]);
+      };
+      reader.readAsDataURL(file);
+    });
+    if (fileInputRef.current) fileInputRef.current.value = "";
   };
 
   const handleEmojiClick = (emojiObject) => {
@@ -113,9 +139,14 @@ function PostForm({ isPostFormOpen, setIsPostFormOpen }) {
   const handleGifSelect = (gif) => {
     setSelectedImages((prevImages) => [
       ...prevImages,
-      gif.images.fixed_height.url,
+      { type: "gif", file: gif.images.fixed_height.url },
     ]);
     setShowGifPicker(false);
+  };
+
+  const handleGifOpenChange = (open) => {
+    setShowGifPicker(open);
+    if (open) searchGifs("");
   };
 
   return (
@@ -159,7 +190,7 @@ function PostForm({ isPostFormOpen, setIsPostFormOpen }) {
                   className="relative w-full h-full aspect-square p-2"
                 >
                   <img
-                    src={image}
+                    src={image.file}
                     alt={`selected ${index}`}
                     className="w-full h-full object-cover rounded-2xl"
                   />
@@ -186,7 +217,6 @@ function PostForm({ isPostFormOpen, setIsPostFormOpen }) {
               ))}
             </div>
           )}
-
           <span className="p-2 flex gap-2 items-center text-sm font-bold text-(--twitter-blue)">
             <img
               src={globeIcon}
@@ -198,13 +228,41 @@ function PostForm({ isPostFormOpen, setIsPostFormOpen }) {
         </div>
         <div className="flex justify-between items-center p-1 mt-1 relative">
           <div className="flex">
-            <DropdownMenu open={showGifPicker} onOpenChange={setShowGifPicker}>
+            {/* Image Upload */}
+            <div>
+              <input
+                ref={fileInputRef}
+                type="file"
+                multiple
+                accept="image/*"
+                onChange={handleImageUpload}
+                className="hidden"
+              />
+              <button
+                type="button"
+                onClick={() => fileInputRef.current?.click()}
+                className="flex items-center justify-center text-(--twitter-blue) hover:bg-(--twitter-blue)/10 rounded-full p-1.5 cursor-pointer"
+              >
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                  aria-hidden="true"
+                  className="w-5 h-5"
+                >
+                  <g>
+                    <path d="M3 5.5C3 4.119 4.119 3 5.5 3h13C19.881 3 21 4.119 21 5.5v13c0 1.381-1.119 2.5-2.5 2.5h-13C4.119 21 3 19.881 3 18.5v-13zM5.5 5c-.276 0-.5.224-.5.5v9.086l3-3 3 3 5-5 3 3V5.5c0-.276-.224-.5-.5-.5h-13zM19 15.414l-3-3-5 5-3-3-3 3V18.5c0 .276.224.5.5.5h13c.276 0 .5-.224.5-.5v-3.086zM9.75 7C8.784 7 8 7.784 8 8.75s.784 1.75 1.75 1.75 1.75-.784 1.75-1.75S10.716 7 9.75 7z"></path>
+                  </g>
+                </svg>
+              </button>
+            </div>
+            {/* GIF Dropdown */}
+            <DropdownMenu
+              open={showGifPicker}
+              onOpenChange={handleGifOpenChange}
+            >
               <DropdownMenuTrigger asChild>
                 <button
                   type="button"
-                  onClick={() => {
-                    if (!showGifPicker) searchGifs("trending");
-                  }}
                   className="flex items-center justify-center text-(--twitter-blue) hover:bg-(--twitter-blue)/10 rounded-full p-1.5 cursor-pointer"
                 >
                   <svg
@@ -239,6 +297,7 @@ function PostForm({ isPostFormOpen, setIsPostFormOpen }) {
                 </div>
               </DropdownMenuContent>
             </DropdownMenu>
+            {/* Emoji Dropdown */}
             <DropdownMenu
               open={showEmojiPicker}
               onOpenChange={setShowEmojiPicker}

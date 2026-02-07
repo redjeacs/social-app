@@ -83,6 +83,9 @@ exports.getFollowsPosts = async (req, res) => {
 exports.createPost = [
   validators.postValidator,
   async (req, res) => {
+    console.log(req.body);
+    console.log(req.files);
+    return;
     const { userId } = req.params;
     const { content } = req.body;
 

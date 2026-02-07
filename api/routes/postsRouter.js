@@ -1,4 +1,10 @@
 const { Router } = require("express");
+const multer = require("multer");
+const storage = multer.memoryStorage();
+const upload = multer({
+  storage: storage,
+  limits: { fileSize: 100 * 1024 * 1024 },
+});
 const verifyToken = require("../middlewares/Verifytoken");
 const postsController = require("../controllers/postsController.js");
 const postsRouter = Router();
@@ -12,7 +18,12 @@ postsRouter.get(
 );
 postsRouter.get("/:userId/likes", verifyToken, postsController.getPostsByLikes);
 postsRouter.get("/post/:postId", verifyToken, postsController.getPostById);
-postsRouter.post("/:userId", verifyToken, postsController.createPost);
+postsRouter.post(
+  "/:userId",
+  verifyToken,
+  upload.array("images", 4),
+  postsController.createPost,
+);
 postsRouter.get(
   "/follows/:userId",
   verifyToken,
