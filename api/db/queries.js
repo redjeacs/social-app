@@ -351,10 +351,11 @@ exports.getFollowsPosts = async (userId) => {
   return posts;
 };
 
-exports.createPost = async (userId, content) => {
+exports.createPost = async (userId, content, uploadedImages) => {
   const newPost = await prisma.post.create({
     data: {
       content: content,
+      media: uploadedImages || [],
       user: { connect: { id: userId } },
     },
   });

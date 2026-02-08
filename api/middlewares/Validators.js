@@ -79,10 +79,22 @@ exports.signinValidator = [
 ];
 
 exports.postValidator = [
-  body("content")
-    .trim()
-    .notEmpty()
-    .withMessage("Post content cannot be empty")
-    .isLength({ min: 1, max: 280 })
-    .withMessage("Post content should be between 1 and 280 characters"),
+  body("gifUrls")
+    .optional()
+    .custom((value) => {
+      // Handle single or multiple values
+      const urls = Array.isArray(value) ? value : value ? [value] : [];
+
+      if (urls.length > 4) {
+        throw new Error("Maximum 4 GIF URLs allowed");
+      }
+
+      urls.forEach((url) => {
+        // Updated regex to allow URLs with query parameters
+        if (url && !/^https?:\/\/.+\.(gif|jpg|jpeg|png)(\?.*)?$/i.test(url)) {
+          throw new Error("Invalid GIF URL: " + url);
+        }
+      });
+      return true;
+    }),
 ];

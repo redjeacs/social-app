@@ -12,12 +12,12 @@ authRouter.post("/signin", authController.signin);
 authRouter.get("/demo-signin", authController.demoSignin);
 authRouter.get(
   "/google",
-  passport.authenticate("google", { scope: ["profile", "email"] })
+  passport.authenticate("google", { scope: ["profile", "email"] }),
 );
 authRouter.get("/google/callback", authController.googleCallback);
 authRouter.get(
   "/github",
-  passport.authenticate("github", { scope: ["user:email"] })
+  passport.authenticate("github", { scope: ["user:email"] }),
 );
 authRouter.get("/github/callback", authController.githubCallback);
 

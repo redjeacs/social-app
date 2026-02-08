@@ -76,6 +76,10 @@ export function LoginForm({ className, ...props }) {
     try {
       const res = await fetch(
         `${import.meta.env.VITE_API_URL}/api/auth/demo-signin`,
+        {
+          method: "GET",
+          headers: { "Content-Type": "application/json" },
+        },
       );
 
       const data = await res.json();
@@ -86,7 +90,6 @@ export function LoginForm({ className, ...props }) {
             ? data.errors.map((err) => err.msg).join("\n")
             : "Demo signin failed",
         );
-
         setLoading(false);
         return;
       }
@@ -110,9 +113,7 @@ export function LoginForm({ className, ...props }) {
     window.location.href = `${import.meta.env.VITE_API_URL}/api/auth/github`;
   };
 
-  return loading ? (
-    <Spinner />
-  ) : (
+  return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
       <Card>
         <CardHeader>
@@ -128,9 +129,11 @@ export function LoginForm({ className, ...props }) {
                 <FieldLabel htmlFor="username">Username</FieldLabel>
                 <Input
                   id="username"
+                  name="username"
                   type="text"
                   placeholder="Enter your username"
                   required
+                  disabled={loading}
                 />
               </Field>
               <Field>
@@ -143,11 +146,24 @@ export function LoginForm({ className, ...props }) {
                     Forgot your password?
                   </a>
                 </div>
-                <Input id="password" type="password" required />
+                <Input
+                  id="password"
+                  name="password"
+                  type="password"
+                  required
+                  disabled={loading}
+                />
               </Field>
               <Field>
-                <Button type="submit">Login</Button>
-                <Button variant="secondary" onClick={handleDemoSignin}>
+                <Button type="submit" disabled={loading}>
+                  Login
+                </Button>
+                <Button
+                  type="button"
+                  variant="secondary"
+                  onClick={handleDemoSignin}
+                  disabled={loading}
+                >
                   Demo Login
                 </Button>
                 <div className="flex flex-col w-full items-center gap-2">

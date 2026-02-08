@@ -63,6 +63,7 @@ function PostForm({ isPostFormOpen, setIsPostFormOpen }) {
       selectedImages.forEach((item, index) => {
         if (item.type === "gif") {
           formData.append("gifUrls", item.file);
+          formData.append("gifIndex", index);
         } else {
           const file =
             item.file instanceof File
@@ -71,6 +72,7 @@ function PostForm({ isPostFormOpen, setIsPostFormOpen }) {
                   type: item.file.type || "image/jpeg",
                 });
           formData.append("images", file);
+          formData.append("imageIndex", index);
         }
       });
 
@@ -90,6 +92,7 @@ function PostForm({ isPostFormOpen, setIsPostFormOpen }) {
           type: "error",
           message: `An error occured - ${data.message || res.statusText}`,
         });
+        console.error("Error response:", data);
         return;
       }
 
@@ -102,6 +105,7 @@ function PostForm({ isPostFormOpen, setIsPostFormOpen }) {
         type: "error",
         message: `An error occured - ${err.message}`,
       });
+      console.error("Error submitting post:", err);
     }
   };
 
@@ -337,6 +341,7 @@ function PostForm({ isPostFormOpen, setIsPostFormOpen }) {
             onClick={handlePostSubmit}
             variant="secondary"
             className="bg-gray-400 rounded-full"
+            disabled={post.trim() === "" && selectedImages.length === 0}
           >
             Post
           </Button>

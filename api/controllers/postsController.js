@@ -2,6 +2,7 @@ const db = require("../db/queries");
 const validators = require("../middlewares/Validators");
 const { matchedData, validationResult } = require("express-validator");
 const CustomNotFoundError = require("../middlewares//CustomNotFoundError");
+const cloudinary = require("../configs/cloudinaryConfig");
 
 exports.getAllPosts = async (req, res) => {
   try {
@@ -83,11 +84,9 @@ exports.getFollowsPosts = async (req, res) => {
 exports.createPost = [
   validators.postValidator,
   async (req, res) => {
-    console.log(req.body);
-    console.log(req.files);
-    return;
     const { userId } = req.params;
-    const { content } = req.body;
+    const images = req.files;
+    const uploadedImages = [];
 
     const errors = validationResult(req);
 
@@ -97,15 +96,51 @@ exports.createPost = [
         .json({ message: "Validation errors", errors: errors.array() });
 
     const data = matchedData(req);
-    if (!data) throw new CustomNotFoundError("No data found after validation");
+
+    if (!data) return res.status(400).json({ message: "Invalid post data" });
 
     try {
-      const newPost = await db.createPost(userId, content);
+      if (images && images.length > 0) {
+        for (const image of images) {
+          const result = await new Promise((resolve, reject) => {
+            const stream = cloudinary.uploader.upload_stream(
+              {
+                folder: "social-app/posts",
+                resource_type: "auto",
+              },
+              (error, result) => {
+                if (error) reject(error);
+                else resolve(result);
+              },
+            );
+            stream.end(image.buffer);
+          });
+          uploadedImages.push(result.secure_url);
+        }
+      }
+
+      uploadedImages.push(
+        ...(Array.isArray(data.gifUrls)
+          ? data.gifUrls
+          : data.gifUrls
+            ? [data.gifUrls]
+            : []),
+      );
+
+      if (uploadedImages.length > 4)
+        return res
+          .status(400)
+          .json({ message: "Maximum 4 media items allowed" });
+
+      const newPost = await db.createPost(userId, data.content, uploadedImages);
+
       res
         .status(201)
         .json({ message: "Post created successfully", post: newPost });
     } catch (error) {
-      res.status(500).json({ message: "Error creating post", error });
+      res
+        .status(500)
+        .json({ message: "Error creating post", error: error.message });
     }
   },
 ];
