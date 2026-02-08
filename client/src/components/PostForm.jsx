@@ -33,11 +33,10 @@ function PostForm({ isPostFormOpen, setIsPostFormOpen }) {
     if (isSubmittingPost) {
       let progressValue = 0;
       const interval = setInterval(() => {
-        progressValue += 10;
+        progressValue += 5;
         setProgress(progressValue);
         if (progressValue >= 100) {
           clearInterval(interval);
-          setIsSubmittingPost(false);
           setProgress(0);
         }
       }, 100);
@@ -98,6 +97,7 @@ function PostForm({ isPostFormOpen, setIsPostFormOpen }) {
 
       setPost("");
       setSelectedImages([]);
+      setIsSubmittingPost(false);
       if (window.location.pathname === `/`) navigate(0);
       if (isPostFormOpen) setIsPostFormOpen(false);
     } catch (err) {
@@ -106,6 +106,7 @@ function PostForm({ isPostFormOpen, setIsPostFormOpen }) {
         message: `An error occured - ${err.message}`,
       });
       console.error("Error submitting post:", err);
+      setIsSubmittingPost(false);
     }
   };
 
@@ -341,7 +342,10 @@ function PostForm({ isPostFormOpen, setIsPostFormOpen }) {
             onClick={handlePostSubmit}
             variant="secondary"
             className="bg-gray-400 rounded-full"
-            disabled={post.trim() === "" && selectedImages.length === 0}
+            disabled={
+              (post.trim() === "" && selectedImages.length === 0) ||
+              isSubmittingPost
+            }
           >
             Post
           </Button>

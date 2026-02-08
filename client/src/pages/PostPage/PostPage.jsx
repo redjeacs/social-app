@@ -103,6 +103,7 @@ function PostPage() {
   }, [post, token]);
 
   if (!post) return;
+  console.log(post);
 
   return (
     <>
@@ -158,8 +159,25 @@ function PostPage() {
             </span>
           </div>
         </div>
-        <div className="flex flex-col w-full justify-end h-9">
+        <div className="flex flex-col w-full justify-end min-h-9">
           <p className="h-6">{post.content}</p>
+          <div
+            className={`w-full relative rounded-xl overflow-hidden ${post.media.length > 2 ? "grid grid-cols-2 gap-1" : "flex"}`}
+          >
+            {post.media &&
+              post.media.map((media, index) => (
+                <div
+                  key={index}
+                  className="relative w-full h-full aspect-square"
+                >
+                  <img
+                    src={media}
+                    alt={`selected ${index}`}
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+              ))}
+          </div>
         </div>
         <div className="my-4">
           <span className="text-(--twitter-text)">

@@ -85,6 +85,7 @@ exports.createPost = [
   validators.postValidator,
   async (req, res) => {
     const { userId } = req.params;
+    const { content, gifUrls } = req.body;
     const images = req.files;
     const uploadedImages = [];
 
@@ -120,11 +121,7 @@ exports.createPost = [
       }
 
       uploadedImages.push(
-        ...(Array.isArray(data.gifUrls)
-          ? data.gifUrls
-          : data.gifUrls
-            ? [data.gifUrls]
-            : []),
+        ...(Array.isArray(gifUrls) ? gifUrls : gifUrls ? [gifUrls] : []),
       );
 
       if (uploadedImages.length > 4)
@@ -132,7 +129,7 @@ exports.createPost = [
           .status(400)
           .json({ message: "Maximum 4 media items allowed" });
 
-      const newPost = await db.createPost(userId, data.content, uploadedImages);
+      const newPost = await db.createPost(userId, content, uploadedImages);
 
       res
         .status(201)

@@ -15,7 +15,7 @@ function PostCard({ post }) {
   const { setAlert } = useAlert();
   const likedPost = post?.originalPost || post;
   const isLiked = likedPost?.likedBy?.some(
-    (likedUser) => likedUser.id === user.id
+    (likedUser) => likedUser.id === user.id,
   );
   const isRepost = Boolean(post?.originalPost);
 
@@ -111,6 +111,23 @@ function PostCard({ post }) {
             </div>
           </div>
           <p>{post.content}</p>
+          <div
+            className={`w-full relative rounded-xl overflow-hidden ${post.media.length > 2 ? "grid grid-cols-2 gap-1" : "flex"}`}
+          >
+            {post.media &&
+              post.media.map((media, index) => (
+                <div
+                  key={index}
+                  className="relative w-full h-full aspect-square"
+                >
+                  <img
+                    src={media}
+                    alt={`selected ${index}`}
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+              ))}
+          </div>
           <div className="flex justify-between md:justify-around w-full text-(--twitter-text) mt-2">
             <div className="flex items-center hover:text-(--twitter-blue)">
               <div className=" hover:bg-[rgba(29,155,240,0.2)] p-2 rounded-full ease-in-out duration-300">
@@ -179,9 +196,9 @@ function PostCard({ post }) {
                 {isRepost && Array.isArray(post.originalPost?.reposts)
                   ? post.originalPost.reposts.length
                   : "" ||
-                    (Array.isArray(post.reposts) && post.reposts.length > 0)
-                  ? post.reposts.length
-                  : ""}
+                      (Array.isArray(post.reposts) && post.reposts.length > 0)
+                    ? post.reposts.length
+                    : ""}
               </span>
             </div>
             <div
