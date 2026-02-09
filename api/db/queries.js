@@ -447,7 +447,7 @@ exports.undoRepost = async (postId, userId) => {
   return repost;
 };
 
-exports.replyToPost = async (postId, userId, content) => {
+exports.replyToPost = async (postId, userId, content, uploadedImages) => {
   let post = await prisma.post.findUnique({
     where: { id: postId },
     include: { replies: true, user: true },
@@ -465,6 +465,7 @@ exports.replyToPost = async (postId, userId, content) => {
   const reply = await prisma.post.create({
     data: {
       content: content,
+      media: uploadedImages || [],
       user: { connect: { id: userId } },
       parentPost: { connect: { id: post.id } },
     },

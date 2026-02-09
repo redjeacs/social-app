@@ -37,7 +37,12 @@ postsRouter.delete(
   postsController.undoRepost,
 );
 
-postsRouter.post("/:postId/reply", verifyToken, postsController.replyToPost);
+postsRouter.post(
+  "/:postId/reply",
+  verifyToken,
+  upload.array("images", 4),
+  postsController.replyToPost,
+);
 
 postsRouter.get(
   "/search/:searchQuery",

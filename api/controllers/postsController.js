@@ -205,10 +205,38 @@ exports.undoRepost = async (req, res) => {
 
 exports.replyToPost = async (req, res) => {
   const { postId } = req.params;
-  const { content, userId } = req.body;
+  const { content, userId, gifUrls } = req.body;
+  const images = req.files;
+  const uploadedImages = [];
 
   try {
-    const reply = await db.replyToPost(postId, userId, content);
+    if (images && images.length > 0) {
+      for (const image of images) {
+        const result = await new Promise((resolve, reject) => {
+          const stream = cloudinary.uploader.upload_stream(
+            {
+              folder: "social-app/posts",
+              resource_type: "auto",
+            },
+            (error, result) => {
+              if (error) reject(error);
+              else resolve(result);
+            },
+          );
+          stream.end(image.buffer);
+        });
+        uploadedImages.push(result.secure_url);
+      }
+    }
+
+    uploadedImages.push(
+      ...(Array.isArray(gifUrls) ? gifUrls : gifUrls ? [gifUrls] : []),
+    );
+
+    if (uploadedImages.length > 4)
+      return res.status(400).json({ message: "Maximum 4 media items allowed" });
+
+    const reply = await db.replyToPost(postId, userId, content, uploadedImages);
 
     if (!reply) {
       return res.status(404).json({ message: "Post not found" });
