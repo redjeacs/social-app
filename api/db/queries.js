@@ -558,10 +558,11 @@ exports.createConversation = async (userId, recipientId) => {
   }
 };
 
-exports.createMessage = async (conversationId, senderId, body) => {
+exports.createMessage = async (conversationId, senderId, body, attachment) => {
   const newMessage = await prisma.message.create({
     data: {
       body: body,
+      attachment: attachment || null,
       conversation: { connect: { id: conversationId } },
       sender: { connect: { id: senderId } },
     },

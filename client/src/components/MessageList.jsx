@@ -17,7 +17,7 @@ function MessageList({ friend }) {
   const { user, token } = useAuth();
   const { socket } = useSocket();
   const { setAlert } = useAlert();
-  const [conversation, setConversation] = useState([]);
+  const [conversation, setConversation] = useState({});
   const [isMessaging, setIsMessaging] = useState(false);
   const [message, setMessage] = useState("");
   const [selectedImage, setSelectedImage] = useState(null);
@@ -65,6 +65,15 @@ function MessageList({ friend }) {
   }, [user.id, friend.id]);
 
   useEffect(() => {
+    if (!socket || !conversation?.id) return;
+    socket.emit("joinConversation", conversation.id);
+
+    return () => {
+      socket.emit("leaveConversation", conversation.id);
+    };
+  }, [socket, conversation?.id]);
+
+  useEffect(() => {
     if (!socket) return;
 
     const handleReceiveMessage = (newMessage) => {
@@ -74,10 +83,10 @@ function MessageList({ friend }) {
       }));
     };
 
-    socket.on("sendMessage", handleReceiveMessage);
+    socket.on("messageReceived", handleReceiveMessage);
 
     return () => {
-      socket.off("sendMessage", handleReceiveMessage);
+      socket.off("messageReceived", handleReceiveMessage);
     };
   }, [socket]);
 
@@ -101,26 +110,32 @@ function MessageList({ friend }) {
       return;
     }
 
-    if (!message.trim() && selectedImage.length === 0) return;
+    if (!message.trim() && !selectedImage) return;
 
     try {
-      socket.emit(
-        "sendMessage",
-        {
-          conversationId: conversation.id,
-          senderId: user.id,
-          body: message,
-        },
-        (res) => {
-          if (res?.status === "ok") {
-            setMessage("");
-            textAreaRef.current.style.height = "auto";
-            setIsMessaging(false);
-          } else {
-            setAlert({ type: "error", message: "Failed to send message" });
-          }
-        },
-      );
+      const messageData = {
+        conversationId: conversation.id,
+        senderId: user.id,
+        body: message,
+      };
+
+      if (selectedImage) {
+        messageData.media = {
+          type: selectedImage.type,
+          file: selectedImage.file,
+        };
+      }
+
+      socket.emit("sendMessage", messageData, (res) => {
+        if (res?.status === "ok") {
+          setMessage("");
+          setSelectedImage(null);
+          textAreaRef.current.style.height = "auto";
+          setIsMessaging(false);
+        } else {
+          setAlert({ type: "error", message: "Failed to send message" });
+        }
+      });
     } catch (err) {
       console.error(err);
     }

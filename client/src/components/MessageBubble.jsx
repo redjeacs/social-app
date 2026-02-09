@@ -26,23 +26,34 @@ function MessageBubble({ message, nextMessage }) {
           <div
             onMouseOver={() => setBubbleHover(true)}
             onMouseLeave={() => setBubbleHover(false)}
-            className="grid gap-x-2 gapy-y-0.5 max-w-[calc(55%+128px)] grid-cols-[auto_auto_auto_auto] items-center -me-4"
+            className="grid gap-x-2 gap-y-0.5 max-w-[calc(55%+128px)] grid-cols-[auto_auto_auto_auto] items-center -me-4"
           >
-            <div
-              className={`relative flex items-end px-4 py-2 rounded-2xl gap-1 ${isSender ? "bg-(--twitter-blue)" : "bg-(--twitter-gray-50)"}`}
-            >
-              <span className="max-w-full leading-4.5">{message.body}</span>
-              {/* hidden if not end of message chain */}
-              <span
-                aria-hidden="true"
-                className={`${isEnd ? "inline-block" : "hidden"} min-w-13 pl-2 user-select-none`}
-              >
-                <div className="flex items-center justify-end text-white ml-auto shrink-0 gap-1 max-w-full text-xs leading-3">
-                  {formatTimeSimple(new Date(message.createdAt))}
+            <div className="flex flex-col gap-1 items-end">
+              {message.attachment && (
+                <img
+                  src={message.attachment}
+                  alt="Message Attachment"
+                  loading="lazy"
+                  className="bg-(twitter-gray-50) object-cover cursor-pointer overflow-hidden  border border-(--twitter-gray-100) rounded-2xl"
+                />
+              )}
+              {message.body !== "" && (
+                <div
+                  className={`relative flex items-end px-4 py-2 rounded-2xl gap-1 ${isSender ? "bg-(--twitter-blue)" : "bg-(--twitter-gray-50)"}`}
+                >
+                  <span className="max-w-full leading-4.5">{message.body}</span>
+
+                  <span
+                    aria-hidden="true"
+                    className={`${isEnd ? "inline-block" : "hidden"} min-w-13 pl-2 user-select-none`}
+                  >
+                    <div className="flex items-center justify-end text-white ml-auto shrink-0 gap-1 max-w-full text-xs leading-3">
+                      {formatTimeSimple(new Date(message.createdAt))}
+                    </div>
+                  </span>
                 </div>
-              </span>
+              )}
             </div>
-            {/* Remove style for friend */}
             <div
               className={`w-32 flex items-center gap-1 min-h-8 ${isSender ? "flex-row-reverse" : ""}`}
               style={isSender ? { gridArea: "1" } : {}}

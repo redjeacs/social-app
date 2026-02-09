@@ -108,8 +108,8 @@ model Message {
   sender         User         @relation(fields: [senderId], references: [id], onDelete: Cascade)
   senderId       String
 
-  body        String
-  attachments String[] // store attachment URLs directly on the message
+  body        String?
+  attachment  String?
   createdAt   DateTime @default(now())
 
   @@index([conversationId, createdAt])
