@@ -100,12 +100,12 @@ function ProfilePage() {
         )}
       </div>
       {/* Profile Info */}
-      <div className=" pt-3 pb-0 px-4">
+      <div className=" pt-3 pb-0">
         {/* Profile Picture and Edit Button */}
-        <div className="w-full mb-4 flex flex-col basis-auto items-stretch">
+        <div className="w-full mb-4 px-4 flex flex-col basis-auto items-stretch">
           <div className="relative flex gap-4 items-end mr-4 min-h-11.5 justify-between">
             <div className="relative flex justify-center items-stretch -mt-11 w-[25%] bg-black">
-              <div className=" flex justify-center items-center absolute bottom-5 md:bottom-0 min-w-18 min-h-18 w-full aspect-square max-w-40 max-h-40 border-2 md:border-4 border-black rounded-full bg-gray-400">
+              <div className="flex justify-center items-center absolute bottom-5 md:bottom-0 min-w-18 min-h-18 w-full aspect-square max-w-40 max-h-40 border-2 md:border-4 border-black rounded-full bg-gray-400">
                 <img
                   className=" w-full h-full rounded-full opacity-75 object-cover"
                   src={userData.profile || userIcon}
@@ -125,7 +125,7 @@ function ProfilePage() {
             )}
           </div>
         </div>
-        <div className="flex mb-3 mt-1 flex-wrap items-stretch">
+        <div className="flex mb-3 mt-1 px-4 flex-wrap items-stretch">
           <div className="flex flex-col shrink mb-3">
             <h2 className="text-2xl font-bold w-full">
               {`${userData.firstName} ${userData.lastName}`}
