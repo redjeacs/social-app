@@ -3,7 +3,7 @@ import { defineConfig, env } from "prisma/config";
 
 const db_URL =
   env("NODE_ENV") === "production"
-    ? env("DATABASE_URL")
+    ? env("DIRECT_URL")
     : env("LOCAL_DATABASE_URL");
 
 export default defineConfig({
