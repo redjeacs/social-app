@@ -6,6 +6,7 @@ require("./configs/passportConfig");
 require("./configs/cloudinaryConfig");
 const app = express();
 const cors = require("cors");
+app.set("trust proxy", 1);
 
 const PORT = process.env.PORT || 8000;
 
