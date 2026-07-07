@@ -1,6 +1,5 @@
 require("dotenv").config();
 const express = require("express");
-const http = require("http");
 const passport = require("passport");
 const socket = require("./sockets/socket");
 require("./configs/passportConfig");
@@ -32,8 +31,7 @@ app.use("/api/posts", postsRouter);
 app.use("/api/users", usersRouter);
 app.use("/api/conversations", conversationsRouter);
 
-const server = http.createServer(app);
-socket(server);
+const server = socket(app);
 
 server.listen(PORT, (err) => {
   if (err) throw err;
