@@ -103,7 +103,6 @@ function PostPage() {
   }, [post, token]);
 
   if (!post) return;
-  console.log(post);
 
   return (
     <>
