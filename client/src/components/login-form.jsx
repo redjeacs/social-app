@@ -17,7 +17,6 @@ import {
 import { Input } from "@/components/ui/input";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { Spinner } from "./ui/spinner";
 import githubIcon from "@/assets/github-icon.svg";
 import googleIcon from "@/assets/google-icon.svg";
 
@@ -139,12 +138,6 @@ export function LoginForm({ className, ...props }) {
               <Field>
                 <div className="flex items-center">
                   <FieldLabel htmlFor="password">Password</FieldLabel>
-                  <a
-                    href="#"
-                    className="ml-auto inline-block text-sm underline-offset-4 hover:underline"
-                  >
-                    Forgot your password?
-                  </a>
                 </div>
                 <Input
                   id="password"
